@@ -22,6 +22,7 @@
 
 int main (void) {
 	for(;;) {
+		//init UART and PIT
 		__ASM("CPSID I");
 		Init_UART0_IRQ();
 		Init_PIT_IRQ();
