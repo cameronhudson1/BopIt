@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Objects\Bop_It.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Objects\Bop_It.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060528: Last Updated: Thu Nov 30 01:05:41 2017
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060528: Last Updated: Thu Nov 30 12:33:42 2017
 <BR><P>
 <H3>Maximum Stack Usage =          8 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -48,7 +48,7 @@ Function Pointers
  <LI><a href="#[26]">MCG_IRQHandler</a> from startup_mkl46z4.o(.text) referenced from startup_mkl46z4.o(RESET)
  <LI><a href="#[6]">NMI_Handler</a> from startup_mkl46z4.o(.text) referenced from startup_mkl46z4.o(RESET)
  <LI><a href="#[21]">PIT_IRQHandler</a> from c_start.o(MyCode) referenced from startup_mkl46z4.o(RESET)
- <LI><a href="#[29]">PORTA_IRQHandler</a> from startup_mkl46z4.o(.text) referenced from startup_mkl46z4.o(RESET)
+ <LI><a href="#[29]">PORTA_IRQHandler</a> from c_start.o(MyCode) referenced from startup_mkl46z4.o(RESET)
  <LI><a href="#[2a]">PORTC_PORTD_IRQHandler</a> from startup_mkl46z4.o(.text) referenced from startup_mkl46z4.o(RESET)
  <LI><a href="#[9]">PendSV_Handler</a> from startup_mkl46z4.o(.text) referenced from startup_mkl46z4.o(RESET)
  <LI><a href="#[1f]">RTC_IRQHandler</a> from startup_mkl46z4.o(.text) referenced from startup_mkl46z4.o(RESET)
@@ -298,9 +298,6 @@ Global Symbols
 <P><STRONG><a name="[26]"></a>MCG_IRQHandler</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, startup_mkl46z4.o(.text))
 <BR>[Address Reference Count : 1]<UL><LI> startup_mkl46z4.o(RESET)
 </UL>
-<P><STRONG><a name="[29]"></a>PORTA_IRQHandler</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, startup_mkl46z4.o(.text))
-<BR>[Address Reference Count : 1]<UL><LI> startup_mkl46z4.o(RESET)
-</UL>
 <P><STRONG><a name="[2a]"></a>PORTC_PORTD_IRQHandler</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, startup_mkl46z4.o(.text))
 <BR>[Address Reference Count : 1]<UL><LI> startup_mkl46z4.o(RESET)
 </UL>
@@ -449,8 +446,13 @@ Global Symbols
 <P><STRONG><a name="[21]"></a>PIT_IRQHandler</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, c_start.o(MyCode))
 <BR>[Address Reference Count : 1]<UL><LI> startup_mkl46z4.o(RESET)
 </UL>
-<P><STRONG><a name="[7b]"></a>GPIO_BopIt_Init</STRONG> (Thumb, 24 bytes, Stack size 0 bytes, c_start.o(MyCode), UNUSED)
-<P>
+<P><STRONG><a name="[7b]"></a>GPIO_BopIt_Init</STRONG> (Thumb, 34 bytes, Stack size 0 bytes, c_start.o(MyCode), UNUSED)
+
+<P><STRONG><a name="[7c]"></a>GPIO_Write_LED</STRONG> (Thumb, 16 bytes, Stack size 0 bytes, c_start.o(MyCode), UNUSED)
+
+<P><STRONG><a name="[29]"></a>PORTA_IRQHandler</STRONG> (Thumb, 78 bytes, Stack size 0 bytes, c_start.o(MyCode))
+<BR>[Address Reference Count : 1]<UL><LI> startup_mkl46z4.o(RESET)
+</UL><P>
 <H3>
 Local Symbols
 </H3>

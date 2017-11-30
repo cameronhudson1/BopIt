@@ -290,6 +290,8 @@ GPIOC_LED	EQU		2_00000000000000010010110010000000	;pins 7 (White), 10 (Red), 11 
 			EXPORT 	Init_PIT_IRQ
 			EXPORT	PIT_IRQHandler
 			EXPORT	GPIO_BopIt_Init
+			EXPORT 	PORTA_IRQHandler
+			EXPORT	GPIO_Write_LED
 ;>>>>> begin subroutine code <<<<<
 
 ;------------------------------------------------------------------------------  
@@ -910,7 +912,7 @@ pit_isr_end	LDR		R0,=PIT_CH0_BASE	;get pit flag register
 ;SUBROUTINES USED: none
 ;------------------------------------------------------------------------------
 GPIO_BopIt_Init	PROC 	{R0-R14}
-			PUSH	{R0-R2}
+			PUSH	{R0-R2,LR}
 			
 			LDR		R0,=SIM_SCGC5
 			LDR		R1,=SIM_SCGC5_PORTA_MASK :OR: SIM_SCGC5_PORTC_MASK
@@ -930,7 +932,30 @@ GPIO_BopIt_Init	PROC 	{R0-R14}
 			ORRS	R1,R1,R2
 			STR		R1,[R0,#GPIO_PDDR_OFFSET]
 			
-			POP		{R0-R2}
+			POP		{R0-R2,PC}
+			ENDP
+;-----------------------------end subroutine-----------------------------------
+
+;------------------------------------------------------------------------------
+;GPIO_Write_LED
+;FUNCTION: initializes gpio pins for led output and buttons input
+;INPUTS: R0 - mask to set an led in PORTC; R1 - boolean for set/clear 
+;(true = set, false = clear)
+;OUTPUTS: none
+;CHANGED: none
+;SUBROUTINES USED: none
+;------------------------------------------------------------------------------
+GPIO_Write_LED	PROC	{R0-R14}
+			PUSH	{R2,LR}
+			
+			LDR		R2,=PORTC_BASE
+			CMP		R1,#0
+			BEQ		LEDSet
+			STR		R0,[R2,#GPIO_PCOR_OFFSET]	;clear led (off)
+			B		WriteLEDEnd
+LEDSet		STR		R0,[R2,#GPIO_PSOR_OFFSET]	;set led (on)
+
+WriteLEDEnd	POP		{R2,PC}
 			ENDP
 ;-----------------------------end subroutine-----------------------------------
 
@@ -1009,6 +1034,7 @@ NoMore		;Clear OUTterrupts
             AREA    MyData,DATA,READWRITE
 			EXPORT	Count
 			EXPORT 	RunStopWatch
+			EXPORT	ButtTouch
 ;>>>>> begin variables here <<<<<
 Count		SPACE	4
 RunStopWatch	SPACE	1

@@ -22,6 +22,7 @@ typedef unsigned char UInt8;
 /* assembly language variables */
 extern int Count;
 extern char RunStopWatch;
+extern char ButtTouch;
 
 /* assembly language subroutines */
 char GetChar (void);
@@ -32,3 +33,6 @@ void PutChar (char Character);
 void PutNumHex (UInt32);
 void PutNumUB (UInt8);
 void PutStringSB (char String[], int StringBufferCapacity);
+void GPIO_BopIt_Init (void);
+void PORTA_IRQHandler (void);
+void GPIO_Write_LED (int LEDMask, int on);
