@@ -1,0 +1,6 @@
+--cpu Cortex-M0+ --pd "__EVAL SETA 1" -g --apcs=interwork 
+-I.\RTE\_Target_1
+-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include
+-IC:\Keil_v5\ARM\PACK\Keil\Kinetis_KLxx_DFP\1.13.0\Device\Include
+--pd "__UVISION_VERSION SETA 524" --pd "_RTE_ SETA 1" --pd "MKL46Z256xxx4 SETA 1"
+--list .\listings\startup_mkl46z4.lst --xref -o .\startup_mkl46z4.o --depend .\startup_mkl46z4.d "RTE\Device\MKL46Z256xxx4\startup_MKL46Z4.s"
