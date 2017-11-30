@@ -243,7 +243,8 @@ NUM_ENQD	EQU 	17			;number of elements enqueued
 NIB_SHFT	EQU		4			;bits to shift to get next nibble
 TXRX_BUF_SIZE	EQU		80
 BUFFER_SIZE	EQU		4
-GPIOA_LED	EQU		2_0000000000000000000000000000000000000000000000000
+GPIOA_BUTT	EQU		2_00000000000000011100000011000000	;pins 6, 7, 14, 15, 16
+GPIOC_LED	EQU		2_00000000000000010010110010000000	;pins 7, 10, 11, 13, 16
 ;****************************************************************
 ;MACROs
 ;****************************************************************
@@ -261,6 +262,7 @@ GPIOA_LED	EQU		2_0000000000000000000000000000000000000000000000000
 			EXPORT 	UART0_IRQHandler
 			EXPORT 	Init_PIT_IRQ
 			EXPORT	PIT_IRQHandler
+			EXPORT	GPIO_BopIt_Init
 ;>>>>> begin subroutine code <<<<<
 
 ;------------------------------------------------------------------------------  
@@ -881,12 +883,22 @@ pit_isr_end	LDR		R0,=PIT_CH0_BASE	;get pit flag register
 ;SUBROUTINES USED: none
 ;------------------------------------------------------------------------------
 GPIO_BopIt_Init	PROC 	{R0-R14}
-			PUSH	{}
+			PUSH	{R0-R2}
 			
 			LDR		R0,=PORTA_BASE
-			MOVS	R1,#GPIO_PDDR_OFFSET
+			LDR		R1,[R0,#0]
+			MOVS	R2,#GPIOA_BUTT
+			BICS	R1,R1,R2
+			STR		R1,[R0,#GPIO_PDDR_OFFSET]
 			
-			STR		R1,[R0,#PORTA_
+			LDR		R0,=PORTC_BASE
+			LDR		R1,[R0,#0]
+			MOVS	R2,#GPIOA_LED
+			ORRS	R1,R1,R2
+			STR		R1,[R0,#GPIO_PDDR_OFFSET]
+			
+			POP		{R0-R2}
+			ENDP
 ;-----------------------------end subroutine-----------------------------------
 
 ;>>>>>   end subroutine code <<<<<
