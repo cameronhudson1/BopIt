@@ -912,6 +912,12 @@ pit_isr_end	LDR		R0,=PIT_CH0_BASE	;get pit flag register
 GPIO_BopIt_Init	PROC 	{R0-R14}
 			PUSH	{R0-R2}
 			
+			LDR		R0,=SIM_SCGC5
+			LDR		R1,=SIM_SCGC5_PORTA_MASK :OR: SIM_SCGC5_PORTC_MASK
+			LDR		R2,[R0,#0]
+			ORRS	R1,R1,R2
+			STR		R1,[R0,#0]
+			
 			LDR		R0,=PORTA_BASE		;initialize GPIOA pins for buttons
 			LDR		R1,[R0,#0]
 			LDR		R2,=GPIOA_BUTT
@@ -940,7 +946,9 @@ PORTA_IRQHandler  PROC	{R0-R14}
 			PUSH	{LR}
 			
 			LDR		R0,=PORTA_BASE				;
-			LDR		R1,[R0,#PORTA_ISFR_OFFSET]	;R1 <- PortA Interrupt Status Flag Register
+			MOVS	R1,#PORTA_ISFR_OFFSET
+			ADDS	R0,R0,R1
+			LDR		R1,[R0,#0]					;R1 <- PortA Interrupt Status Flag Register
 			
 CheckWhite	LDR		R2,=WHITE_BUTT_SET_MASK		;R2 <- White Button Set Mask
 			CMP		R1,R2						;

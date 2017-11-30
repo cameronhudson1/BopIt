@@ -570,19 +570,19 @@ ARM Macro Assembler    Page 9 Program Title for Listing Header Goes Here
   305 00000000 B507            PUSH             {R0-R2,LR}
   306 00000002         
   307 00000002         ;initialize Rx and Tx queues
-  308 00000002 48C4            LDR              R0,=RxQBuffer ;init Rx queue
-  309 00000004 49C4            LDR              R1,=RxQRef
+  308 00000002 48CE            LDR              R0,=RxQBuffer ;init Rx queue
+  309 00000004 49CE            LDR              R1,=RxQRef
   310 00000006 2250            MOVS             R2,#TXRX_BUF_SIZE
   311 00000008 F7FF FFFE       BL               InitQueue
-  312 0000000C 48C3            LDR              R0,=TxQBuffer ;init Tx queue
-  313 0000000E 49C4            LDR              R1,=TxQRef
+  312 0000000C 48CD            LDR              R0,=TxQBuffer ;init Tx queue
+  313 0000000E 49CE            LDR              R1,=TxQRef
   314 00000010 F7FF FFFE       BL               InitQueue
   315 00000014         
-  316 00000014 48C3            LDR              R0,=SIM_SOPT2
-  317 00000016 49C4            LDR              R1,=SIM_SOPT2_UART0SRC_MASK
+  316 00000014 48CD            LDR              R0,=SIM_SOPT2
+  317 00000016 49CE            LDR              R1,=SIM_SOPT2_UART0SRC_MASK
   318 00000018 6802            LDR              R2,[R0,#0]
   319 0000001A 438A            BICS             R2,R2,R1
-  320 0000001C 49C3            LDR              R1,=SIM_SOPT2_UART0_MCGPLLCLK_D
+  320 0000001C 49CD            LDR              R1,=SIM_SOPT2_UART0_MCGPLLCLK_D
 
 
 
@@ -594,71 +594,71 @@ IV2
   322 00000020 6002            STR              R2,[R0,#0]
   323 00000022         
   324 00000022         ;Enable external connection for UART0     
-  325 00000022 48C3            LDR              R0,=SIM_SOPT5
-  326 00000024 49C3            LDR              R1,=SIM_SOPT5_UART0_EXTERN_MASK
+  325 00000022 48CD            LDR              R0,=SIM_SOPT5
+  326 00000024 49CD            LDR              R1,=SIM_SOPT5_UART0_EXTERN_MASK
 _CLEAR
   327 00000026 6802            LDR              R2,[R0,#0]
   328 00000028 438A            BICS             R2,R2,R1
   329 0000002A 6002            STR              R2,[R0,#0]
   330 0000002C         
   331 0000002C         ;Enable clock for UART0 module     
-  332 0000002C 48C2            LDR              R0,=SIM_SCGC4
-  333 0000002E 49C3            LDR              R1,=SIM_SCGC4_UART0_MASK
+  332 0000002C 48CC            LDR              R0,=SIM_SCGC4
+  333 0000002E 49CD            LDR              R1,=SIM_SCGC4_UART0_MASK
   334 00000030 6802            LDR              R2,[R0,#0]
   335 00000032 430A            ORRS             R2,R2,R1
   336 00000034 6002            STR              R2,[R0,#0]
   337 00000036         
   338 00000036         ;Enable clock for Port A module     
-  339 00000036 48C2            LDR              R0,=SIM_SCGC5
-  340 00000038 49C2            LDR              R1,=SIM_SCGC5_PORTA_MASK
+  339 00000036 48CC            LDR              R0,=SIM_SCGC5
+  340 00000038 49CC            LDR              R1,=SIM_SCGC5_PORTA_MASK
   341 0000003A 6802            LDR              R2,[R0,#0]
   342 0000003C 430A            ORRS             R2,R2,R1
   343 0000003E 6002            STR              R2,[R0,#0]
   344 00000040         
   345 00000040         ;Connect PORT A Pin 1 (PTA1) to UART0 Rx (J1 Pin 02)    
                         
-  346 00000040 48C1            LDR              R0,=PORTA_PCR1
-  347 00000042 49C2            LDR              R1,=PORT_PCR_SET_PTA1_UART0_RX
+  346 00000040 48CB            LDR              R0,=PORTA_PCR1
+  347 00000042 49CC            LDR              R1,=PORT_PCR_SET_PTA1_UART0_RX
   348 00000044 6001            STR              R1,[R0,#0]
   349 00000046         
   350 00000046         ;Connect PORT A Pin 2 (PTA2) to UART0 Tx (J1 Pin 04)    
                         
-  351 00000046 48C2            LDR              R0,=PORTA_PCR2
-  352 00000048 49C0            LDR              R1,=PORT_PCR_SET_PTA2_UART0_TX
+  351 00000046 48CC            LDR              R0,=PORTA_PCR2
+  352 00000048 49CA            LDR              R1,=PORT_PCR_SET_PTA2_UART0_TX
   353 0000004A 6001            STR              R1,[R0,#0]
   354 0000004C         
   355 0000004C         ;Disable UART0 receiver and transmitter     
-  356 0000004C 48C1            LDR              R0,=UART0_BASE
+  356 0000004C 48CB            LDR              R0,=UART0_BASE
   357 0000004E 210C            MOVS             R1,#UART0_C2_T_R
   358 00000050 78C2            LDRB             R2,[R0,#UART0_C2_OFFSET]
   359 00000052 438A            BICS             R2,R2,R1
   360 00000054 70C2            STRB             R2,[R0,#UART0_C2_OFFSET]
   361 00000056         
   362 00000056         ;initialize NVIC
-  363 00000056 48C0            LDR              R0,=UART0_IPR
-  364 00000058 4AC0            LDR              R2,=NVIC_IPR_UART0_PRI_3
+  363 00000056 48CA            LDR              R0,=UART0_IPR
+  364 00000058 4ACA            LDR              R2,=NVIC_IPR_UART0_PRI_3
   365 0000005A 6803            LDR              R3,[R0,#0]
   366 0000005C 4313            ORRS             R3,R3,R2
   367 0000005E 6003            STR              R3,[R0,#0]
   368 00000060         
   369 00000060         ;clear any pending uart interrupts
-  370 00000060 48BF            LDR              R0,=NVIC_ICPR
-  371 00000062 49C0            LDR              R1,=NVIC_ICPR_UART0_MASK
+  370 00000060 48C9            LDR              R0,=NVIC_ICPR
+  371 00000062 49CA            LDR              R1,=NVIC_ICPR_UART0_MASK
   372 00000064 6001            STR              R1,[R0,#0]
   373 00000066         
   374 00000066         ;unmask uart interrupts
-  375 00000066 48C0            LDR              R0,=NVIC_ISER
+  375 00000066 48CA            LDR              R0,=NVIC_ISER
 
 
 
 ARM Macro Assembler    Page 11 Program Title for Listing Header Goes Here
 
 
-  376 00000068 49BE            LDR              R1,=NVIC_ISER_UART0_MASK
+  376 00000068 49C8            LDR              R1,=NVIC_ISER_UART0_MASK
   377 0000006A 6001            STR              R1,[R0,#0]
   378 0000006C         
   379 0000006C         ;Set UART0 for 9600 baud, 8N1 protocol 
-  380 0000006C 48B9            LDR              R0,=UART0_BASE
+  380 0000006C 48C3            LDR              R0,=UART0_BASE
   381 0000006E 2101            MOVS             R1,#UART0_BDH_9600
   382 00000070 7001            STRB             R1,[R0,#UART0_BDH_OFFSET]
   383 00000072 2138            MOVS             R1,#UART0_BDL_9600
@@ -703,7 +703,7 @@ LBKDETECT_CLEAR_FLAGS
   417 00000096         GetChar PROC             {R1-R14}
   418 00000096 B502            PUSH             {R1,LR}
   419 00000098         
-  420 00000098 499F            LDR              R1,=RxQRef  ;try to enqueue cha
+  420 00000098 49A9            LDR              R1,=RxQRef  ;try to enqueue cha
                                                             racter
   421 0000009A         
   422 0000009A B672    getLoop CPSID            I           ;mask interrupts
@@ -815,7 +815,7 @@ ARM Macro Assembler    Page 13 Program Title for Listing Header Goes Here
   488 000000E0 B672            CPSID            I
   489 000000E2 B500            PUSH             {LR}
   490 000000E4         
-  491 000000E4 489B            LDR              R0,=UART0_BASE
+  491 000000E4 48A5            LDR              R0,=UART0_BASE
   492 000000E6 78C1            LDRB             R1,[R0,#UART0_C2_OFFSET]
   493 000000E8 2280            MOVS             R2,#UART0_C2_TIE_MASK
   494 000000EA 4211            TST              R1,R2       ;check if TxInterru
@@ -826,22 +826,22 @@ ARM Macro Assembler    Page 13 Program Title for Listing Header Goes Here
   498 000000F2 4211            TST              R1,R2       ;check if TDRE is s
                                                             et
   499 000000F4 D009            BEQ              Rx
-  500 000000F6 498A            LDR              R1,=TxQRef
+  500 000000F6 4994            LDR              R1,=TxQRef
   501 000000F8 F7FF FFFE       BL               Dequeue     ;dequeue from trans
                                                             mit queue
   502 000000FC D303            BCC              dqSucc      ;branch if queue wa
                                                             s successful
-  503 000000FE 4895            LDR              R0,=UART0_BASE
+  503 000000FE 489F            LDR              R0,=UART0_BASE
   504 00000100 212C            MOVS             R1,#UART0_C2_T_RI ;diasble TxIn
                                                             terrupt
   505 00000102 70C1            STRB             R1,[R0,#UART0_C2_OFFSET]
   506 00000104 E001            B                Rx
   507 00000106         
-  508 00000106 4993    dqSucc  LDR              R1,=UART0_BASE ;write to uart d
+  508 00000106 499D    dqSucc  LDR              R1,=UART0_BASE ;write to uart d
                                                             ata register
   509 00000108 71C8            STRB             R0,[R1,#UART0_D_OFFSET]
   510 0000010A         
-  511 0000010A 4892    Rx      LDR              R0,=UART0_BASE ;check if RDRF i
+  511 0000010A 489C    Rx      LDR              R0,=UART0_BASE ;check if RDRF i
                                                             s set
 
 
@@ -856,7 +856,7 @@ ARM Macro Assembler    Page 14 Program Title for Listing Header Goes Here
   516 00000114 79C0            LDRB             R0,[R0,#UART0_D_OFFSET] ;read c
                                                             har from data regis
                                                             ter
-  517 00000116 4980            LDR              R1,=RxQRef
+  517 00000116 498A            LDR              R1,=RxQRef
   518 00000118 F7FF FFFE       BL               Enqueue     ;enqueue character 
                                                             to receive queue
   519 0000011C         
@@ -1076,14 +1076,14 @@ ARM Macro Assembler    Page 17 Program Title for Listing Header Goes Here
   648 000001B6         PutChar PROC             {R0-R14}
   649 000001B6 B507            PUSH             {R0-R2,LR}
   650 000001B8         
-  651 000001B8 4959            LDR              R1,=TxQRef  ;try to enqueue cha
+  651 000001B8 4963            LDR              R1,=TxQRef  ;try to enqueue cha
                                                             racter
   652 000001BA B672    putLoop CPSID            I           ;mask interrupts
   653 000001BC F7FF FFFE       BL               Enqueue
   654 000001C0 B662            CPSIE            I           ;unmask interrupts
   655 000001C2 D2FA            BCS              putLoop     ;loop if unsuccesfu
                                                             l
-  656 000001C4 4863            LDR              R0,=UART0_BASE 
+  656 000001C4 486D            LDR              R0,=UART0_BASE 
                                                             ;enable TxInterrupt
                                                             
   657 000001C6 21AC            MOVS             R1,#UART0_C2_TI_RI
@@ -1116,7 +1116,7 @@ ARM Macro Assembler    Page 18 Program Title for Listing Header Goes Here
   673 000001CE         
   674 000001CE 2108            MOVS             R1,#8       ;initialize downcou
                                                             nter to 8
-  675 000001D0 4A6A            LDR              R2,=0xF0000000 ;initialize mask
+  675 000001D0 4A74            LDR              R2,=0xF0000000 ;initialize mask
                                                             
   676 000001D2         
   677 000001D2 2900    hexLoop CMP              R1,#0       ;check if downcount
@@ -1349,18 +1349,18 @@ ARM Macro Assembler    Page 21 Program Title for Listing Header Goes Here
                                PROC             {R0-R14}
   829 0000026C B507            PUSH             {R0-R2,LR}
   830 0000026E         
-  831 0000026E 4844            LDR              R0,=SIM_SCGC6 ;set SIM_SCGC6 fo
+  831 0000026E 484E            LDR              R0,=SIM_SCGC6 ;set SIM_SCGC6 fo
                                                             r PIT clock enabled
                                                             
-  832 00000270 4944            LDR              R1,=SIM_SCGC6_PIT_MASK
+  832 00000270 494E            LDR              R1,=SIM_SCGC6_PIT_MASK
   833 00000272 6802            LDR              R2,[R0,#0]
   834 00000274 430A            ORRS             R2,R2,R1
   835 00000276 6002            STR              R2,[R0,#0]
   836 00000278         
-  837 00000278 4843            LDR              R0,=PIT_CH0_BASE 
+  837 00000278 484D            LDR              R0,=PIT_CH0_BASE 
                                                             ;disable PIT0 timer
                                                             
-  838 0000027A 4944            LDR              R1,=PIT_TCTRL_TEN_MASK
+  838 0000027A 494E            LDR              R1,=PIT_TCTRL_TEN_MASK
   839 0000027C 7A02            LDRB             R2,[R0,#PIT_TCTRL_OFFSET]
   840 0000027E 4391            BICS             R1,R1,R2
 
@@ -1371,34 +1371,34 @@ ARM Macro Assembler    Page 22 Program Title for Listing Header Goes Here
 
   841 00000280 6081            STR              R1,[R0,#PIT_TCTRL_OFFSET]
   842 00000282         
-  843 00000282 4843            LDR              R0,=PIT_IPR ;set PIT interrupt 
+  843 00000282 484D            LDR              R0,=PIT_IPR ;set PIT interrupt 
                                                             priority
-  844 00000284 4943            LDR              R1,=NVIC_IPR_PIT_MASK
+  844 00000284 494D            LDR              R1,=NVIC_IPR_PIT_MASK
   845 00000286 6802            LDR              R2,[R0,#0]
   846 00000288 438A            BICS             R2,R2,R1
   847 0000028A 6002            STR              R2,[R0,#0]
   848 0000028C         
-  849 0000028C 4834            LDR              R0,=NVIC_ICPR ;clear any pendin
+  849 0000028C 483E            LDR              R0,=NVIC_ICPR ;clear any pendin
                                                             g PIT interrupts
-  850 0000028E 4942            LDR              R1,=NVIC_ICPR_PIT_MASK
+  850 0000028E 494C            LDR              R1,=NVIC_ICPR_PIT_MASK
   851 00000290 6001            STR              R1,[R0,#0]
   852 00000292         
-  853 00000292 4835            LDR              R0,=NVIC_ISER ;unmask PIT inter
+  853 00000292 483F            LDR              R0,=NVIC_ISER ;unmask PIT inter
                                                             rutps
-  854 00000294 4940            LDR              R1,=NVIC_ISER_PIT_MASK
+  854 00000294 494A            LDR              R1,=NVIC_ISER_PIT_MASK
   855 00000296 6001            STR              R1,[R0,#0]
   856 00000298         
-  857 00000298 4840            LDR              R0,=PIT_BASE ;enable PIT interr
+  857 00000298 484A            LDR              R0,=PIT_BASE ;enable PIT interr
                                                             upts
-  858 0000029A 493C            LDR              R1,=PIT_MCR_EN_FRZ
+  858 0000029A 4946            LDR              R1,=PIT_MCR_EN_FRZ
   859 0000029C 7001            STRB             R1,[R0,#PIT_MCR_OFFSET]
   860 0000029E         
-  861 0000029E 483A            LDR              R0,=PIT_CH0_BASE ;set interrupt
+  861 0000029E 4844            LDR              R0,=PIT_CH0_BASE ;set interrupt
                                                              period
-  862 000002A0 493F            LDR              R1,=PIT_LDVAL_10ms
+  862 000002A0 4949            LDR              R1,=PIT_LDVAL_10ms
   863 000002A2 6001            STR              R1,[R0,#PIT_LDVAL_OFFSET]
   864 000002A4         
-  865 000002A4 4838            LDR              R0,=PIT_CH0_BASE ;enable timer 
+  865 000002A4 4842            LDR              R0,=PIT_CH0_BASE ;enable timer 
                                                             channel 0 for inter
                                                             rupts
   866 000002A6 2103            MOVS             R1,#PIT_TCTRL_CH_IE
@@ -1425,7 +1425,7 @@ ARM Macro Assembler    Page 22 Program Title for Listing Header Goes Here
   883 000002AC B672            CPSID            I
   884 000002AE B500            PUSH             {LR}
   885 000002B0         
-  886 000002B0 482E            LDR              R0,=RunStopWatch ;get RunStopWa
+  886 000002B0 4838            LDR              R0,=RunStopWatch ;get RunStopWa
                                                             tch variable
   887 000002B2 7800            LDRB             R0,[R0,#0]
 
@@ -1436,13 +1436,13 @@ ARM Macro Assembler    Page 23 Program Title for Listing Header Goes Here
 
   888 000002B4 2800            CMP              R0,#0       ;exit if equals 0
   889 000002B6 D003            BEQ              pit_isr_end
-  890 000002B8 482D            LDR              R0,=Count   ;get count variable
+  890 000002B8 4837            LDR              R0,=Count   ;get count variable
                                                             
   891 000002BA 6801            LDR              R1,[R0,#0]
   892 000002BC 1C49            ADDS             R1,R1,#1    ;increment count
   893 000002BE 6001            STR              R1,[R0,#0]  ;store new count
   894 000002C0         
-  895 000002C0 4831    pit_isr_end
+  895 000002C0 483B    pit_isr_end
                                LDR              R0,=PIT_CH0_BASE ;get pit flag 
                                                             register
   896 000002C2 2101            MOVS             R1,#PIT_TFLG_TIF_MASK 
@@ -1471,123 +1471,148 @@ ARM Macro Assembler    Page 23 Program Title for Listing Header Goes Here
                                PROC             {R0-R14}
   913 000002CA B407            PUSH             {R0-R2}
   914 000002CC         
-  915 000002CC 4837            LDR              R0,=PORTA_BASE ;initialize GPIO
-                                                            A pins for buttons
-  916 000002CE 6801            LDR              R1,[R0,#0]
-  917 000002D0 4A37            LDR              R2,=GPIOA_BUTT
-  918 000002D2 4391            BICS             R1,R1,R2
-  919 000002D4 6141            STR              R1,[R0,#GPIO_PDDR_OFFSET]
+  915 000002CC 4826            LDR              R0,=SIM_SCGC5
+  916 000002CE 4941            LDR              R1,=SIM_SCGC5_PORTA_MASK :OR: S
+IM_SCGC5_PORTC_MASK
+  917 000002D0 6802            LDR              R2,[R0,#0]
+  918 000002D2 4311            ORRS             R1,R1,R2
+  919 000002D4 6001            STR              R1,[R0,#0]
   920 000002D6         
-  921 000002D6 4837            LDR              R0,=PORTC_BASE ;initialize GPIO
-                                                            C pins for LEDs
+  921 000002D6 4840            LDR              R0,=PORTA_BASE ;initialize GPIO
+                                                            A pins for buttons
   922 000002D8 6801            LDR              R1,[R0,#0]
-  923 000002DA 4A37            LDR              R2,=GPIOC_LED
-  924 000002DC 4311            ORRS             R1,R1,R2
+  923 000002DA 4A40            LDR              R2,=GPIOA_BUTT
+  924 000002DC 4391            BICS             R1,R1,R2
   925 000002DE 6141            STR              R1,[R0,#GPIO_PDDR_OFFSET]
   926 000002E0         
-  927 000002E0 BC07            POP              {R0-R2}
-  928 000002E2                 ENDP
-  929 000002E2         ;-----------------------------end subroutine------------
-                       -----------------------
-  930 000002E2         
-  931 000002E2         ;-------------------------------------------------------
-                       -----------------------
-  932 000002E2         ; PORTA_IRQHandler
+  927 000002E0 483F            LDR              R0,=PORTC_BASE ;initialize GPIO
+                                                            C pins for LEDs
+  928 000002E2 6801            LDR              R1,[R0,#0]
+  929 000002E4 4A3F            LDR              R2,=GPIOC_LED
+  930 000002E6 4311            ORRS             R1,R1,R2
+  931 000002E8 6141            STR              R1,[R0,#GPIO_PDDR_OFFSET]
+  932 000002EA         
+  933 000002EA BC07            POP              {R0-R2}
 
 
 
 ARM Macro Assembler    Page 24 Program Title for Listing Header Goes Here
 
 
-  933 000002E2         ;  Handles an IRQ from any Port A Pins (Containing 5 LED
-                        Buttons)
-  934 000002E2         ;  Checks each one to see what was clicked, updates a va
-                       riable to a
-  935 000002E2         ;  charcter of whcih was pressed.  Clears the Interrupt 
-                       and sets the 
-  936 000002E2         ;  input to 0.
-  937 000002E2         ;-------------------------------------------------------
+  934 000002EC                 ENDP
+  935 000002EC         ;-----------------------------end subroutine------------
                        -----------------------
-  938 000002E2         PORTA_IRQHandler
+  936 000002EC         
+  937 000002EC         ;-------------------------------------------------------
+                       -----------------------
+  938 000002EC         ; PORTA_IRQHandler
+  939 000002EC         ;  Handles an IRQ from any Port A Pins (Containing 5 LED
+                        Buttons)
+  940 000002EC         ;  Checks each one to see what was clicked, updates a va
+                       riable to a
+  941 000002EC         ;  charcter of whcih was pressed.  Clears the Interrupt 
+                       and sets the 
+  942 000002EC         ;  input to 0.
+  943 000002EC         ;-------------------------------------------------------
+                       -----------------------
+  944 000002EC         PORTA_IRQHandler
                                PROC             {R0-R14}
-  939 000002E2 B672            CPSID            I
-  940 000002E4 B500            PUSH             {LR}
-  941 000002E6         
-  942 000002E6 4835            LDR              R0,=GPIO_BASE ;R0 <- GPIO Base
-  943 000002E8 6901            LDR              R1,[R0,#GPIO_PDIR_OFFSET] ;R1 <
-                                                            - PortA Data Input 
-                                                            Register
-  944 000002EA         
-  945 000002EA 4A35    CheckWhite
+  945 000002EC B672            CPSID            I
+  946 000002EE B500            PUSH             {LR}
+  947 000002F0         
+  948 000002F0 4839            LDR              R0,=PORTA_BASE ;
+  949 000002F2 21A0            MOVS             R1,#PORTA_ISFR_OFFSET
+  950 000002F4 1840            ADDS             R0,R0,R1
+  951 000002F6 6801            LDR              R1,[R0,#0]  ;R1 <- PortA Interr
+                                                            upt Status Flag Reg
+                                                            ister
+  952 000002F8         
+  953 000002F8 4A3B    CheckWhite
                                LDR              R2,=WHITE_BUTT_SET_MASK ;R2 <- 
                                                             White Button Set Ma
                                                             sk
-  946 000002EC 4291            CMP              R1,R2       ;
-  947 000002EE D103            BNE              CheckRed    ;Branch if White Bu
+  954 000002FA 4291            CMP              R1,R2       ;
+  955 000002FC D102            BNE              CheckRed    ;Branch if White Bu
                                                             tton is not set
-  948 000002F0         
-  949 000002F0 4920            LDR              R1,=ButtTouch ;
-  950 000002F2 2357            MOVS             R3,#WHITE_LED_CHAR ;
-  951 000002F4 600B            STR              R3,[R1,#0]  ;White Led Characte
+  956 000002FE         
+  957 000002FE 4A27            LDR              R2,=ButtTouch ;
+  958 00000300 2357            MOVS             R3,#WHITE_LED_CHAR ;
+  959 00000302 6013            STR              R3,[R2,#0]  ;White Led Characte
                                                             r ->ButtTouch
-  952 000002F6         
-  953 000002F6         ;Clear Interrupt
-  954 000002F6 482D            LDR              R0,=PORTA_BASE
-  955 000002F8         
-  956 000002F8 4A33    CheckRed
+  960 00000304         
+  961 00000304 4A3A    CheckRed
                                LDR              R2,=RED_BUTT_SET_MASK ;R2 <- Wh
                                                             ite Button Set Mask
                                                             
-  957 000002FA 4291            CMP              R1,R2       ;
-  958 000002FC D1FF            BNE              CheckYellow ;Branch if White Bu
-                                                            tton is not set
-  959 000002FE         ;HAVE IT DO SOMETHING
-  960 000002FE         
-  961 000002FE 4A33    CheckYellow
+  962 00000306 4291            CMP              R1,R2       ;
+  963 00000308 D102            BNE              CheckYellow ;Branch if Red Butt
+                                                            on is not set
+  964 0000030A         
+  965 0000030A 4A24            LDR              R2,=ButtTouch ;
+  966 0000030C 2352            MOVS             R3,#RED_LED_CHAR ;
+  967 0000030E 6013            STR              R3,[R2,#0]  ;Red Led Character 
+                                                            ->ButtTouch
+  968 00000310         
+  969 00000310 4A39    CheckYellow
                                LDR              R2,=YELLOW_BUTT_SET_MASK ;R2 <-
                                                              White Button Set M
                                                             ask
-  962 00000300 4291            CMP              R1,R2       ;
-  963 00000302 D1FF            BNE              CheckGreen  ;Branch if White Bu
-                                                            tton is not set
-  964 00000304         ;HAVE IT DO SOMETHING
-  965 00000304         
-  966 00000304 4A32    CheckGreen
-                               LDR              R2,=GREEN_BUTT_SET_MASK ;R2 <- 
-                                                            White Button Set Ma
-                                                            sk
-  967 00000306 4291            CMP              R1,R2       ;
-  968 00000308 D1FF            BNE              CheckBlue   ;Branch if White Bu
+  970 00000312 4291            CMP              R1,R2       ;
 
 
 
 ARM Macro Assembler    Page 25 Program Title for Listing Header Goes Here
 
 
+  971 00000314 D102            BNE              CheckGreen  ;Branch if Yellow B
+                                                            utton is not set
+  972 00000316         
+  973 00000316 4A21            LDR              R2,=ButtTouch ;
+  974 00000318 2359            MOVS             R3,#YELLOW_LED_CHAR ;
+  975 0000031A 6013            STR              R3,[R2,#0]  ;Yellow Led Charact
+                                                            er ->ButtTouch
+  976 0000031C         
+  977 0000031C 4A38    CheckGreen
+                               LDR              R2,=GREEN_BUTT_SET_MASK ;R2 <- 
+                                                            White Button Set Ma
+                                                            sk
+  978 0000031E 4291            CMP              R1,R2       ;
+  979 00000320 D102            BNE              CheckBlue   ;Branch if Green Bu
                                                             tton is not set
-  969 0000030A         ;HAVE IT DO SOMETHING
-  970 0000030A         
-  971 0000030A 4A2F    CheckBlue
+  980 00000322         
+  981 00000322 4A1E            LDR              R2,=ButtTouch ;
+  982 00000324 2347            MOVS             R3,#GREEN_LED_CHAR ;
+  983 00000326 6013            STR              R3,[R2,#0]  ;Green Led Characte
+                                                            r ->ButtTouch
+  984 00000328         
+  985 00000328 4A31    CheckBlue
                                LDR              R2,=RED_BUTT_SET_MASK ;R2 <- Wh
                                                             ite Button Set Mask
                                                             
-  972 0000030C 4291            CMP              R1,R2       ;
-  973 0000030E D1FF            BNE              NoMore      ;Branch if White Bu
-                                                            tton is not set
-  974 00000310         ;HAVE IT DO SOMETHING
-  975 00000310         
-  976 00000310         NoMore
-  977 00000310         
-  978 00000310 BD00            POP              {PC}
-  979 00000312 B662            CPSIE            I
-  980 00000314                 ENDP
-  981 00000314         
-  982 00000314         ;>>>>>   end subroutine code <<<<<
-  983 00000314                 ALIGN
-  984 00000314         ;*******************************************************
+  986 0000032A 4291            CMP              R1,R2       ;
+  987 0000032C D102            BNE              NoMore      ;Branch if Blue But
+                                                            ton is not set
+  988 0000032E         
+  989 0000032E 4A1B            LDR              R2,=ButtTouch ;
+  990 00000330 2342            MOVS             R3,#BLUE_LED_CHAR ;
+  991 00000332 6013            STR              R3,[R2,#0]  ;Blue Led Character
+                                                             ->ButtTouch
+  992 00000334         
+  993 00000334         NoMore                               ;Clear OUTterrupts
+  994 00000334 6001            STR              R1,[R0,#0]  ;Storing 1's to pin
+                                                             bit values clears 
+                                                            them
+  995 00000336         
+  996 00000336 BD00            POP              {PC}
+  997 00000338 B662            CPSIE            I
+  998 0000033A                 ENDP
+  999 0000033A         
+ 1000 0000033A         ;>>>>>   end subroutine code <<<<<
+ 1001 0000033A 00 00           ALIGN
+ 1002 0000033C         ;*******************************************************
                        ***************
-  985 00000314         ;Constants
-  986 00000314 00000000 
+ 1003 0000033C         ;Constants
+ 1004 0000033C 00000000 
               00000000 
               00000000 
               00000000 
@@ -1598,6 +1623,12 @@ ARM Macro Assembler    Page 25 Program Title for Listing Header Goes Here
               00010007 
               40048034 
               00000400 
+
+
+
+ARM Macro Assembler    Page 26 Program Title for Listing Header Goes Here
+
+
               40048038 
               00000200 
               40049004 
@@ -1623,68 +1654,37 @@ ARM Macro Assembler    Page 25 Program Title for Listing Header Goes Here
               00400000 
               40037000 
               0003A97F 
-
-
-
-ARM Macro Assembler    Page 26 Program Title for Listing Header Goes Here
-
-
               00000000 
               00000000 
+              00000A00 
               40049000 
               0001C0C0 
               4004B000 
               00012C80 
-              400FF000 
               00010000 
               00000000 
               00008000 
+              00000000 
               00004000 
-              00000080         AREA             MyConst,DATA,READONLY
-  987 00000000         ;>>>>> begin constants here <<<<<
-  988 00000000         ;>>>>>   end constants here <<<<<
-  989 00000000         ;*******************************************************
+              00000000 
+              00000080 
+              00000000 
+              00000000         AREA             MyConst,DATA,READONLY
+ 1005 00000000         ;>>>>> begin constants here <<<<<
+ 1006 00000000         ;>>>>>   end constants here <<<<<
+ 1007 00000000         ;*******************************************************
                        ***************
-  990 00000000         ;Variables
-  991 00000000                 AREA             MyData,DATA,READWRITE
-  992 00000000                 EXPORT           Count
-  993 00000000                 EXPORT           RunStopWatch
-  994 00000000         ;>>>>> begin variables here <<<<<
-  995 00000000 00 00 00 
+ 1008 00000000         ;Variables
+ 1009 00000000                 AREA             MyData,DATA,READWRITE
+ 1010 00000000                 EXPORT           Count
+ 1011 00000000                 EXPORT           RunStopWatch
+ 1012 00000000         ;>>>>> begin variables here <<<<<
+ 1013 00000000 00 00 00 
               00       Count   SPACE            4
-  996 00000004 00      RunStopWatch
+ 1014 00000004 00      RunStopWatch
                                SPACE            1
-  997 00000005 00 00 00        ALIGN
-  998 00000008 00 00 00 
-              00 00 00 
-              00 00 00 
-              00 00 00 
-              00 00 00 
-              00 00 00 RxQRef  SPACE            18
-  999 0000001A 00 00           ALIGN
- 1000 0000001C 00 00 00 
-              00 00 00 
-              00 00 00 
-              00 00 00 
-              00 00 00 
-              00 00 00 TxQRef  SPACE            18
- 1001 0000002E 00 00           ALIGN
- 1002 00000030 00 00 00 
-              00 00 00 
-              00 00 00 
-              00 00 00 
-              00 00 00 
-              00 00 00 
-              00 00 00 
-              00 00 00 
-              00 00 00 
-              00 00 00 
-              00 00 00 
-              00 00 00 
-              00 00 00 
-              00 00 00 
-              00 00 00 
-              00 00 00 
+ 1015 00000005 00 00 00        ALIGN
+ 1016 00000008 00 00 00 
               00 00 00 
               00 00 00 
               00 00 00 
@@ -1695,6 +1695,35 @@ ARM Macro Assembler    Page 27 Program Title for Listing Header Goes Here
 
 
               00 00 00 
+              00 00 00 RxQRef  SPACE            18
+ 1017 0000001A 00 00           ALIGN
+ 1018 0000001C 00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 TxQRef  SPACE            18
+ 1019 0000002E 00 00           ALIGN
+ 1020 00000030 00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
               00 00 00 
               00 00 00 
               00 00 00 
@@ -1703,8 +1732,8 @@ ARM Macro Assembler    Page 27 Program Title for Listing Header Goes Here
               00 00 00 
               00 00    RxQBuffer
                                SPACE            TXRX_BUF_SIZE
- 1003 00000080                 ALIGN
- 1004 00000080 00 00 00 
+ 1021 00000080                 ALIGN
+ 1022 00000080 00 00 00 
               00 00 00 
               00 00 00 
               00 00 00 
@@ -1724,6 +1753,12 @@ ARM Macro Assembler    Page 27 Program Title for Listing Header Goes Here
               00 00 00 
               00 00 00 
               00 00 00 
+
+
+
+ARM Macro Assembler    Page 28 Program Title for Listing Header Goes Here
+
+
               00 00 00 
               00 00 00 
               00 00 00 
@@ -1732,64 +1767,64 @@ ARM Macro Assembler    Page 27 Program Title for Listing Header Goes Here
               00 00 00 
               00 00    TxQBuffer
                                SPACE            TXRX_BUF_SIZE
- 1005 000000D0                 ALIGN
- 1006 000000D0 00      ButtTouch
+ 1023 000000D0                 ALIGN
+ 1024 000000D0 00      ButtTouch
                                SPACE            1           ;Stores Char of the
                                                              last button presse
                                                             d
- 1007 000000D1         ;>>>>>   end variables here <<<<<
- 1008 000000D1                 END
+ 1025 000000D1         ;>>>>>   end variables here <<<<<
+ 1026 000000D1                 END
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M0+ --apcs=inter
-work --depend=.\objects\c_start.d -o.\objects\c_start.o -I.\RTE\_Target_1 -ID:\
-Keil\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include -ID:\Keil\ARM\PACK\Keil\Kinetis_KLx
-x_DFP\1.13.0\Device\Include --predefine="__EVAL SETA 1" --predefine="__UVISION_
-VERSION SETA 524" --predefine="_RTE_ SETA 1" --predefine="MKL46Z256xxx4 SETA 1"
- --list=.\listings\c_start.lst C_Start.s
+work --depend=.\objects\c_start.d -o.\objects\c_start.o -I.\RTE\_Target_1 -IC:\
+Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include -IC:\Keil_v5\ARM\PACK\Keil\Kinet
+is_KLxx_DFP\1.13.0\Device\Include --predefine="__EVAL SETA 1" --predefine="__UV
+ISION_VERSION SETA 524" --predefine="_RTE_ SETA 1" --predefine="MKL46Z256xxx4 S
+ETA 1" --list=.\listings\c_start.lst C_Start.s
 
 
 
 ARM Macro Assembler    Page 1 Alphabetic symbol ordering
 Relocatable symbols
 
-CheckBlue 0000030A
+CheckBlue 00000328
 
 Symbol: CheckBlue
    Definitions
-      At line 971 in file C_Start.s
+      At line 985 in file C_Start.s
    Uses
-      At line 968 in file C_Start.s
+      At line 979 in file C_Start.s
 Comment: CheckBlue used once
-CheckGreen 00000304
+CheckGreen 0000031C
 
 Symbol: CheckGreen
    Definitions
-      At line 966 in file C_Start.s
+      At line 977 in file C_Start.s
    Uses
-      At line 963 in file C_Start.s
+      At line 971 in file C_Start.s
 Comment: CheckGreen used once
-CheckRed 000002F8
+CheckRed 00000304
 
 Symbol: CheckRed
    Definitions
-      At line 956 in file C_Start.s
+      At line 961 in file C_Start.s
    Uses
-      At line 947 in file C_Start.s
+      At line 955 in file C_Start.s
 Comment: CheckRed used once
-CheckWhite 000002EA
+CheckWhite 000002F8
 
 Symbol: CheckWhite
    Definitions
-      At line 945 in file C_Start.s
+      At line 953 in file C_Start.s
    Uses
       None
 Comment: CheckWhite unused
-CheckYellow 000002FE
+CheckYellow 00000310
 
 Symbol: CheckYellow
    Definitions
-      At line 961 in file C_Start.s
+      At line 969 in file C_Start.s
    Uses
-      At line 958 in file C_Start.s
+      At line 963 in file C_Start.s
 Comment: CheckYellow used once
 Dequeue 00000136
 
@@ -1890,13 +1925,13 @@ Symbol: MyCode
    Uses
       None
 Comment: MyCode unused
-NoMore 00000310
+NoMore 00000334
 
 Symbol: NoMore
    Definitions
-      At line 976 in file C_Start.s
+      At line 993 in file C_Start.s
    Uses
-      At line 973 in file C_Start.s
+      At line 987 in file C_Start.s
 Comment: NoMore used once
 PIT_IRQHandler 000002AC
 
@@ -1914,11 +1949,11 @@ Symbol: PIT_ISR
    Uses
       None
 Comment: PIT_ISR unused
-PORTA_IRQHandler 000002E2
+PORTA_IRQHandler 000002EC
 
 Symbol: PORTA_IRQHandler
    Definitions
-      At line 938 in file C_Start.s
+      At line 944 in file C_Start.s
    Uses
       None
 Comment: PORTA_IRQHandler unused
@@ -2236,7 +2271,7 @@ MyConst 00000000
 
 Symbol: MyConst
    Definitions
-      At line 986 in file C_Start.s
+      At line 1004 in file C_Start.s
    Uses
       None
 Comment: MyConst unused
@@ -2251,24 +2286,28 @@ ButtTouch 000000D0
 
 Symbol: ButtTouch
    Definitions
-      At line 1006 in file C_Start.s
+      At line 1024 in file C_Start.s
    Uses
-      At line 949 in file C_Start.s
-Comment: ButtTouch used once
+      At line 957 in file C_Start.s
+      At line 965 in file C_Start.s
+      At line 973 in file C_Start.s
+      At line 981 in file C_Start.s
+      At line 989 in file C_Start.s
+
 Count 00000000
 
 Symbol: Count
    Definitions
-      At line 995 in file C_Start.s
+      At line 1013 in file C_Start.s
    Uses
       At line 890 in file C_Start.s
-      At line 992 in file C_Start.s
+      At line 1010 in file C_Start.s
 
 MyData 00000000
 
 Symbol: MyData
    Definitions
-      At line 991 in file C_Start.s
+      At line 1009 in file C_Start.s
    Uses
       None
 Comment: MyData unused
@@ -2276,16 +2315,16 @@ RunStopWatch 00000004
 
 Symbol: RunStopWatch
    Definitions
-      At line 996 in file C_Start.s
+      At line 1014 in file C_Start.s
    Uses
       At line 886 in file C_Start.s
-      At line 993 in file C_Start.s
+      At line 1011 in file C_Start.s
 
 RxQBuffer 00000030
 
 Symbol: RxQBuffer
    Definitions
-      At line 1002 in file C_Start.s
+      At line 1020 in file C_Start.s
    Uses
       At line 308 in file C_Start.s
 Comment: RxQBuffer used once
@@ -2293,7 +2332,7 @@ RxQRef 00000008
 
 Symbol: RxQRef
    Definitions
-      At line 998 in file C_Start.s
+      At line 1016 in file C_Start.s
    Uses
       At line 309 in file C_Start.s
       At line 420 in file C_Start.s
@@ -2302,22 +2341,22 @@ Symbol: RxQRef
 TxQBuffer 00000080
 
 Symbol: TxQBuffer
-   Definitions
-      At line 1004 in file C_Start.s
-   Uses
-      At line 312 in file C_Start.s
 
 
 
 ARM Macro Assembler    Page 2 Alphabetic symbol ordering
 Relocatable symbols
 
+   Definitions
+      At line 1022 in file C_Start.s
+   Uses
+      At line 312 in file C_Start.s
 Comment: TxQBuffer used once
 TxQRef 0000001C
 
 Symbol: TxQRef
    Definitions
-      At line 1000 in file C_Start.s
+      At line 1018 in file C_Start.s
    Uses
       At line 313 in file C_Start.s
       At line 500 in file C_Start.s
@@ -3774,8 +3813,8 @@ Symbol: BLUE_LED_CHAR
    Definitions
       At line 258 in file C_Start.s
    Uses
-      None
-Comment: BLUE_LED_CHAR unused
+      At line 990 in file C_Start.s
+Comment: BLUE_LED_CHAR used once
 BLUE_LED_SET_MASK 00000080
 
 Symbol: BLUE_LED_SET_MASK
@@ -5753,7 +5792,7 @@ Symbol: GPIOA_BUTT
    Definitions
       At line 273 in file C_Start.s
    Uses
-      At line 917 in file C_Start.s
+      At line 923 in file C_Start.s
 Comment: GPIOA_BUTT used once
 GPIOA_OFFSET 00000000
 
@@ -5917,7 +5956,7 @@ Symbol: GPIOC_LED
    Definitions
       At line 274 in file C_Start.s
    Uses
-      At line 923 in file C_Start.s
+      At line 929 in file C_Start.s
 Comment: GPIOC_LED used once
 GPIOC_OFFSET 00000080
 
@@ -6137,8 +6176,8 @@ Symbol: GPIO_BASE
    Definitions
       At line 903 in file MKL46Z4.s
    Uses
-      At line 942 in file C_Start.s
-Comment: GPIO_BASE used once
+      None
+Comment: GPIO_BASE unused
 GPIO_PCOR_OFFSET 00000008
 
 Symbol: GPIO_PCOR_OFFSET
@@ -6178,8 +6217,8 @@ Absolute symbols
       At line 938 in file MKL46Z4.s
       At line 946 in file MKL46Z4.s
       At line 954 in file MKL46Z4.s
-      At line 919 in file C_Start.s
       At line 925 in file C_Start.s
+      At line 931 in file C_Start.s
 
 GPIO_PDIR_OFFSET 00000010
 
@@ -6197,7 +6236,6 @@ Symbol: GPIO_PDIR_OFFSET
       At line 937 in file MKL46Z4.s
       At line 945 in file MKL46Z4.s
       At line 953 in file MKL46Z4.s
-      At line 943 in file C_Start.s
 
 GPIO_PDOR_OFFSET 00000000
 
@@ -6224,13 +6262,13 @@ Symbol: GPIO_PSOR_OFFSET
    Uses
       At line 731 in file MKL46Z4.s
       At line 739 in file MKL46Z4.s
+      At line 747 in file MKL46Z4.s
 
 
 
 ARM Macro Assembler    Page 61 Alphabetic symbol ordering
 Absolute symbols
 
-      At line 747 in file MKL46Z4.s
       At line 755 in file MKL46Z4.s
       At line 763 in file MKL46Z4.s
       At line 918 in file MKL46Z4.s
@@ -6262,7 +6300,7 @@ Symbol: GREEN_BUTT_SET_MASK
    Definitions
       At line 254 in file C_Start.s
    Uses
-      At line 966 in file C_Start.s
+      At line 977 in file C_Start.s
 Comment: GREEN_BUTT_SET_MASK used once
 GREEN_LED_CHAR 00000047
 
@@ -6270,8 +6308,8 @@ Symbol: GREEN_LED_CHAR
    Definitions
       At line 253 in file C_Start.s
    Uses
-      None
-Comment: GREEN_LED_CHAR unused
+      At line 982 in file C_Start.s
+Comment: GREEN_LED_CHAR used once
 GREEN_LED_SEE_MASK 00000400
 
 Symbol: GREEN_LED_SEE_MASK
@@ -6292,9 +6330,9 @@ HALFWORD_SIZE 00000002
 
 
 
+
 ARM Macro Assembler    Page 62 Alphabetic symbol ordering
 Absolute symbols
-
 
 Symbol: HALFWORD_SIZE
    Definitions
@@ -6354,13 +6392,13 @@ I2C0_PRI_POS 00000006
 
 Symbol: I2C0_PRI_POS
    Definitions
+      At line 2684 in file MKL46Z4.s
 
 
 
 ARM Macro Assembler    Page 63 Alphabetic symbol ordering
 Absolute symbols
 
-      At line 2684 in file MKL46Z4.s
    Uses
       None
 Comment: I2C0_PRI_POS unused
@@ -6419,13 +6457,13 @@ Symbol: I2C1_Vector
       At line 2803 in file MKL46Z4.s
    Uses
       None
+Comment: I2C1_Vector unused
 
 
 
 ARM Macro Assembler    Page 64 Alphabetic symbol ordering
 Absolute symbols
 
-Comment: I2C1_Vector unused
 I2S0_IPR E000E414
 
 Symbol: I2S0_IPR
@@ -6487,9 +6525,9 @@ Symbol: IN_PTR
 
 
 
+
 ARM Macro Assembler    Page 65 Alphabetic symbol ordering
 Absolute symbols
-
 
 IPSR_EXCEPTION_MASK 0000003F
 
@@ -6549,13 +6587,13 @@ Symbol: LCD_AR_ALT_MASK
 Comment: LCD_AR_ALT_MASK unused
 LCD_AR_ALT_SHIFT 00000006
 
+Symbol: LCD_AR_ALT_SHIFT
 
 
 
 ARM Macro Assembler    Page 66 Alphabetic symbol ordering
 Absolute symbols
 
-Symbol: LCD_AR_ALT_SHIFT
    Definitions
       At line 1111 in file MKL46Z4.s
    Uses
@@ -6614,13 +6652,13 @@ LCD_AR_BRATE_MASK 00000007
 Symbol: LCD_AR_BRATE_MASK
    Definitions
       At line 1104 in file MKL46Z4.s
+   Uses
 
 
 
 ARM Macro Assembler    Page 67 Alphabetic symbol ordering
 Absolute symbols
 
-   Uses
       None
 Comment: LCD_AR_BRATE_MASK unused
 LCD_AR_BRATE_SHIFT 00000000
@@ -6679,13 +6717,13 @@ Symbol: LCD_BPENH
    Uses
       None
 Comment: LCD_BPENH unused
+LCD_BPENH_OFFSET 0000001C
 
 
 
 ARM Macro Assembler    Page 68 Alphabetic symbol ordering
 Absolute symbols
 
-LCD_BPENH_OFFSET 0000001C
 
 Symbol: LCD_BPENH_OFFSET
    Definitions
@@ -6744,13 +6782,13 @@ Comment: LCD_FDCR_FDBPEN_MASK unused
 LCD_FDCR_FDBPEN_SHIFT 00000006
 
 Symbol: LCD_FDCR_FDBPEN_SHIFT
+   Definitions
 
 
 
 ARM Macro Assembler    Page 69 Alphabetic symbol ordering
 Absolute symbols
 
-   Definitions
       At line 1129 in file MKL46Z4.s
    Uses
       None
@@ -6809,13 +6847,13 @@ Symbol: LCD_FDCR_FDSWW_MASK
    Definitions
       At line 1132 in file MKL46Z4.s
    Uses
+      None
 
 
 
 ARM Macro Assembler    Page 70 Alphabetic symbol ordering
 Absolute symbols
 
-      None
 Comment: LCD_FDCR_FDSWW_MASK unused
 LCD_FDCR_FDSWW_SHIFT 00000009
 
@@ -6877,9 +6915,9 @@ LCD_FDSR_OFFSET 0000000C
 
 
 
+
 ARM Macro Assembler    Page 71 Alphabetic symbol ordering
 Absolute symbols
-
 
 Symbol: LCD_FDSR_OFFSET
    Definitions
@@ -6939,13 +6977,13 @@ LCD_GCR_CPSEL_SHIFT 00000017
 
 Symbol: LCD_GCR_CPSEL_SHIFT
    Definitions
+      At line 1085 in file MKL46Z4.s
 
 
 
 ARM Macro Assembler    Page 72 Alphabetic symbol ordering
 Absolute symbols
 
-      At line 1085 in file MKL46Z4.s
    Uses
       None
 Comment: LCD_GCR_CPSEL_SHIFT unused
@@ -7004,13 +7042,13 @@ Symbol: LCD_GCR_LADJ_MASK
       At line 1082 in file MKL46Z4.s
    Uses
       None
+Comment: LCD_GCR_LADJ_MASK unused
 
 
 
 ARM Macro Assembler    Page 73 Alphabetic symbol ordering
 Absolute symbols
 
-Comment: LCD_GCR_LADJ_MASK unused
 LCD_GCR_LADJ_SHIFT 00000014
 
 Symbol: LCD_GCR_LADJ_SHIFT
@@ -7069,13 +7107,13 @@ Symbol: LCD_GCR_LCDSTP_SHIFT
 Comment: LCD_GCR_LCDSTP_SHIFT unused
 LCD_GCR_LCLK_MASK 00000038
 
+Symbol: LCD_GCR_LCLK_MASK
 
 
 
 ARM Macro Assembler    Page 74 Alphabetic symbol ordering
 Absolute symbols
 
-Symbol: LCD_GCR_LCLK_MASK
    Definitions
       At line 1060 in file MKL46Z4.s
    Uses
@@ -7134,13 +7172,13 @@ LCD_GCR_RVTRIM_MASK 0F000000
 Symbol: LCD_GCR_RVTRIM_MASK
    Definitions
       At line 1086 in file MKL46Z4.s
+   Uses
 
 
 
 ARM Macro Assembler    Page 75 Alphabetic symbol ordering
 Absolute symbols
 
-   Uses
       None
 Comment: LCD_GCR_RVTRIM_MASK unused
 LCD_GCR_RVTRIM_SHIFT 00000018
@@ -7199,13 +7237,13 @@ Symbol: LCD_IRQ
    Uses
       At line 2773 in file MKL46Z4.s
 Comment: LCD_IRQ used once
+LCD_IRQ_MASK 20000000
 
 
 
 ARM Macro Assembler    Page 76 Alphabetic symbol ordering
 Absolute symbols
 
-LCD_IRQ_MASK 20000000
 
 Symbol: LCD_IRQ_MASK
    Definitions
@@ -7264,13 +7302,13 @@ Comment: LCD_PEN_PEN_MASK unused
 LCD_PEN_PEN_SHIFT 00000000
 
 Symbol: LCD_PEN_PEN_SHIFT
+   Definitions
 
 
 
 ARM Macro Assembler    Page 77 Alphabetic symbol ordering
 Absolute symbols
 
-   Definitions
       At line 1155 in file MKL46Z4.s
    Uses
       None
@@ -7329,13 +7367,13 @@ Symbol: LCD_WF11TO8
 LCD_WF11TO8_OFFSET 00000028
 
 Symbol: LCD_WF11TO8_OFFSET
+   Definitions
 
 
 
 ARM Macro Assembler    Page 78 Alphabetic symbol ordering
 Absolute symbols
 
-   Definitions
       At line 972 in file MKL46Z4.s
    Uses
       At line 997 in file MKL46Z4.s
@@ -7394,13 +7432,13 @@ Comment: LCD_WF15TO12_OFFSET used once
 LCD_WF15_REG 4005302C
 
 Symbol: LCD_WF15_REG
+   Definitions
 
 
 
 ARM Macro Assembler    Page 79 Alphabetic symbol ordering
 Absolute symbols
 
-   Definitions
       At line 1198 in file MKL46Z4.s
    Uses
       None
@@ -7459,13 +7497,13 @@ Comment: LCD_WF19_REG unused
 LCD_WF1_REG 40053020
 
 Symbol: LCD_WF1_REG
+   Definitions
 
 
 
 ARM Macro Assembler    Page 80 Alphabetic symbol ordering
 Absolute symbols
 
-   Definitions
       At line 1184 in file MKL46Z4.s
    Uses
       None
@@ -7524,13 +7562,13 @@ Comment: LCD_WF23_REG unused
 LCD_WF24_REG 40053038
 
 Symbol: LCD_WF24_REG
+   Definitions
 
 
 
 ARM Macro Assembler    Page 81 Alphabetic symbol ordering
 Absolute symbols
 
-   Definitions
       At line 1207 in file MKL46Z4.s
    Uses
       None
@@ -7589,13 +7627,13 @@ Comment: LCD_WF28_REG unused
 LCD_WF29_REG 4005303C
 
 Symbol: LCD_WF29_REG
+   Definitions
 
 
 
 ARM Macro Assembler    Page 82 Alphabetic symbol ordering
 Absolute symbols
 
-   Definitions
       At line 1212 in file MKL46Z4.s
    Uses
       None
@@ -7654,13 +7692,13 @@ Comment: LCD_WF32_REG unused
 LCD_WF33_REG 40053040
 
 Symbol: LCD_WF33_REG
+   Definitions
 
 
 
 ARM Macro Assembler    Page 83 Alphabetic symbol ordering
 Absolute symbols
 
-   Definitions
       At line 1216 in file MKL46Z4.s
    Uses
       None
@@ -7719,13 +7757,13 @@ Comment: LCD_WF37_REG unused
 LCD_WF38_REG 40053044
 
 Symbol: LCD_WF38_REG
+   Definitions
 
 
 
 ARM Macro Assembler    Page 84 Alphabetic symbol ordering
 Absolute symbols
 
-   Definitions
       At line 1221 in file MKL46Z4.s
    Uses
       None
@@ -7784,13 +7822,13 @@ Symbol: LCD_WF3_REG
    Uses
       None
 Comment: LCD_WF3_REG unused
+LCD_WF40_REG 40053048
 
 
 
 ARM Macro Assembler    Page 85 Alphabetic symbol ordering
 Absolute symbols
 
-LCD_WF40_REG 40053048
 
 Symbol: LCD_WF40_REG
    Definitions
@@ -7849,13 +7887,13 @@ Symbol: LCD_WF44_REG
    Uses
       None
 Comment: LCD_WF44_REG unused
+LCD_WF45_REG 4005304C
 
 
 
 ARM Macro Assembler    Page 86 Alphabetic symbol ordering
 Absolute symbols
 
-LCD_WF45_REG 4005304C
 
 Symbol: LCD_WF45_REG
    Definitions
@@ -7914,13 +7952,13 @@ Symbol: LCD_WF49_REG
    Uses
       None
 Comment: LCD_WF49_REG unused
+LCD_WF4_REG 40053024
 
 
 
 ARM Macro Assembler    Page 87 Alphabetic symbol ordering
 Absolute symbols
 
-LCD_WF4_REG 40053024
 
 Symbol: LCD_WF4_REG
    Definitions
@@ -7979,13 +8017,13 @@ Symbol: LCD_WF53_REG
    Uses
       None
 Comment: LCD_WF53_REG unused
+LCD_WF54_REG 40053054
 
 
 
 ARM Macro Assembler    Page 88 Alphabetic symbol ordering
 Absolute symbols
 
-LCD_WF54_REG 40053054
 
 Symbol: LCD_WF54_REG
    Definitions
@@ -8044,13 +8082,13 @@ Symbol: LCD_WF58_REG
    Uses
       None
 Comment: LCD_WF58_REG unused
+LCD_WF59TO56 40053058
 
 
 
 ARM Macro Assembler    Page 89 Alphabetic symbol ordering
 Absolute symbols
 
-LCD_WF59TO56 40053058
 
 Symbol: LCD_WF59TO56
    Definitions
@@ -8109,13 +8147,13 @@ Symbol: LCD_WF62_REG
    Uses
       None
 Comment: LCD_WF62_REG unused
+LCD_WF63TO60 4005305C
 
 
 
 ARM Macro Assembler    Page 90 Alphabetic symbol ordering
 Absolute symbols
 
-LCD_WF63TO60 4005305C
 
 Symbol: LCD_WF63TO60
    Definitions
@@ -8174,13 +8212,13 @@ LCD_WF7_REG 40053024
 Symbol: LCD_WF7_REG
    Definitions
       At line 1190 in file MKL46Z4.s
+   Uses
 
 
 
 ARM Macro Assembler    Page 91 Alphabetic symbol ordering
 Absolute symbols
 
-   Uses
       None
 Comment: LCD_WF7_REG unused
 LCD_WF8B_BPALCD0_MASK 00000001
@@ -8239,13 +8277,13 @@ Symbol: LCD_WF8B_BPALCD12_MASK
    Uses
       None
 Comment: LCD_WF8B_BPALCD12_MASK unused
+LCD_WF8B_BPALCD12_SHIFT 00000000
 
 
 
 ARM Macro Assembler    Page 92 Alphabetic symbol ordering
 Absolute symbols
 
-LCD_WF8B_BPALCD12_SHIFT 00000000
 
 Symbol: LCD_WF8B_BPALCD12_SHIFT
    Definitions
@@ -8304,13 +8342,13 @@ Comment: LCD_WF8B_BPALCD15_SHIFT unused
 LCD_WF8B_BPALCD16_MASK 00000001
 
 Symbol: LCD_WF8B_BPALCD16_MASK
+   Definitions
 
 
 
 ARM Macro Assembler    Page 93 Alphabetic symbol ordering
 Absolute symbols
 
-   Definitions
       At line 1516 in file MKL46Z4.s
    Uses
       None
@@ -8369,13 +8407,13 @@ Symbol: LCD_WF8B_BPALCD19_SHIFT
    Definitions
       At line 1511 in file MKL46Z4.s
    Uses
+      None
 
 
 
 ARM Macro Assembler    Page 94 Alphabetic symbol ordering
 Absolute symbols
 
-      None
 Comment: LCD_WF8B_BPALCD19_SHIFT unused
 LCD_WF8B_BPALCD1_MASK 00000001
 
@@ -8437,9 +8475,9 @@ LCD_WF8B_BPALCD22_SHIFT 00000000
 
 
 
+
 ARM Macro Assembler    Page 95 Alphabetic symbol ordering
 Absolute symbols
-
 
 Symbol: LCD_WF8B_BPALCD22_SHIFT
    Definitions
@@ -8499,13 +8537,13 @@ LCD_WF8B_BPALCD26_MASK 00000001
 
 Symbol: LCD_WF8B_BPALCD26_MASK
    Definitions
+      At line 1494 in file MKL46Z4.s
 
 
 
 ARM Macro Assembler    Page 96 Alphabetic symbol ordering
 Absolute symbols
 
-      At line 1494 in file MKL46Z4.s
    Uses
       None
 Comment: LCD_WF8B_BPALCD26_MASK unused
@@ -8564,13 +8602,13 @@ Symbol: LCD_WF8B_BPALCD29_SHIFT
       At line 1487 in file MKL46Z4.s
    Uses
       None
+Comment: LCD_WF8B_BPALCD29_SHIFT unused
 
 
 
 ARM Macro Assembler    Page 97 Alphabetic symbol ordering
 Absolute symbols
 
-Comment: LCD_WF8B_BPALCD29_SHIFT unused
 LCD_WF8B_BPALCD2_MASK 00000001
 
 Symbol: LCD_WF8B_BPALCD2_MASK
@@ -8629,13 +8667,13 @@ Symbol: LCD_WF8B_BPALCD32_MASK
 Comment: LCD_WF8B_BPALCD32_MASK unused
 LCD_WF8B_BPALCD32_SHIFT 00000000
 
+Symbol: LCD_WF8B_BPALCD32_SHIFT
 
 
 
 ARM Macro Assembler    Page 98 Alphabetic symbol ordering
 Absolute symbols
 
-Symbol: LCD_WF8B_BPALCD32_SHIFT
    Definitions
       At line 1481 in file MKL46Z4.s
    Uses
@@ -8694,13 +8732,13 @@ LCD_WF8B_BPALCD36_MASK 00000001
 Symbol: LCD_WF8B_BPALCD36_MASK
    Definitions
       At line 1470 in file MKL46Z4.s
+   Uses
 
 
 
 ARM Macro Assembler    Page 99 Alphabetic symbol ordering
 Absolute symbols
 
-   Uses
       None
 Comment: LCD_WF8B_BPALCD36_MASK unused
 LCD_WF8B_BPALCD36_SHIFT 00000000
@@ -8759,13 +8797,13 @@ Symbol: LCD_WF8B_BPALCD39_SHIFT
    Uses
       None
 Comment: LCD_WF8B_BPALCD39_SHIFT unused
+LCD_WF8B_BPALCD3_MASK 00000001
 
 
 
 ARM Macro Assembler    Page 100 Alphabetic symbol ordering
 Absolute symbols
 
-LCD_WF8B_BPALCD3_MASK 00000001
 
 Symbol: LCD_WF8B_BPALCD3_MASK
    Definitions
@@ -8824,13 +8862,13 @@ Comment: LCD_WF8B_BPALCD42_MASK unused
 LCD_WF8B_BPALCD42_SHIFT 00000000
 
 Symbol: LCD_WF8B_BPALCD42_SHIFT
+   Definitions
 
 
 
 ARM Macro Assembler    Page 101 Alphabetic symbol ordering
 Absolute symbols
 
-   Definitions
       At line 1459 in file MKL46Z4.s
    Uses
       None
@@ -8889,13 +8927,13 @@ Symbol: LCD_WF8B_BPALCD46_MASK
    Definitions
       At line 1448 in file MKL46Z4.s
    Uses
+      None
 
 
 
 ARM Macro Assembler    Page 102 Alphabetic symbol ordering
 Absolute symbols
 
-      None
 Comment: LCD_WF8B_BPALCD46_MASK unused
 LCD_WF8B_BPALCD46_SHIFT 00000000
 
@@ -8957,9 +8995,9 @@ LCD_WF8B_BPALCD4_MASK 00000001
 
 
 
+
 ARM Macro Assembler    Page 103 Alphabetic symbol ordering
 Absolute symbols
-
 
 Symbol: LCD_WF8B_BPALCD4_MASK
    Definitions
@@ -9019,13 +9057,13 @@ LCD_WF8B_BPALCD52_SHIFT 00000000
 
 Symbol: LCD_WF8B_BPALCD52_SHIFT
    Definitions
+      At line 1435 in file MKL46Z4.s
 
 
 
 ARM Macro Assembler    Page 104 Alphabetic symbol ordering
 Absolute symbols
 
-      At line 1435 in file MKL46Z4.s
    Uses
       None
 Comment: LCD_WF8B_BPALCD52_SHIFT unused
@@ -9084,13 +9122,13 @@ Symbol: LCD_WF8B_BPALCD56_MASK
       At line 1426 in file MKL46Z4.s
    Uses
       None
+Comment: LCD_WF8B_BPALCD56_MASK unused
 
 
 
 ARM Macro Assembler    Page 105 Alphabetic symbol ordering
 Absolute symbols
 
-Comment: LCD_WF8B_BPALCD56_MASK unused
 LCD_WF8B_BPALCD56_SHIFT 00000000
 
 Symbol: LCD_WF8B_BPALCD56_SHIFT
@@ -9149,13 +9187,13 @@ Symbol: LCD_WF8B_BPALCD59_SHIFT
 Comment: LCD_WF8B_BPALCD59_SHIFT unused
 LCD_WF8B_BPALCD5_MASK 00000001
 
+Symbol: LCD_WF8B_BPALCD5_MASK
 
 
 
 ARM Macro Assembler    Page 106 Alphabetic symbol ordering
 Absolute symbols
 
-Symbol: LCD_WF8B_BPALCD5_MASK
    Definitions
       At line 1488 in file MKL46Z4.s
    Uses
@@ -9214,13 +9252,13 @@ LCD_WF8B_BPALCD62_SHIFT 00000000
 Symbol: LCD_WF8B_BPALCD62_SHIFT
    Definitions
       At line 1413 in file MKL46Z4.s
+   Uses
 
 
 
 ARM Macro Assembler    Page 107 Alphabetic symbol ordering
 Absolute symbols
 
-   Uses
       None
 Comment: LCD_WF8B_BPALCD62_SHIFT unused
 LCD_WF8B_BPALCD63_MASK 00000001
@@ -9279,13 +9317,13 @@ Symbol: LCD_WF8B_BPALCD8_MASK
    Uses
       None
 Comment: LCD_WF8B_BPALCD8_MASK unused
+LCD_WF8B_BPALCD8_SHIFT 00000000
 
 
 
 ARM Macro Assembler    Page 108 Alphabetic symbol ordering
 Absolute symbols
 
-LCD_WF8B_BPALCD8_SHIFT 00000000
 
 Symbol: LCD_WF8B_BPALCD8_SHIFT
    Definitions
@@ -9344,13 +9382,13 @@ Comment: LCD_WF8B_BPBLCD10_SHIFT unused
 LCD_WF8B_BPBLCD11_MASK 00000002
 
 Symbol: LCD_WF8B_BPBLCD11_MASK
+   Definitions
 
 
 
 ARM Macro Assembler    Page 109 Alphabetic symbol ordering
 Absolute symbols
 
-   Definitions
       At line 1648 in file MKL46Z4.s
    Uses
       None
@@ -9409,13 +9447,13 @@ Symbol: LCD_WF8B_BPBLCD14_SHIFT
    Definitions
       At line 1635 in file MKL46Z4.s
    Uses
+      None
 
 
 
 ARM Macro Assembler    Page 110 Alphabetic symbol ordering
 Absolute symbols
 
-      None
 Comment: LCD_WF8B_BPBLCD14_SHIFT unused
 LCD_WF8B_BPBLCD15_MASK 00000002
 
@@ -9477,9 +9515,9 @@ LCD_WF8B_BPBLCD18_SHIFT 00000001
 
 
 
+
 ARM Macro Assembler    Page 111 Alphabetic symbol ordering
 Absolute symbols
-
 
 Symbol: LCD_WF8B_BPBLCD18_SHIFT
    Definitions
@@ -9539,13 +9577,13 @@ LCD_WF8B_BPBLCD21_MASK 00000002
 
 Symbol: LCD_WF8B_BPBLCD21_MASK
    Definitions
+      At line 1580 in file MKL46Z4.s
 
 
 
 ARM Macro Assembler    Page 112 Alphabetic symbol ordering
 Absolute symbols
 
-      At line 1580 in file MKL46Z4.s
    Uses
       None
 Comment: LCD_WF8B_BPBLCD21_MASK unused
@@ -9604,13 +9642,13 @@ Symbol: LCD_WF8B_BPBLCD24_SHIFT
       At line 1545 in file MKL46Z4.s
    Uses
       None
+Comment: LCD_WF8B_BPBLCD24_SHIFT unused
 
 
 
 ARM Macro Assembler    Page 113 Alphabetic symbol ordering
 Absolute symbols
 
-Comment: LCD_WF8B_BPBLCD24_SHIFT unused
 LCD_WF8B_BPBLCD25_MASK 00000002
 
 Symbol: LCD_WF8B_BPBLCD25_MASK
@@ -9669,13 +9707,13 @@ Symbol: LCD_WF8B_BPBLCD28_MASK
 Comment: LCD_WF8B_BPBLCD28_MASK unused
 LCD_WF8B_BPBLCD28_SHIFT 00000001
 
+Symbol: LCD_WF8B_BPBLCD28_SHIFT
 
 
 
 ARM Macro Assembler    Page 114 Alphabetic symbol ordering
 Absolute symbols
 
-Symbol: LCD_WF8B_BPBLCD28_SHIFT
    Definitions
       At line 1547 in file MKL46Z4.s
    Uses
@@ -9734,13 +9772,13 @@ LCD_WF8B_BPBLCD31_MASK 00000002
 Symbol: LCD_WF8B_BPBLCD31_MASK
    Definitions
       At line 1624 in file MKL46Z4.s
+   Uses
 
 
 
 ARM Macro Assembler    Page 115 Alphabetic symbol ordering
 Absolute symbols
 
-   Uses
       None
 Comment: LCD_WF8B_BPBLCD31_MASK unused
 LCD_WF8B_BPBLCD31_SHIFT 00000001
@@ -9799,13 +9837,13 @@ Symbol: LCD_WF8B_BPBLCD34_SHIFT
    Uses
       None
 Comment: LCD_WF8B_BPBLCD34_SHIFT unused
+LCD_WF8B_BPBLCD35_MASK 00000002
 
 
 
 ARM Macro Assembler    Page 116 Alphabetic symbol ordering
 Absolute symbols
 
-LCD_WF8B_BPBLCD35_MASK 00000002
 
 Symbol: LCD_WF8B_BPBLCD35_MASK
    Definitions
@@ -9864,13 +9902,13 @@ Comment: LCD_WF8B_BPBLCD38_MASK unused
 LCD_WF8B_BPBLCD38_SHIFT 00000001
 
 Symbol: LCD_WF8B_BPBLCD38_SHIFT
+   Definitions
 
 
 
 ARM Macro Assembler    Page 117 Alphabetic symbol ordering
 Absolute symbols
 
-   Definitions
       At line 1593 in file MKL46Z4.s
    Uses
       None
@@ -9929,13 +9967,13 @@ Symbol: LCD_WF8B_BPBLCD41_MASK
    Definitions
       At line 1646 in file MKL46Z4.s
    Uses
+      None
 
 
 
 ARM Macro Assembler    Page 118 Alphabetic symbol ordering
 Absolute symbols
 
-      None
 Comment: LCD_WF8B_BPBLCD41_MASK unused
 LCD_WF8B_BPBLCD41_SHIFT 00000001
 
@@ -9997,9 +10035,9 @@ LCD_WF8B_BPBLCD45_MASK 00000002
 
 
 
+
 ARM Macro Assembler    Page 119 Alphabetic symbol ordering
 Absolute symbols
-
 
 Symbol: LCD_WF8B_BPBLCD45_MASK
    Definitions
@@ -10059,13 +10097,13 @@ LCD_WF8B_BPBLCD48_SHIFT 00000001
 
 Symbol: LCD_WF8B_BPBLCD48_SHIFT
    Definitions
+      At line 1551 in file MKL46Z4.s
 
 
 
 ARM Macro Assembler    Page 120 Alphabetic symbol ordering
 Absolute symbols
 
-      At line 1551 in file MKL46Z4.s
    Uses
       None
 Comment: LCD_WF8B_BPBLCD48_SHIFT unused
@@ -10124,13 +10162,13 @@ Symbol: LCD_WF8B_BPBLCD51_MASK
       At line 1636 in file MKL46Z4.s
    Uses
       None
+Comment: LCD_WF8B_BPBLCD51_MASK unused
 
 
 
 ARM Macro Assembler    Page 121 Alphabetic symbol ordering
 Absolute symbols
 
-Comment: LCD_WF8B_BPBLCD51_MASK unused
 LCD_WF8B_BPBLCD51_SHIFT 00000001
 
 Symbol: LCD_WF8B_BPBLCD51_SHIFT
@@ -10189,13 +10227,13 @@ Symbol: LCD_WF8B_BPBLCD54_SHIFT
 Comment: LCD_WF8B_BPBLCD54_SHIFT unused
 LCD_WF8B_BPBLCD55_MASK 00000002
 
+Symbol: LCD_WF8B_BPBLCD55_MASK
 
 
 
 ARM Macro Assembler    Page 122 Alphabetic symbol ordering
 Absolute symbols
 
-Symbol: LCD_WF8B_BPBLCD55_MASK
    Definitions
       At line 1576 in file MKL46Z4.s
    Uses
@@ -10254,13 +10292,13 @@ LCD_WF8B_BPBLCD58_SHIFT 00000001
 Symbol: LCD_WF8B_BPBLCD58_SHIFT
    Definitions
       At line 1627 in file MKL46Z4.s
+   Uses
 
 
 
 ARM Macro Assembler    Page 123 Alphabetic symbol ordering
 Absolute symbols
 
-   Uses
       None
 Comment: LCD_WF8B_BPBLCD58_SHIFT unused
 LCD_WF8B_BPBLCD59_MASK 00000002
@@ -10319,13 +10357,13 @@ Symbol: LCD_WF8B_BPBLCD61_MASK
    Uses
       None
 Comment: LCD_WF8B_BPBLCD61_MASK unused
+LCD_WF8B_BPBLCD61_SHIFT 00000001
 
 
 
 ARM Macro Assembler    Page 124 Alphabetic symbol ordering
 Absolute symbols
 
-LCD_WF8B_BPBLCD61_SHIFT 00000001
 
 Symbol: LCD_WF8B_BPBLCD61_SHIFT
    Definitions
@@ -10384,13 +10422,13 @@ Comment: LCD_WF8B_BPBLCD6_SHIFT unused
 LCD_WF8B_BPBLCD7_MASK 00000002
 
 Symbol: LCD_WF8B_BPBLCD7_MASK
+   Definitions
 
 
 
 ARM Macro Assembler    Page 125 Alphabetic symbol ordering
 Absolute symbols
 
-   Definitions
       At line 1600 in file MKL46Z4.s
    Uses
       None
@@ -10449,13 +10487,13 @@ Symbol: LCD_WF8B_BPCLCD0_SHIFT
    Definitions
       At line 1737 in file MKL46Z4.s
    Uses
+      None
 
 
 
 ARM Macro Assembler    Page 126 Alphabetic symbol ordering
 Absolute symbols
 
-      None
 Comment: LCD_WF8B_BPCLCD0_SHIFT unused
 LCD_WF8B_BPCLCD10_MASK 00000004
 
@@ -10517,9 +10555,9 @@ LCD_WF8B_BPCLCD13_SHIFT 00000002
 
 
 
+
 ARM Macro Assembler    Page 127 Alphabetic symbol ordering
 Absolute symbols
-
 
 Symbol: LCD_WF8B_BPCLCD13_SHIFT
    Definitions
@@ -10579,13 +10617,13 @@ LCD_WF8B_BPCLCD17_MASK 00000004
 
 Symbol: LCD_WF8B_BPCLCD17_MASK
    Definitions
+      At line 1714 in file MKL46Z4.s
 
 
 
 ARM Macro Assembler    Page 128 Alphabetic symbol ordering
 Absolute symbols
 
-      At line 1714 in file MKL46Z4.s
    Uses
       None
 Comment: LCD_WF8B_BPCLCD17_MASK unused
@@ -10644,13 +10682,13 @@ Symbol: LCD_WF8B_BPCLCD1_SHIFT
       At line 1691 in file MKL46Z4.s
    Uses
       None
+Comment: LCD_WF8B_BPCLCD1_SHIFT unused
 
 
 
 ARM Macro Assembler    Page 129 Alphabetic symbol ordering
 Absolute symbols
 
-Comment: LCD_WF8B_BPCLCD1_SHIFT unused
 LCD_WF8B_BPCLCD20_MASK 00000004
 
 Symbol: LCD_WF8B_BPCLCD20_MASK
@@ -10709,13 +10747,13 @@ Symbol: LCD_WF8B_BPCLCD23_MASK
 Comment: LCD_WF8B_BPCLCD23_MASK unused
 LCD_WF8B_BPCLCD23_SHIFT 00000002
 
+Symbol: LCD_WF8B_BPCLCD23_SHIFT
 
 
 
 ARM Macro Assembler    Page 130 Alphabetic symbol ordering
 Absolute symbols
 
-Symbol: LCD_WF8B_BPCLCD23_SHIFT
    Definitions
       At line 1671 in file MKL46Z4.s
    Uses
@@ -10774,13 +10812,13 @@ LCD_WF8B_BPCLCD27_MASK 00000004
 Symbol: LCD_WF8B_BPCLCD27_MASK
    Definitions
       At line 1712 in file MKL46Z4.s
+   Uses
 
 
 
 ARM Macro Assembler    Page 131 Alphabetic symbol ordering
 Absolute symbols
 
-   Uses
       None
 Comment: LCD_WF8B_BPCLCD27_MASK unused
 LCD_WF8B_BPCLCD27_SHIFT 00000002
@@ -10839,13 +10877,13 @@ Symbol: LCD_WF8B_BPCLCD2_SHIFT
    Uses
       None
 Comment: LCD_WF8B_BPCLCD2_SHIFT unused
+LCD_WF8B_BPCLCD30_MASK 00000004
 
 
 
 ARM Macro Assembler    Page 132 Alphabetic symbol ordering
 Absolute symbols
 
-LCD_WF8B_BPCLCD30_MASK 00000004
 
 Symbol: LCD_WF8B_BPCLCD30_MASK
    Definitions
@@ -10904,13 +10942,13 @@ Comment: LCD_WF8B_BPCLCD33_MASK unused
 LCD_WF8B_BPCLCD33_SHIFT 00000002
 
 Symbol: LCD_WF8B_BPCLCD33_SHIFT
+   Definitions
 
 
 
 ARM Macro Assembler    Page 133 Alphabetic symbol ordering
 Absolute symbols
 
-   Definitions
       At line 1735 in file MKL46Z4.s
    Uses
       None
@@ -10969,13 +11007,13 @@ Symbol: LCD_WF8B_BPCLCD37_MASK
    Definitions
       At line 1768 in file MKL46Z4.s
    Uses
+      None
 
 
 
 ARM Macro Assembler    Page 134 Alphabetic symbol ordering
 Absolute symbols
 
-      None
 Comment: LCD_WF8B_BPCLCD37_MASK unused
 LCD_WF8B_BPCLCD37_SHIFT 00000002
 
@@ -11037,9 +11075,9 @@ LCD_WF8B_BPCLCD40_MASK 00000004
 
 
 
+
 ARM Macro Assembler    Page 135 Alphabetic symbol ordering
 Absolute symbols
-
 
 Symbol: LCD_WF8B_BPCLCD40_MASK
    Definitions
@@ -11099,13 +11137,13 @@ LCD_WF8B_BPCLCD43_SHIFT 00000002
 
 Symbol: LCD_WF8B_BPCLCD43_SHIFT
    Definitions
+      At line 1739 in file MKL46Z4.s
 
 
 
 ARM Macro Assembler    Page 136 Alphabetic symbol ordering
 Absolute symbols
 
-      At line 1739 in file MKL46Z4.s
    Uses
       None
 Comment: LCD_WF8B_BPCLCD43_SHIFT unused
@@ -11164,13 +11202,13 @@ Symbol: LCD_WF8B_BPCLCD47_MASK
       At line 1678 in file MKL46Z4.s
    Uses
       None
+Comment: LCD_WF8B_BPCLCD47_MASK unused
 
 
 
 ARM Macro Assembler    Page 137 Alphabetic symbol ordering
 Absolute symbols
 
-Comment: LCD_WF8B_BPCLCD47_MASK unused
 LCD_WF8B_BPCLCD47_SHIFT 00000002
 
 Symbol: LCD_WF8B_BPCLCD47_SHIFT
@@ -11229,13 +11267,13 @@ Symbol: LCD_WF8B_BPCLCD4_SHIFT
 Comment: LCD_WF8B_BPCLCD4_SHIFT unused
 LCD_WF8B_BPCLCD50_MASK 00000004
 
+Symbol: LCD_WF8B_BPCLCD50_MASK
 
 
 
 ARM Macro Assembler    Page 138 Alphabetic symbol ordering
 Absolute symbols
 
-Symbol: LCD_WF8B_BPCLCD50_MASK
    Definitions
       At line 1694 in file MKL46Z4.s
    Uses
@@ -11294,13 +11332,13 @@ LCD_WF8B_BPCLCD53_SHIFT 00000002
 Symbol: LCD_WF8B_BPCLCD53_SHIFT
    Definitions
       At line 1733 in file MKL46Z4.s
+   Uses
 
 
 
 ARM Macro Assembler    Page 139 Alphabetic symbol ordering
 Absolute symbols
 
-   Uses
       None
 Comment: LCD_WF8B_BPCLCD53_SHIFT unused
 LCD_WF8B_BPCLCD54_MASK 00000004
@@ -11359,13 +11397,13 @@ Symbol: LCD_WF8B_BPCLCD57_MASK
    Uses
       None
 Comment: LCD_WF8B_BPCLCD57_MASK unused
+LCD_WF8B_BPCLCD57_SHIFT 00000002
 
 
 
 ARM Macro Assembler    Page 140 Alphabetic symbol ordering
 Absolute symbols
 
-LCD_WF8B_BPCLCD57_SHIFT 00000002
 
 Symbol: LCD_WF8B_BPCLCD57_SHIFT
    Definitions
@@ -11424,13 +11462,13 @@ Comment: LCD_WF8B_BPCLCD5_SHIFT unused
 LCD_WF8B_BPCLCD60_MASK 00000004
 
 Symbol: LCD_WF8B_BPCLCD60_MASK
+   Definitions
 
 
 
 ARM Macro Assembler    Page 141 Alphabetic symbol ordering
 Absolute symbols
 
-   Definitions
       At line 1676 in file MKL46Z4.s
    Uses
       None
@@ -11489,13 +11527,13 @@ Symbol: LCD_WF8B_BPCLCD63_SHIFT
    Definitions
       At line 1711 in file MKL46Z4.s
    Uses
+      None
 
 
 
 ARM Macro Assembler    Page 142 Alphabetic symbol ordering
 Absolute symbols
 
-      None
 Comment: LCD_WF8B_BPCLCD63_SHIFT unused
 LCD_WF8B_BPCLCD6_MASK 00000004
 
@@ -11557,9 +11595,9 @@ LCD_WF8B_BPCLCD9_SHIFT 00000002
 
 
 
+
 ARM Macro Assembler    Page 143 Alphabetic symbol ordering
 Absolute symbols
-
 
 Symbol: LCD_WF8B_BPCLCD9_SHIFT
    Definitions
@@ -11619,13 +11657,13 @@ LCD_WF8B_BPDLCD12_MASK 00000008
 
 Symbol: LCD_WF8B_BPDLCD12_MASK
    Definitions
+      At line 1912 in file MKL46Z4.s
 
 
 
 ARM Macro Assembler    Page 144 Alphabetic symbol ordering
 Absolute symbols
 
-      At line 1912 in file MKL46Z4.s
    Uses
       None
 Comment: LCD_WF8B_BPDLCD12_MASK unused
@@ -11684,13 +11722,13 @@ Symbol: LCD_WF8B_BPDLCD15_SHIFT
       At line 1801 in file MKL46Z4.s
    Uses
       None
+Comment: LCD_WF8B_BPDLCD15_SHIFT unused
 
 
 
 ARM Macro Assembler    Page 145 Alphabetic symbol ordering
 Absolute symbols
 
-Comment: LCD_WF8B_BPDLCD15_SHIFT unused
 LCD_WF8B_BPDLCD16_MASK 00000008
 
 Symbol: LCD_WF8B_BPDLCD16_MASK
@@ -11749,13 +11787,13 @@ Symbol: LCD_WF8B_BPDLCD19_MASK
 Comment: LCD_WF8B_BPDLCD19_MASK unused
 LCD_WF8B_BPDLCD19_SHIFT 00000003
 
+Symbol: LCD_WF8B_BPDLCD19_SHIFT
 
 
 
 ARM Macro Assembler    Page 146 Alphabetic symbol ordering
 Absolute symbols
 
-Symbol: LCD_WF8B_BPDLCD19_SHIFT
    Definitions
       At line 1827 in file MKL46Z4.s
    Uses
@@ -11814,13 +11852,13 @@ LCD_WF8B_BPDLCD22_MASK 00000008
 Symbol: LCD_WF8B_BPDLCD22_MASK
    Definitions
       At line 1802 in file MKL46Z4.s
+   Uses
 
 
 
 ARM Macro Assembler    Page 147 Alphabetic symbol ordering
 Absolute symbols
 
-   Uses
       None
 Comment: LCD_WF8B_BPDLCD22_MASK unused
 LCD_WF8B_BPDLCD22_SHIFT 00000003
@@ -11879,13 +11917,13 @@ Symbol: LCD_WF8B_BPDLCD25_SHIFT
    Uses
       None
 Comment: LCD_WF8B_BPDLCD25_SHIFT unused
+LCD_WF8B_BPDLCD26_MASK 00000008
 
 
 
 ARM Macro Assembler    Page 148 Alphabetic symbol ordering
 Absolute symbols
 
-LCD_WF8B_BPDLCD26_MASK 00000008
 
 Symbol: LCD_WF8B_BPDLCD26_MASK
    Definitions
@@ -11944,13 +11982,13 @@ Comment: LCD_WF8B_BPDLCD29_MASK unused
 LCD_WF8B_BPDLCD29_SHIFT 00000003
 
 Symbol: LCD_WF8B_BPDLCD29_SHIFT
+   Definitions
 
 
 
 ARM Macro Assembler    Page 149 Alphabetic symbol ordering
 Absolute symbols
 
-   Definitions
       At line 1879 in file MKL46Z4.s
    Uses
       None
@@ -12009,13 +12047,13 @@ Symbol: LCD_WF8B_BPDLCD32_MASK
    Definitions
       At line 1858 in file MKL46Z4.s
    Uses
+      None
 
 
 
 ARM Macro Assembler    Page 150 Alphabetic symbol ordering
 Absolute symbols
 
-      None
 Comment: LCD_WF8B_BPDLCD32_MASK unused
 LCD_WF8B_BPDLCD32_SHIFT 00000003
 
@@ -12077,9 +12115,9 @@ LCD_WF8B_BPDLCD36_MASK 00000008
 
 
 
+
 ARM Macro Assembler    Page 151 Alphabetic symbol ordering
 Absolute symbols
-
 
 Symbol: LCD_WF8B_BPDLCD36_MASK
    Definitions
@@ -12139,13 +12177,13 @@ LCD_WF8B_BPDLCD39_SHIFT 00000003
 
 Symbol: LCD_WF8B_BPDLCD39_SHIFT
    Definitions
+      At line 1915 in file MKL46Z4.s
 
 
 
 ARM Macro Assembler    Page 152 Alphabetic symbol ordering
 Absolute symbols
 
-      At line 1915 in file MKL46Z4.s
    Uses
       None
 Comment: LCD_WF8B_BPDLCD39_SHIFT unused
@@ -12204,13 +12242,13 @@ Symbol: LCD_WF8B_BPDLCD42_MASK
       At line 1884 in file MKL46Z4.s
    Uses
       None
+Comment: LCD_WF8B_BPDLCD42_MASK unused
 
 
 
 ARM Macro Assembler    Page 153 Alphabetic symbol ordering
 Absolute symbols
 
-Comment: LCD_WF8B_BPDLCD42_MASK unused
 LCD_WF8B_BPDLCD42_SHIFT 00000003
 
 Symbol: LCD_WF8B_BPDLCD42_SHIFT
@@ -12269,13 +12307,13 @@ Symbol: LCD_WF8B_BPDLCD45_SHIFT
 Comment: LCD_WF8B_BPDLCD45_SHIFT unused
 LCD_WF8B_BPDLCD46_MASK 00000008
 
+Symbol: LCD_WF8B_BPDLCD46_MASK
 
 
 
 ARM Macro Assembler    Page 154 Alphabetic symbol ordering
 Absolute symbols
 
-Symbol: LCD_WF8B_BPDLCD46_MASK
    Definitions
       At line 1836 in file MKL46Z4.s
    Uses
@@ -12334,13 +12372,13 @@ LCD_WF8B_BPDLCD49_SHIFT 00000003
 Symbol: LCD_WF8B_BPDLCD49_SHIFT
    Definitions
       At line 1811 in file MKL46Z4.s
+   Uses
 
 
 
 ARM Macro Assembler    Page 155 Alphabetic symbol ordering
 Absolute symbols
 
-   Uses
       None
 Comment: LCD_WF8B_BPDLCD49_SHIFT unused
 LCD_WF8B_BPDLCD4_MASK 00000008
@@ -12399,13 +12437,13 @@ Symbol: LCD_WF8B_BPDLCD52_MASK
    Uses
       None
 Comment: LCD_WF8B_BPDLCD52_MASK unused
+LCD_WF8B_BPDLCD52_SHIFT 00000003
 
 
 
 ARM Macro Assembler    Page 156 Alphabetic symbol ordering
 Absolute symbols
 
-LCD_WF8B_BPDLCD52_SHIFT 00000003
 
 Symbol: LCD_WF8B_BPDLCD52_SHIFT
    Definitions
@@ -12464,13 +12502,13 @@ Comment: LCD_WF8B_BPDLCD55_SHIFT unused
 LCD_WF8B_BPDLCD56_MASK 00000008
 
 Symbol: LCD_WF8B_BPDLCD56_MASK
+   Definitions
 
 
 
 ARM Macro Assembler    Page 157 Alphabetic symbol ordering
 Absolute symbols
 
-   Definitions
       At line 1906 in file MKL46Z4.s
    Uses
       None
@@ -12529,13 +12567,13 @@ Symbol: LCD_WF8B_BPDLCD59_SHIFT
    Definitions
       At line 1823 in file MKL46Z4.s
    Uses
+      None
 
 
 
 ARM Macro Assembler    Page 158 Alphabetic symbol ordering
 Absolute symbols
 
-      None
 Comment: LCD_WF8B_BPDLCD59_SHIFT unused
 LCD_WF8B_BPDLCD5_MASK 00000008
 
@@ -12597,9 +12635,9 @@ LCD_WF8B_BPDLCD62_SHIFT 00000003
 
 
 
+
 ARM Macro Assembler    Page 159 Alphabetic symbol ordering
 Absolute symbols
-
 
 Symbol: LCD_WF8B_BPDLCD62_SHIFT
    Definitions
@@ -12659,13 +12697,13 @@ LCD_WF8B_BPDLCD8_MASK 00000008
 
 Symbol: LCD_WF8B_BPDLCD8_MASK
    Definitions
+      At line 1870 in file MKL46Z4.s
 
 
 
 ARM Macro Assembler    Page 160 Alphabetic symbol ordering
 Absolute symbols
 
-      At line 1870 in file MKL46Z4.s
    Uses
       None
 Comment: LCD_WF8B_BPDLCD8_MASK unused
@@ -12724,13 +12762,13 @@ Symbol: LCD_WF8B_BPELCD10_SHIFT
       At line 1975 in file MKL46Z4.s
    Uses
       None
+Comment: LCD_WF8B_BPELCD10_SHIFT unused
 
 
 
 ARM Macro Assembler    Page 161 Alphabetic symbol ordering
 Absolute symbols
 
-Comment: LCD_WF8B_BPELCD10_SHIFT unused
 LCD_WF8B_BPELCD11_MASK 00000010
 
 Symbol: LCD_WF8B_BPELCD11_MASK
@@ -12789,13 +12827,13 @@ Symbol: LCD_WF8B_BPELCD14_MASK
 Comment: LCD_WF8B_BPELCD14_MASK unused
 LCD_WF8B_BPELCD14_SHIFT 00000004
 
+Symbol: LCD_WF8B_BPELCD14_SHIFT
 
 
 
 ARM Macro Assembler    Page 162 Alphabetic symbol ordering
 Absolute symbols
 
-Symbol: LCD_WF8B_BPELCD14_SHIFT
    Definitions
       At line 2029 in file MKL46Z4.s
    Uses
@@ -12854,13 +12892,13 @@ LCD_WF8B_BPELCD18_MASK 00000010
 Symbol: LCD_WF8B_BPELCD18_MASK
    Definitions
       At line 2004 in file MKL46Z4.s
+   Uses
 
 
 
 ARM Macro Assembler    Page 163 Alphabetic symbol ordering
 Absolute symbols
 
-   Uses
       None
 Comment: LCD_WF8B_BPELCD18_MASK unused
 LCD_WF8B_BPELCD18_SHIFT 00000004
@@ -12919,13 +12957,13 @@ Symbol: LCD_WF8B_BPELCD20_SHIFT
    Uses
       None
 Comment: LCD_WF8B_BPELCD20_SHIFT unused
+LCD_WF8B_BPELCD21_MASK 00000010
 
 
 
 ARM Macro Assembler    Page 164 Alphabetic symbol ordering
 Absolute symbols
 
-LCD_WF8B_BPELCD21_MASK 00000010
 
 Symbol: LCD_WF8B_BPELCD21_MASK
    Definitions
@@ -12984,13 +13022,13 @@ Comment: LCD_WF8B_BPELCD24_MASK unused
 LCD_WF8B_BPELCD24_SHIFT 00000004
 
 Symbol: LCD_WF8B_BPELCD24_SHIFT
+   Definitions
 
 
 
 ARM Macro Assembler    Page 165 Alphabetic symbol ordering
 Absolute symbols
 
-   Definitions
       At line 1983 in file MKL46Z4.s
    Uses
       None
@@ -13049,13 +13087,13 @@ Symbol: LCD_WF8B_BPELCD28_MASK
    Definitions
       At line 1964 in file MKL46Z4.s
    Uses
+      None
 
 
 
 ARM Macro Assembler    Page 166 Alphabetic symbol ordering
 Absolute symbols
 
-      None
 Comment: LCD_WF8B_BPELCD28_MASK unused
 LCD_WF8B_BPELCD28_SHIFT 00000004
 
@@ -13117,9 +13155,9 @@ LCD_WF8B_BPELCD31_MASK 00000010
 
 
 
+
 ARM Macro Assembler    Page 167 Alphabetic symbol ordering
 Absolute symbols
-
 
 Symbol: LCD_WF8B_BPELCD31_MASK
    Definitions
@@ -13179,13 +13217,13 @@ LCD_WF8B_BPELCD34_SHIFT 00000004
 
 Symbol: LCD_WF8B_BPELCD34_SHIFT
    Definitions
+      At line 1943 in file MKL46Z4.s
 
 
 
 ARM Macro Assembler    Page 168 Alphabetic symbol ordering
 Absolute symbols
 
-      At line 1943 in file MKL46Z4.s
    Uses
       None
 Comment: LCD_WF8B_BPELCD34_SHIFT unused
@@ -13244,13 +13282,13 @@ Symbol: LCD_WF8B_BPELCD38_MASK
       At line 1926 in file MKL46Z4.s
    Uses
       None
+Comment: LCD_WF8B_BPELCD38_MASK unused
 
 
 
 ARM Macro Assembler    Page 169 Alphabetic symbol ordering
 Absolute symbols
 
-Comment: LCD_WF8B_BPELCD38_MASK unused
 LCD_WF8B_BPELCD38_SHIFT 00000004
 
 Symbol: LCD_WF8B_BPELCD38_SHIFT
@@ -13309,13 +13347,13 @@ Symbol: LCD_WF8B_BPELCD40_SHIFT
 Comment: LCD_WF8B_BPELCD40_SHIFT unused
 LCD_WF8B_BPELCD41_MASK 00000010
 
+Symbol: LCD_WF8B_BPELCD41_MASK
 
 
 
 ARM Macro Assembler    Page 170 Alphabetic symbol ordering
 Absolute symbols
 
-Symbol: LCD_WF8B_BPELCD41_MASK
    Definitions
       At line 1932 in file MKL46Z4.s
    Uses
@@ -13374,13 +13412,13 @@ LCD_WF8B_BPELCD44_SHIFT 00000004
 Symbol: LCD_WF8B_BPELCD44_SHIFT
    Definitions
       At line 1955 in file MKL46Z4.s
+   Uses
 
 
 
 ARM Macro Assembler    Page 171 Alphabetic symbol ordering
 Absolute symbols
 
-   Uses
       None
 Comment: LCD_WF8B_BPELCD44_SHIFT unused
 LCD_WF8B_BPELCD45_MASK 00000010
@@ -13439,13 +13477,13 @@ Symbol: LCD_WF8B_BPELCD48_MASK
    Uses
       None
 Comment: LCD_WF8B_BPELCD48_MASK unused
+LCD_WF8B_BPELCD48_SHIFT 00000004
 
 
 
 ARM Macro Assembler    Page 172 Alphabetic symbol ordering
 Absolute symbols
 
-LCD_WF8B_BPELCD48_SHIFT 00000004
 
 Symbol: LCD_WF8B_BPELCD48_SHIFT
    Definitions
@@ -13504,13 +13542,13 @@ Comment: LCD_WF8B_BPELCD50_SHIFT unused
 LCD_WF8B_BPELCD51_MASK 00000010
 
 Symbol: LCD_WF8B_BPELCD51_MASK
+   Definitions
 
 
 
 ARM Macro Assembler    Page 173 Alphabetic symbol ordering
 Absolute symbols
 
-   Definitions
       At line 2010 in file MKL46Z4.s
    Uses
       None
@@ -13569,13 +13607,13 @@ Symbol: LCD_WF8B_BPELCD54_SHIFT
    Definitions
       At line 2039 in file MKL46Z4.s
    Uses
+      None
 
 
 
 ARM Macro Assembler    Page 174 Alphabetic symbol ordering
 Absolute symbols
 
-      None
 Comment: LCD_WF8B_BPELCD54_SHIFT unused
 LCD_WF8B_BPELCD55_MASK 00000010
 
@@ -13637,9 +13675,9 @@ LCD_WF8B_BPELCD58_SHIFT 00000004
 
 
 
+
 ARM Macro Assembler    Page 175 Alphabetic symbol ordering
 Absolute symbols
-
 
 Symbol: LCD_WF8B_BPELCD58_SHIFT
    Definitions
@@ -13699,13 +13737,13 @@ LCD_WF8B_BPELCD61_MASK 00000010
 
 Symbol: LCD_WF8B_BPELCD61_MASK
    Definitions
+      At line 2036 in file MKL46Z4.s
 
 
 
 ARM Macro Assembler    Page 176 Alphabetic symbol ordering
 Absolute symbols
 
-      At line 2036 in file MKL46Z4.s
    Uses
       None
 Comment: LCD_WF8B_BPELCD61_MASK unused
@@ -13764,13 +13802,13 @@ Symbol: LCD_WF8B_BPELCD6_SHIFT
       At line 2007 in file MKL46Z4.s
    Uses
       None
+Comment: LCD_WF8B_BPELCD6_SHIFT unused
 
 
 
 ARM Macro Assembler    Page 177 Alphabetic symbol ordering
 Absolute symbols
 
-Comment: LCD_WF8B_BPELCD6_SHIFT unused
 LCD_WF8B_BPELCD7_MASK 00000010
 
 Symbol: LCD_WF8B_BPELCD7_MASK
@@ -13829,13 +13867,13 @@ Symbol: LCD_WF8B_BPFLCD0_MASK
 Comment: LCD_WF8B_BPFLCD0_MASK unused
 LCD_WF8B_BPFLCD0_SHIFT 00000005
 
+Symbol: LCD_WF8B_BPFLCD0_SHIFT
 
 
 
 ARM Macro Assembler    Page 178 Alphabetic symbol ordering
 Absolute symbols
 
-Symbol: LCD_WF8B_BPFLCD0_SHIFT
    Definitions
       At line 2089 in file MKL46Z4.s
    Uses
@@ -13894,13 +13932,13 @@ LCD_WF8B_BPFLCD13_MASK 00000020
 Symbol: LCD_WF8B_BPFLCD13_MASK
    Definitions
       At line 2048 in file MKL46Z4.s
+   Uses
 
 
 
 ARM Macro Assembler    Page 179 Alphabetic symbol ordering
 Absolute symbols
 
-   Uses
       None
 Comment: LCD_WF8B_BPFLCD13_MASK unused
 LCD_WF8B_BPFLCD13_SHIFT 00000005
@@ -13959,13 +13997,13 @@ Symbol: LCD_WF8B_BPFLCD16_SHIFT
    Uses
       None
 Comment: LCD_WF8B_BPFLCD16_SHIFT unused
+LCD_WF8B_BPFLCD17_MASK 00000020
 
 
 
 ARM Macro Assembler    Page 180 Alphabetic symbol ordering
 Absolute symbols
 
-LCD_WF8B_BPFLCD17_MASK 00000020
 
 Symbol: LCD_WF8B_BPFLCD17_MASK
    Definitions
@@ -14024,13 +14062,13 @@ Comment: LCD_WF8B_BPFLCD1_MASK unused
 LCD_WF8B_BPFLCD1_SHIFT 00000005
 
 Symbol: LCD_WF8B_BPFLCD1_SHIFT
+   Definitions
 
 
 
 ARM Macro Assembler    Page 181 Alphabetic symbol ordering
 Absolute symbols
 
-   Definitions
       At line 2111 in file MKL46Z4.s
    Uses
       None
@@ -14089,13 +14127,13 @@ Symbol: LCD_WF8B_BPFLCD23_MASK
    Definitions
       At line 2174 in file MKL46Z4.s
    Uses
+      None
 
 
 
 ARM Macro Assembler    Page 182 Alphabetic symbol ordering
 Absolute symbols
 
-      None
 Comment: LCD_WF8B_BPFLCD23_MASK unused
 LCD_WF8B_BPFLCD23_SHIFT 00000005
 
@@ -14157,9 +14195,9 @@ LCD_WF8B_BPFLCD27_MASK 00000020
 
 
 
+
 ARM Macro Assembler    Page 183 Alphabetic symbol ordering
 Absolute symbols
-
 
 Symbol: LCD_WF8B_BPFLCD27_MASK
    Definitions
@@ -14219,13 +14257,13 @@ LCD_WF8B_BPFLCD2_SHIFT 00000005
 
 Symbol: LCD_WF8B_BPFLCD2_SHIFT
    Definitions
+      At line 2141 in file MKL46Z4.s
 
 
 
 ARM Macro Assembler    Page 184 Alphabetic symbol ordering
 Absolute symbols
 
-      At line 2141 in file MKL46Z4.s
    Uses
       None
 Comment: LCD_WF8B_BPFLCD2_SHIFT unused
@@ -14284,13 +14322,13 @@ Symbol: LCD_WF8B_BPFLCD33_MASK
       At line 2082 in file MKL46Z4.s
    Uses
       None
+Comment: LCD_WF8B_BPFLCD33_MASK unused
 
 
 
 ARM Macro Assembler    Page 185 Alphabetic symbol ordering
 Absolute symbols
 
-Comment: LCD_WF8B_BPFLCD33_MASK unused
 LCD_WF8B_BPFLCD33_SHIFT 00000005
 
 Symbol: LCD_WF8B_BPFLCD33_SHIFT
@@ -14349,13 +14387,13 @@ Symbol: LCD_WF8B_BPFLCD36_SHIFT
 Comment: LCD_WF8B_BPFLCD36_SHIFT unused
 LCD_WF8B_BPFLCD37_MASK 00000020
 
+Symbol: LCD_WF8B_BPFLCD37_MASK
 
 
 
 ARM Macro Assembler    Page 186 Alphabetic symbol ordering
 Absolute symbols
 
-Symbol: LCD_WF8B_BPFLCD37_MASK
    Definitions
       At line 2146 in file MKL46Z4.s
    Uses
@@ -14414,13 +14452,13 @@ LCD_WF8B_BPFLCD3_SHIFT 00000005
 Symbol: LCD_WF8B_BPFLCD3_SHIFT
    Definitions
       At line 2145 in file MKL46Z4.s
+   Uses
 
 
 
 ARM Macro Assembler    Page 187 Alphabetic symbol ordering
 Absolute symbols
 
-   Uses
       None
 Comment: LCD_WF8B_BPFLCD3_SHIFT unused
 LCD_WF8B_BPFLCD40_MASK 00000020
@@ -14479,13 +14517,13 @@ Symbol: LCD_WF8B_BPFLCD43_MASK
    Uses
       None
 Comment: LCD_WF8B_BPFLCD43_MASK unused
+LCD_WF8B_BPFLCD43_SHIFT 00000005
 
 
 
 ARM Macro Assembler    Page 188 Alphabetic symbol ordering
 Absolute symbols
 
-LCD_WF8B_BPFLCD43_SHIFT 00000005
 
 Symbol: LCD_WF8B_BPFLCD43_SHIFT
    Definitions
@@ -14544,13 +14582,13 @@ Comment: LCD_WF8B_BPFLCD46_SHIFT unused
 LCD_WF8B_BPFLCD47_MASK 00000020
 
 Symbol: LCD_WF8B_BPFLCD47_MASK
+   Definitions
 
 
 
 ARM Macro Assembler    Page 189 Alphabetic symbol ordering
 Absolute symbols
 
-   Definitions
       At line 2054 in file MKL46Z4.s
    Uses
       None
@@ -14609,13 +14647,13 @@ Symbol: LCD_WF8B_BPFLCD4_SHIFT
    Definitions
       At line 2161 in file MKL46Z4.s
    Uses
+      None
 
 
 
 ARM Macro Assembler    Page 190 Alphabetic symbol ordering
 Absolute symbols
 
-      None
 Comment: LCD_WF8B_BPFLCD4_SHIFT unused
 LCD_WF8B_BPFLCD50_MASK 00000020
 
@@ -14677,9 +14715,9 @@ LCD_WF8B_BPFLCD53_SHIFT 00000005
 
 
 
+
 ARM Macro Assembler    Page 191 Alphabetic symbol ordering
 Absolute symbols
-
 
 Symbol: LCD_WF8B_BPFLCD53_SHIFT
    Definitions
@@ -14739,13 +14777,13 @@ LCD_WF8B_BPFLCD57_MASK 00000020
 
 Symbol: LCD_WF8B_BPFLCD57_MASK
    Definitions
+      At line 2102 in file MKL46Z4.s
 
 
 
 ARM Macro Assembler    Page 192 Alphabetic symbol ordering
 Absolute symbols
 
-      At line 2102 in file MKL46Z4.s
    Uses
       None
 Comment: LCD_WF8B_BPFLCD57_MASK unused
@@ -14804,13 +14842,13 @@ Symbol: LCD_WF8B_BPFLCD5_SHIFT
       At line 2061 in file MKL46Z4.s
    Uses
       None
+Comment: LCD_WF8B_BPFLCD5_SHIFT unused
 
 
 
 ARM Macro Assembler    Page 193 Alphabetic symbol ordering
 Absolute symbols
 
-Comment: LCD_WF8B_BPFLCD5_SHIFT unused
 LCD_WF8B_BPFLCD60_MASK 00000020
 
 Symbol: LCD_WF8B_BPFLCD60_MASK
@@ -14869,13 +14907,13 @@ Symbol: LCD_WF8B_BPFLCD63_MASK
 Comment: LCD_WF8B_BPFLCD63_MASK unused
 LCD_WF8B_BPFLCD63_SHIFT 00000005
 
+Symbol: LCD_WF8B_BPFLCD63_SHIFT
 
 
 
 ARM Macro Assembler    Page 194 Alphabetic symbol ordering
 Absolute symbols
 
-Symbol: LCD_WF8B_BPFLCD63_SHIFT
    Definitions
       At line 2057 in file MKL46Z4.s
    Uses
@@ -14934,13 +14972,13 @@ LCD_WF8B_BPFLCD9_MASK 00000020
 Symbol: LCD_WF8B_BPFLCD9_MASK
    Definitions
       At line 2142 in file MKL46Z4.s
+   Uses
 
 
 
 ARM Macro Assembler    Page 195 Alphabetic symbol ordering
 Absolute symbols
 
-   Uses
       None
 Comment: LCD_WF8B_BPFLCD9_MASK unused
 LCD_WF8B_BPFLCD9_SHIFT 00000005
@@ -14999,13 +15037,13 @@ Symbol: LCD_WF8B_BPGLCD11_SHIFT
    Uses
       None
 Comment: LCD_WF8B_BPGLCD11_SHIFT unused
+LCD_WF8B_BPGLCD12_MASK 00000040
 
 
 
 ARM Macro Assembler    Page 196 Alphabetic symbol ordering
 Absolute symbols
 
-LCD_WF8B_BPGLCD12_MASK 00000040
 
 Symbol: LCD_WF8B_BPGLCD12_MASK
    Definitions
@@ -15064,13 +15102,13 @@ Comment: LCD_WF8B_BPGLCD15_MASK unused
 LCD_WF8B_BPGLCD15_SHIFT 00000006
 
 Symbol: LCD_WF8B_BPGLCD15_SHIFT
+   Definitions
 
 
 
 ARM Macro Assembler    Page 197 Alphabetic symbol ordering
 Absolute symbols
 
-   Definitions
       At line 2183 in file MKL46Z4.s
    Uses
       None
@@ -15129,13 +15167,13 @@ Symbol: LCD_WF8B_BPGLCD19_MASK
    Definitions
       At line 2222 in file MKL46Z4.s
    Uses
+      None
 
 
 
 ARM Macro Assembler    Page 198 Alphabetic symbol ordering
 Absolute symbols
 
-      None
 Comment: LCD_WF8B_BPGLCD19_MASK unused
 LCD_WF8B_BPGLCD19_SHIFT 00000006
 
@@ -15197,9 +15235,9 @@ LCD_WF8B_BPGLCD22_MASK 00000040
 
 
 
+
 ARM Macro Assembler    Page 199 Alphabetic symbol ordering
 Absolute symbols
-
 
 Symbol: LCD_WF8B_BPGLCD22_MASK
    Definitions
@@ -15259,13 +15297,13 @@ LCD_WF8B_BPGLCD25_SHIFT 00000006
 
 Symbol: LCD_WF8B_BPGLCD25_SHIFT
    Definitions
+      At line 2249 in file MKL46Z4.s
 
 
 
 ARM Macro Assembler    Page 200 Alphabetic symbol ordering
 Absolute symbols
 
-      At line 2249 in file MKL46Z4.s
    Uses
       None
 Comment: LCD_WF8B_BPGLCD25_SHIFT unused
@@ -15324,13 +15362,13 @@ Symbol: LCD_WF8B_BPGLCD29_MASK
       At line 2262 in file MKL46Z4.s
    Uses
       None
+Comment: LCD_WF8B_BPGLCD29_MASK unused
 
 
 
 ARM Macro Assembler    Page 201 Alphabetic symbol ordering
 Absolute symbols
 
-Comment: LCD_WF8B_BPGLCD29_MASK unused
 LCD_WF8B_BPGLCD29_SHIFT 00000006
 
 Symbol: LCD_WF8B_BPGLCD29_SHIFT
@@ -15389,13 +15427,13 @@ Symbol: LCD_WF8B_BPGLCD31_SHIFT
 Comment: LCD_WF8B_BPGLCD31_SHIFT unused
 LCD_WF8B_BPGLCD32_MASK 00000040
 
+Symbol: LCD_WF8B_BPGLCD32_MASK
 
 
 
 ARM Macro Assembler    Page 202 Alphabetic symbol ordering
 Absolute symbols
 
-Symbol: LCD_WF8B_BPGLCD32_MASK
    Definitions
       At line 2276 in file MKL46Z4.s
    Uses
@@ -15454,13 +15492,13 @@ LCD_WF8B_BPGLCD35_SHIFT 00000006
 Symbol: LCD_WF8B_BPGLCD35_SHIFT
    Definitions
       At line 2287 in file MKL46Z4.s
+   Uses
 
 
 
 ARM Macro Assembler    Page 203 Alphabetic symbol ordering
 Absolute symbols
 
-   Uses
       None
 Comment: LCD_WF8B_BPGLCD35_SHIFT unused
 LCD_WF8B_BPGLCD36_MASK 00000040
@@ -15519,13 +15557,13 @@ Symbol: LCD_WF8B_BPGLCD39_MASK
    Uses
       None
 Comment: LCD_WF8B_BPGLCD39_MASK unused
+LCD_WF8B_BPGLCD39_SHIFT 00000006
 
 
 
 ARM Macro Assembler    Page 204 Alphabetic symbol ordering
 Absolute symbols
 
-LCD_WF8B_BPGLCD39_SHIFT 00000006
 
 Symbol: LCD_WF8B_BPGLCD39_SHIFT
    Definitions
@@ -15584,13 +15622,13 @@ Comment: LCD_WF8B_BPGLCD41_SHIFT unused
 LCD_WF8B_BPGLCD42_MASK 00000040
 
 Symbol: LCD_WF8B_BPGLCD42_MASK
+   Definitions
 
 
 
 ARM Macro Assembler    Page 205 Alphabetic symbol ordering
 Absolute symbols
 
-   Definitions
       At line 2280 in file MKL46Z4.s
    Uses
       None
@@ -15649,13 +15687,13 @@ Symbol: LCD_WF8B_BPGLCD45_SHIFT
    Definitions
       At line 2259 in file MKL46Z4.s
    Uses
+      None
 
 
 
 ARM Macro Assembler    Page 206 Alphabetic symbol ordering
 Absolute symbols
 
-      None
 Comment: LCD_WF8B_BPGLCD45_SHIFT unused
 LCD_WF8B_BPGLCD46_MASK 00000040
 
@@ -15717,9 +15755,9 @@ LCD_WF8B_BPGLCD49_SHIFT 00000006
 
 
 
+
 ARM Macro Assembler    Page 207 Alphabetic symbol ordering
 Absolute symbols
-
 
 Symbol: LCD_WF8B_BPGLCD49_SHIFT
    Definitions
@@ -15779,13 +15817,13 @@ LCD_WF8B_BPGLCD52_MASK 00000040
 
 Symbol: LCD_WF8B_BPGLCD52_MASK
    Definitions
+      At line 2202 in file MKL46Z4.s
 
 
 
 ARM Macro Assembler    Page 208 Alphabetic symbol ordering
 Absolute symbols
 
-      At line 2202 in file MKL46Z4.s
    Uses
       None
 Comment: LCD_WF8B_BPGLCD52_MASK unused
@@ -15844,13 +15882,13 @@ Symbol: LCD_WF8B_BPGLCD55_SHIFT
       At line 2179 in file MKL46Z4.s
    Uses
       None
+Comment: LCD_WF8B_BPGLCD55_SHIFT unused
 
 
 
 ARM Macro Assembler    Page 209 Alphabetic symbol ordering
 Absolute symbols
 
-Comment: LCD_WF8B_BPGLCD55_SHIFT unused
 LCD_WF8B_BPGLCD56_MASK 00000040
 
 Symbol: LCD_WF8B_BPGLCD56_MASK
@@ -15909,13 +15947,13 @@ Symbol: LCD_WF8B_BPGLCD59_MASK
 Comment: LCD_WF8B_BPGLCD59_MASK unused
 LCD_WF8B_BPGLCD59_SHIFT 00000006
 
+Symbol: LCD_WF8B_BPGLCD59_SHIFT
 
 
 
 ARM Macro Assembler    Page 210 Alphabetic symbol ordering
 Absolute symbols
 
-Symbol: LCD_WF8B_BPGLCD59_SHIFT
    Definitions
       At line 2193 in file MKL46Z4.s
    Uses
@@ -15974,13 +16012,13 @@ LCD_WF8B_BPGLCD62_MASK 00000040
 Symbol: LCD_WF8B_BPGLCD62_MASK
    Definitions
       At line 2184 in file MKL46Z4.s
+   Uses
 
 
 
 ARM Macro Assembler    Page 211 Alphabetic symbol ordering
 Absolute symbols
 
-   Uses
       None
 Comment: LCD_WF8B_BPGLCD62_MASK unused
 LCD_WF8B_BPGLCD62_SHIFT 00000006
@@ -16039,13 +16077,13 @@ Symbol: LCD_WF8B_BPGLCD7_SHIFT
    Uses
       None
 Comment: LCD_WF8B_BPGLCD7_SHIFT unused
+LCD_WF8B_BPGLCD8_MASK 00000040
 
 
 
 ARM Macro Assembler    Page 212 Alphabetic symbol ordering
 Absolute symbols
 
-LCD_WF8B_BPGLCD8_MASK 00000040
 
 Symbol: LCD_WF8B_BPGLCD8_MASK
    Definitions
@@ -16104,13 +16142,13 @@ Comment: LCD_WF8B_BPHLCD10_MASK unused
 LCD_WF8B_BPHLCD10_SHIFT 00000007
 
 Symbol: LCD_WF8B_BPHLCD10_SHIFT
+   Definitions
 
 
 
 ARM Macro Assembler    Page 213 Alphabetic symbol ordering
 Absolute symbols
 
-   Definitions
       At line 2425 in file MKL46Z4.s
    Uses
       None
@@ -16169,13 +16207,13 @@ Symbol: LCD_WF8B_BPHLCD14_MASK
    Definitions
       At line 2416 in file MKL46Z4.s
    Uses
+      None
 
 
 
 ARM Macro Assembler    Page 214 Alphabetic symbol ordering
 Absolute symbols
 
-      None
 Comment: LCD_WF8B_BPHLCD14_MASK unused
 LCD_WF8B_BPHLCD14_SHIFT 00000007
 
@@ -16237,9 +16275,9 @@ LCD_WF8B_BPHLCD18_MASK 00000080
 
 
 
+
 ARM Macro Assembler    Page 215 Alphabetic symbol ordering
 Absolute symbols
-
 
 Symbol: LCD_WF8B_BPHLCD18_MASK
    Definitions
@@ -16299,13 +16337,13 @@ LCD_WF8B_BPHLCD20_SHIFT 00000007
 
 Symbol: LCD_WF8B_BPHLCD20_SHIFT
    Definitions
+      At line 2403 in file MKL46Z4.s
 
 
 
 ARM Macro Assembler    Page 216 Alphabetic symbol ordering
 Absolute symbols
 
-      At line 2403 in file MKL46Z4.s
    Uses
       None
 Comment: LCD_WF8B_BPHLCD20_SHIFT unused
@@ -16364,13 +16402,13 @@ Symbol: LCD_WF8B_BPHLCD24_MASK
       At line 2392 in file MKL46Z4.s
    Uses
       None
+Comment: LCD_WF8B_BPHLCD24_MASK unused
 
 
 
 ARM Macro Assembler    Page 217 Alphabetic symbol ordering
 Absolute symbols
 
-Comment: LCD_WF8B_BPHLCD24_MASK unused
 LCD_WF8B_BPHLCD24_SHIFT 00000007
 
 Symbol: LCD_WF8B_BPHLCD24_SHIFT
@@ -16429,13 +16467,13 @@ Symbol: LCD_WF8B_BPHLCD27_SHIFT
 Comment: LCD_WF8B_BPHLCD27_SHIFT unused
 LCD_WF8B_BPHLCD28_MASK 00000080
 
+Symbol: LCD_WF8B_BPHLCD28_MASK
 
 
 
 ARM Macro Assembler    Page 218 Alphabetic symbol ordering
 Absolute symbols
 
-Symbol: LCD_WF8B_BPHLCD28_MASK
    Definitions
       At line 2384 in file MKL46Z4.s
    Uses
@@ -16494,13 +16532,13 @@ LCD_WF8B_BPHLCD30_SHIFT 00000007
 Symbol: LCD_WF8B_BPHLCD30_SHIFT
    Definitions
       At line 2379 in file MKL46Z4.s
+   Uses
 
 
 
 ARM Macro Assembler    Page 219 Alphabetic symbol ordering
 Absolute symbols
 
-   Uses
       None
 Comment: LCD_WF8B_BPHLCD30_SHIFT unused
 LCD_WF8B_BPHLCD31_MASK 00000080
@@ -16559,13 +16597,13 @@ Symbol: LCD_WF8B_BPHLCD34_MASK
    Uses
       None
 Comment: LCD_WF8B_BPHLCD34_MASK unused
+LCD_WF8B_BPHLCD34_SHIFT 00000007
 
 
 
 ARM Macro Assembler    Page 220 Alphabetic symbol ordering
 Absolute symbols
 
-LCD_WF8B_BPHLCD34_SHIFT 00000007
 
 Symbol: LCD_WF8B_BPHLCD34_SHIFT
    Definitions
@@ -16624,13 +16662,13 @@ Comment: LCD_WF8B_BPHLCD37_SHIFT unused
 LCD_WF8B_BPHLCD38_MASK 00000080
 
 Symbol: LCD_WF8B_BPHLCD38_MASK
+   Definitions
 
 
 
 ARM Macro Assembler    Page 221 Alphabetic symbol ordering
 Absolute symbols
 
-   Definitions
       At line 2360 in file MKL46Z4.s
    Uses
       None
@@ -16689,13 +16727,13 @@ Symbol: LCD_WF8B_BPHLCD40_SHIFT
    Definitions
       At line 2357 in file MKL46Z4.s
    Uses
+      None
 
 
 
 ARM Macro Assembler    Page 222 Alphabetic symbol ordering
 Absolute symbols
 
-      None
 Comment: LCD_WF8B_BPHLCD40_SHIFT unused
 LCD_WF8B_BPHLCD41_MASK 00000080
 
@@ -16757,9 +16795,9 @@ LCD_WF8B_BPHLCD44_SHIFT 00000007
 
 
 
+
 ARM Macro Assembler    Page 223 Alphabetic symbol ordering
 Absolute symbols
-
 
 Symbol: LCD_WF8B_BPHLCD44_SHIFT
    Definitions
@@ -16819,13 +16857,13 @@ LCD_WF8B_BPHLCD48_MASK 00000080
 
 Symbol: LCD_WF8B_BPHLCD48_MASK
    Definitions
+      At line 2338 in file MKL46Z4.s
 
 
 
 ARM Macro Assembler    Page 224 Alphabetic symbol ordering
 Absolute symbols
 
-      At line 2338 in file MKL46Z4.s
    Uses
       None
 Comment: LCD_WF8B_BPHLCD48_MASK unused
@@ -16884,13 +16922,13 @@ Symbol: LCD_WF8B_BPHLCD50_SHIFT
       At line 2333 in file MKL46Z4.s
    Uses
       None
+Comment: LCD_WF8B_BPHLCD50_SHIFT unused
 
 
 
 ARM Macro Assembler    Page 225 Alphabetic symbol ordering
 Absolute symbols
 
-Comment: LCD_WF8B_BPHLCD50_SHIFT unused
 LCD_WF8B_BPHLCD51_MASK 00000080
 
 Symbol: LCD_WF8B_BPHLCD51_MASK
@@ -16949,13 +16987,13 @@ Symbol: LCD_WF8B_BPHLCD54_MASK
 Comment: LCD_WF8B_BPHLCD54_MASK unused
 LCD_WF8B_BPHLCD54_SHIFT 00000007
 
+Symbol: LCD_WF8B_BPHLCD54_SHIFT
 
 
 
 ARM Macro Assembler    Page 226 Alphabetic symbol ordering
 Absolute symbols
 
-Symbol: LCD_WF8B_BPHLCD54_SHIFT
    Definitions
       At line 2325 in file MKL46Z4.s
    Uses
@@ -17014,13 +17052,13 @@ LCD_WF8B_BPHLCD58_MASK 00000080
 Symbol: LCD_WF8B_BPHLCD58_MASK
    Definitions
       At line 2314 in file MKL46Z4.s
+   Uses
 
 
 
 ARM Macro Assembler    Page 227 Alphabetic symbol ordering
 Absolute symbols
 
-   Uses
       None
 Comment: LCD_WF8B_BPHLCD58_MASK unused
 LCD_WF8B_BPHLCD58_SHIFT 00000007
@@ -17079,13 +17117,13 @@ Symbol: LCD_WF8B_BPHLCD60_SHIFT
    Uses
       None
 Comment: LCD_WF8B_BPHLCD60_SHIFT unused
+LCD_WF8B_BPHLCD61_MASK 00000080
 
 
 
 ARM Macro Assembler    Page 228 Alphabetic symbol ordering
 Absolute symbols
 
-LCD_WF8B_BPHLCD61_MASK 00000080
 
 Symbol: LCD_WF8B_BPHLCD61_MASK
    Definitions
@@ -17144,13 +17182,13 @@ Comment: LCD_WF8B_BPHLCD6_MASK unused
 LCD_WF8B_BPHLCD6_SHIFT 00000007
 
 Symbol: LCD_WF8B_BPHLCD6_SHIFT
+   Definitions
 
 
 
 ARM Macro Assembler    Page 229 Alphabetic symbol ordering
 Absolute symbols
 
-   Definitions
       At line 2415 in file MKL46Z4.s
    Uses
       None
@@ -17209,13 +17247,13 @@ Symbol: LCD_WF8_REG
    Definitions
       At line 1191 in file MKL46Z4.s
    Uses
+      None
 
 
 
 ARM Macro Assembler    Page 230 Alphabetic symbol ordering
 Absolute symbols
 
-      None
 Comment: LCD_WF8_REG unused
 LCD_WF9_REG 40053028
 
@@ -17277,9 +17315,9 @@ LCD_WF_D_MASK 00000008
 
 
 
+
 ARM Macro Assembler    Page 231 Alphabetic symbol ordering
 Absolute symbols
-
 
 Symbol: LCD_WF_D_MASK
    Definitions
@@ -17339,13 +17377,13 @@ LCD_WF_G_SHIFT 00000006
 
 Symbol: LCD_WF_G_SHIFT
    Definitions
+      At line 1403 in file MKL46Z4.s
 
 
 
 ARM Macro Assembler    Page 232 Alphabetic symbol ordering
 Absolute symbols
 
-      At line 1403 in file MKL46Z4.s
    Uses
       None
 Comment: LCD_WF_G_SHIFT unused
@@ -17404,13 +17442,13 @@ Symbol: LCD_WF_WF10_SHIFT
       At line 1344 in file MKL46Z4.s
    Uses
       None
+Comment: LCD_WF_WF10_SHIFT unused
 
 
 
 ARM Macro Assembler    Page 233 Alphabetic symbol ordering
 Absolute symbols
 
-Comment: LCD_WF_WF10_SHIFT unused
 LCD_WF_WF11_MASK FF000000
 
 Symbol: LCD_WF_WF11_MASK
@@ -17469,13 +17507,13 @@ Symbol: LCD_WF_WF14_MASK
 Comment: LCD_WF_WF14_MASK unused
 LCD_WF_WF14_SHIFT 00000010
 
+Symbol: LCD_WF_WF14_SHIFT
 
 
 
 ARM Macro Assembler    Page 234 Alphabetic symbol ordering
 Absolute symbols
 
-Symbol: LCD_WF_WF14_SHIFT
    Definitions
       At line 1332 in file MKL46Z4.s
    Uses
@@ -17534,13 +17572,13 @@ LCD_WF_WF18_MASK 00FF0000
 Symbol: LCD_WF_WF18_MASK
    Definitions
       At line 1321 in file MKL46Z4.s
+   Uses
 
 
 
 ARM Macro Assembler    Page 235 Alphabetic symbol ordering
 Absolute symbols
 
-   Uses
       None
 Comment: LCD_WF_WF18_MASK unused
 LCD_WF_WF18_SHIFT 00000010
@@ -17599,13 +17637,13 @@ Symbol: LCD_WF_WF20_SHIFT
    Uses
       None
 Comment: LCD_WF_WF20_SHIFT unused
+LCD_WF_WF21_MASK 0000FF00
 
 
 
 ARM Macro Assembler    Page 236 Alphabetic symbol ordering
 Absolute symbols
 
-LCD_WF_WF21_MASK 0000FF00
 
 Symbol: LCD_WF_WF21_MASK
    Definitions
@@ -17664,13 +17702,13 @@ Comment: LCD_WF_WF24_MASK unused
 LCD_WF_WF24_SHIFT 00000000
 
 Symbol: LCD_WF_WF24_SHIFT
+   Definitions
 
 
 
 ARM Macro Assembler    Page 237 Alphabetic symbol ordering
 Absolute symbols
 
-   Definitions
       At line 1276 in file MKL46Z4.s
    Uses
       None
@@ -17729,13 +17767,13 @@ Symbol: LCD_WF_WF28_MASK
    Definitions
       At line 1271 in file MKL46Z4.s
    Uses
+      None
 
 
 
 ARM Macro Assembler    Page 238 Alphabetic symbol ordering
 Absolute symbols
 
-      None
 Comment: LCD_WF_WF28_MASK unused
 LCD_WF_WF28_SHIFT 00000000
 
@@ -17797,9 +17835,9 @@ LCD_WF_WF31_MASK FF000000
 
 
 
+
 ARM Macro Assembler    Page 239 Alphabetic symbol ordering
 Absolute symbols
-
 
 Symbol: LCD_WF_WF31_MASK
    Definitions
@@ -17859,13 +17897,13 @@ LCD_WF_WF34_SHIFT 00000010
 
 Symbol: LCD_WF_WF34_SHIFT
    Definitions
+      At line 1328 in file MKL46Z4.s
 
 
 
 ARM Macro Assembler    Page 240 Alphabetic symbol ordering
 Absolute symbols
 
-      At line 1328 in file MKL46Z4.s
    Uses
       None
 Comment: LCD_WF_WF34_SHIFT unused
@@ -17924,13 +17962,13 @@ Symbol: LCD_WF_WF38_MASK
       At line 1323 in file MKL46Z4.s
    Uses
       None
+Comment: LCD_WF_WF38_MASK unused
 
 
 
 ARM Macro Assembler    Page 241 Alphabetic symbol ordering
 Absolute symbols
 
-Comment: LCD_WF_WF38_MASK unused
 LCD_WF_WF38_SHIFT 00000010
 
 Symbol: LCD_WF_WF38_SHIFT
@@ -17989,13 +18027,13 @@ Symbol: LCD_WF_WF40_SHIFT
 Comment: LCD_WF_WF40_SHIFT unused
 LCD_WF_WF41_MASK 0000FF00
 
+Symbol: LCD_WF_WF41_MASK
 
 
 
 ARM Macro Assembler    Page 242 Alphabetic symbol ordering
 Absolute symbols
 
-Symbol: LCD_WF_WF41_MASK
    Definitions
       At line 1293 in file MKL46Z4.s
    Uses
@@ -18054,13 +18092,13 @@ LCD_WF_WF44_SHIFT 00000000
 Symbol: LCD_WF_WF44_SHIFT
    Definitions
       At line 1262 in file MKL46Z4.s
+   Uses
 
 
 
 ARM Macro Assembler    Page 243 Alphabetic symbol ordering
 Absolute symbols
 
-   Uses
       None
 Comment: LCD_WF_WF44_SHIFT unused
 LCD_WF_WF45_MASK 0000FF00
@@ -18119,13 +18157,13 @@ Symbol: LCD_WF_WF48_MASK
    Uses
       None
 Comment: LCD_WF_WF48_MASK unused
+LCD_WF_WF48_SHIFT 00000000
 
 
 
 ARM Macro Assembler    Page 244 Alphabetic symbol ordering
 Absolute symbols
 
-LCD_WF_WF48_SHIFT 00000000
 
 Symbol: LCD_WF_WF48_SHIFT
    Definitions
@@ -18184,13 +18222,13 @@ Comment: LCD_WF_WF50_SHIFT unused
 LCD_WF_WF51_MASK FF000000
 
 Symbol: LCD_WF_WF51_MASK
+   Definitions
 
 
 
 ARM Macro Assembler    Page 245 Alphabetic symbol ordering
 Absolute symbols
 
-   Definitions
       At line 1353 in file MKL46Z4.s
    Uses
       None
@@ -18249,13 +18287,13 @@ Symbol: LCD_WF_WF54_SHIFT
    Definitions
       At line 1334 in file MKL46Z4.s
    Uses
+      None
 
 
 
 ARM Macro Assembler    Page 246 Alphabetic symbol ordering
 Absolute symbols
 
-      None
 Comment: LCD_WF_WF54_SHIFT unused
 LCD_WF_WF55_MASK FF000000
 
@@ -18317,9 +18355,9 @@ LCD_WF_WF58_SHIFT 00000010
 
 
 
+
 ARM Macro Assembler    Page 247 Alphabetic symbol ordering
 Absolute symbols
-
 
 Symbol: LCD_WF_WF58_SHIFT
    Definitions
@@ -18379,13 +18417,13 @@ LCD_WF_WF61_MASK 0000FF00
 
 Symbol: LCD_WF_WF61_MASK
    Definitions
+      At line 1287 in file MKL46Z4.s
 
 
 
 ARM Macro Assembler    Page 248 Alphabetic symbol ordering
 Absolute symbols
 
-      At line 1287 in file MKL46Z4.s
    Uses
       None
 Comment: LCD_WF_WF61_MASK unused
@@ -18444,13 +18482,13 @@ Symbol: LCD_WF_WF6_SHIFT
       At line 1318 in file MKL46Z4.s
    Uses
       None
+Comment: LCD_WF_WF6_SHIFT unused
 
 
 
 ARM Macro Assembler    Page 249 Alphabetic symbol ordering
 Absolute symbols
 
-Comment: LCD_WF_WF6_SHIFT unused
 LCD_WF_WF7_MASK FF000000
 
 Symbol: LCD_WF_WF7_MASK
@@ -18509,13 +18547,13 @@ Symbol: LLWU_IPR
 Comment: LLWU_IPR unused
 LLWU_IRQ 00000007
 
+Symbol: LLWU_IRQ
 
 
 
 ARM Macro Assembler    Page 250 Alphabetic symbol ordering
 Absolute symbols
 
-Symbol: LLWU_IRQ
    Definitions
       At line 2717 in file MKL46Z4.s
    Uses
@@ -18574,13 +18612,13 @@ LPTMR0_IRQ_MASK 10000000
 Symbol: LPTMR0_IRQ_MASK
    Definitions
       At line 2772 in file MKL46Z4.s
+   Uses
 
 
 
 ARM Macro Assembler    Page 251 Alphabetic symbol ordering
 Absolute symbols
 
-   Uses
       None
 Comment: LPTMR0_IRQ_MASK unused
 LPTMR0_PRI_POS 00000006
@@ -18639,13 +18677,13 @@ Symbol: MCG_BASE
 MCG_C1 40064000
 
 Symbol: MCG_C1
+   Definitions
 
 
 
 ARM Macro Assembler    Page 252 Alphabetic symbol ordering
 Absolute symbols
 
-   Definitions
       At line 2441 in file MKL46Z4.s
    Uses
       None
@@ -18704,13 +18742,13 @@ Symbol: MCG_C1_IREFSTEN_MASK
    Definitions
       At line 2479 in file MKL46Z4.s
    Uses
+      None
 
 
 
 ARM Macro Assembler    Page 253 Alphabetic symbol ordering
 Absolute symbols
 
-      None
 Comment: MCG_C1_IREFSTEN_MASK unused
 MCG_C1_IREFSTEN_SHIFT 00000000
 
@@ -18772,9 +18810,9 @@ MCG_C2_FCFTRIM_MASK 00000040
 
 
 
+
 ARM Macro Assembler    Page 254 Alphabetic symbol ordering
 Absolute symbols
-
 
 Symbol: MCG_C2_FCFTRIM_MASK
    Definitions
@@ -18834,13 +18872,13 @@ MCG_C2_LOCRE0_SHIFT 00000007
 
 Symbol: MCG_C2_LOCRE0_SHIFT
    Definitions
+      At line 2504 in file MKL46Z4.s
 
 
 
 ARM Macro Assembler    Page 255 Alphabetic symbol ordering
 Absolute symbols
 
-      At line 2504 in file MKL46Z4.s
    Uses
       None
 Comment: MCG_C2_LOCRE0_SHIFT unused
@@ -18899,13 +18937,13 @@ Symbol: MCG_C3_SCTRIM_SHIFT
       At line 2522 in file MKL46Z4.s
    Uses
       None
+Comment: MCG_C3_SCTRIM_SHIFT unused
 
 
 
 ARM Macro Assembler    Page 256 Alphabetic symbol ordering
 Absolute symbols
 
-Comment: MCG_C3_SCTRIM_SHIFT unused
 MCG_C4 40064003
 
 Symbol: MCG_C4
@@ -18964,13 +19002,13 @@ Symbol: MCG_C4_FCTRIM_SHIFT
 Comment: MCG_C4_FCTRIM_SHIFT unused
 MCG_C4_OFFSET 00000003
 
+Symbol: MCG_C4_OFFSET
 
 
 
 ARM Macro Assembler    Page 257 Alphabetic symbol ordering
 Absolute symbols
 
-Symbol: MCG_C4_OFFSET
    Definitions
       At line 2437 in file MKL46Z4.s
    Uses
@@ -19029,13 +19067,13 @@ MCG_C5_PLLSTEN0_MASK 00000020
 Symbol: MCG_C5_PLLSTEN0_MASK
    Definitions
       At line 2555 in file MKL46Z4.s
+   Uses
 
 
 
 ARM Macro Assembler    Page 258 Alphabetic symbol ordering
 Absolute symbols
 
-   Uses
       None
 Comment: MCG_C5_PLLSTEN0_MASK unused
 MCG_C5_PLLSTEN0_SHIFT 00000005
@@ -19094,13 +19132,13 @@ Symbol: MCG_C6_CME0_SHIFT
    Uses
       None
 Comment: MCG_C6_CME0_SHIFT unused
+MCG_C6_LOLIE0_MASK 00000080
 
 
 
 ARM Macro Assembler    Page 259 Alphabetic symbol ordering
 Absolute symbols
 
-MCG_C6_LOLIE0_MASK 00000080
 
 Symbol: MCG_C6_LOLIE0_MASK
    Definitions
@@ -19159,13 +19197,13 @@ Comment: MCG_C6_VDIV0_SHIFT unused
 MCG_IPR E000E418
 
 Symbol: MCG_IPR
+   Definitions
 
 
 
 ARM Macro Assembler    Page 260 Alphabetic symbol ordering
 Absolute symbols
 
-   Definitions
       At line 2667 in file MKL46Z4.s
    Uses
       None
@@ -19224,13 +19262,13 @@ Symbol: MCG_S_CLKST_SHIFT
    Definitions
       At line 2605 in file MKL46Z4.s
    Uses
+      None
 
 
 
 ARM Macro Assembler    Page 261 Alphabetic symbol ordering
 Absolute symbols
 
-      None
 Comment: MCG_S_CLKST_SHIFT unused
 MCG_S_IRCST_MASK 00000001
 
@@ -19292,9 +19330,9 @@ MCG_S_LOLS_SHIFT 00000007
 
 
 
+
 ARM Macro Assembler    Page 262 Alphabetic symbol ordering
 Absolute symbols
-
 
 Symbol: MCG_S_LOLS_SHIFT
    Definitions
@@ -19354,13 +19392,13 @@ MCU_MEM_MAP_VERSION 00000200
 
 Symbol: MCU_MEM_MAP_VERSION
    Definitions
+      At line 158 in file MKL46Z4.s
 
 
 
 ARM Macro Assembler    Page 263 Alphabetic symbol ordering
 Absolute symbols
 
-      At line 158 in file MKL46Z4.s
    Uses
       None
 Comment: MCU_MEM_MAP_VERSION unused
@@ -19419,13 +19457,13 @@ Symbol: NUM_ENQD
 NVIC_BASE E000E100
 
 Symbol: NVIC_BASE
+   Definitions
 
 
 
 ARM Macro Assembler    Page 264 Alphabetic symbol ordering
 Absolute symbols
 
-   Definitions
       At line 2613 in file MKL46Z4.s
    Uses
       At line 2626 in file MKL46Z4.s
@@ -19484,13 +19522,13 @@ Symbol: NVIC_ICPR
 
 NVIC_ICPR_OFFSET 00000180
 
+Symbol: NVIC_ICPR_OFFSET
 
 
 
 ARM Macro Assembler    Page 265 Alphabetic symbol ordering
 Absolute symbols
 
-Symbol: NVIC_ICPR_OFFSET
    Definitions
       At line 2617 in file MKL46Z4.s
    Uses
@@ -19549,13 +19587,13 @@ Symbol: NVIC_IPR1_OFFSET
       At line 2619 in file MKL46Z4.s
    Uses
       At line 2631 in file MKL46Z4.s
+Comment: NVIC_IPR1_OFFSET used once
 
 
 
 ARM Macro Assembler    Page 266 Alphabetic symbol ordering
 Absolute symbols
 
-Comment: NVIC_IPR1_OFFSET used once
 NVIC_IPR2 E000E408
 
 Symbol: NVIC_IPR2
@@ -19617,9 +19655,9 @@ NVIC_IPR5 E000E414
 
 
 
+
 ARM Macro Assembler    Page 267 Alphabetic symbol ordering
 Absolute symbols
-
 
 Symbol: NVIC_IPR5
    Definitions
@@ -19679,13 +19717,13 @@ Comment: NVIC_IPR7_OFFSET used once
 NVIC_IPR_PIT_MASK 00C00000
 
 Symbol: NVIC_IPR_PIT_MASK
+   Definitions
 
 
 
 ARM Macro Assembler    Page 268 Alphabetic symbol ordering
 Absolute symbols
 
-   Definitions
       At line 49 in file C_Start.s
    Uses
       At line 844 in file C_Start.s
@@ -19744,13 +19782,13 @@ NVIC_ISER_UART0_MASK 00001000
 Symbol: NVIC_ISER_UART0_MASK
    Definitions
       At line 63 in file C_Start.s
+   Uses
 
 
 
 ARM Macro Assembler    Page 269 Alphabetic symbol ordering
 Absolute symbols
 
-   Uses
       At line 376 in file C_Start.s
 Comment: NVIC_ISER_UART0_MASK used once
 NVIC_ISPR E000E200
@@ -19809,13 +19847,13 @@ Symbol: OSC_CR_ERCLKEN_MASK
    Uses
       None
 Comment: OSC_CR_ERCLKEN_MASK unused
+OSC_CR_ERCLKEN_SHIFT 00000007
 
 
 
 ARM Macro Assembler    Page 270 Alphabetic symbol ordering
 Absolute symbols
 
-OSC_CR_ERCLKEN_SHIFT 00000007
 
 Symbol: OSC_CR_ERCLKEN_SHIFT
    Definitions
@@ -19874,13 +19912,13 @@ Comment: OSC_CR_SC2P_SHIFT unused
 OSC_CR_SC4P_MASK 00000004
 
 Symbol: OSC_CR_SC4P_MASK
+   Definitions
 
 
 
 ARM Macro Assembler    Page 271 Alphabetic symbol ordering
 Absolute symbols
 
-   Definitions
       At line 2845 in file MKL46Z4.s
    Uses
       None
@@ -19939,13 +19977,13 @@ Symbol: PIT_BASE
       At line 2883 in file MKL46Z4.s
       At line 857 in file C_Start.s
 
+PIT_CH0_BASE 40037100
 
 
 
 ARM Macro Assembler    Page 272 Alphabetic symbol ordering
 Absolute symbols
 
-PIT_CH0_BASE 40037100
 
 Symbol: PIT_CH0_BASE
    Definitions
@@ -20004,13 +20042,13 @@ Symbol: PIT_CVAL_OFFSET
    Uses
       None
 Comment: PIT_CVAL_OFFSET unused
+PIT_IPR E000E414
 
 
 
 ARM Macro Assembler    Page 273 Alphabetic symbol ordering
 Absolute symbols
 
-PIT_IPR E000E414
 
 Symbol: PIT_IPR
    Definitions
@@ -20072,9 +20110,9 @@ PIT_LDVAL1 40037110
 
 
 
+
 ARM Macro Assembler    Page 274 Alphabetic symbol ordering
 Absolute symbols
-
 
 Symbol: PIT_LDVAL1
    Definitions
@@ -20134,13 +20172,13 @@ PIT_LTMR64L_OFFSET 000000E4
 
 Symbol: PIT_LTMR64L_OFFSET
    Definitions
+      At line 2864 in file MKL46Z4.s
 
 
 
 ARM Macro Assembler    Page 275 Alphabetic symbol ordering
 Absolute symbols
 
-      At line 2864 in file MKL46Z4.s
    Uses
       At line 2875 in file MKL46Z4.s
 Comment: PIT_LTMR64L_OFFSET used once
@@ -20199,13 +20237,13 @@ Symbol: PIT_MCR_OFFSET
       At line 2862 in file MKL46Z4.s
    Uses
       At line 2873 in file MKL46Z4.s
+      At line 859 in file C_Start.s
 
 
 
 ARM Macro Assembler    Page 276 Alphabetic symbol ordering
 Absolute symbols
 
-      At line 859 in file C_Start.s
 
 PIT_PRI_POS 00000016
 
@@ -20267,9 +20305,9 @@ PIT_TCTRL_CH_IE 00000003
 
 
 
+
 ARM Macro Assembler    Page 277 Alphabetic symbol ordering
 Absolute symbols
-
 
 Symbol: PIT_TCTRL_CH_IE
    Definitions
@@ -20332,9 +20370,9 @@ PIT_TFLG0_OFFSET 0000010C
 
 
 
+
 ARM Macro Assembler    Page 278 Alphabetic symbol ordering
 Absolute symbols
-
 
 Symbol: PIT_TFLG0_OFFSET
    Definitions
@@ -20394,13 +20432,13 @@ PMC_IPR E000E404
 
 Symbol: PMC_IPR
    Definitions
+      At line 2646 in file MKL46Z4.s
 
 
 
 ARM Macro Assembler    Page 279 Alphabetic symbol ordering
 Absolute symbols
 
-      At line 2646 in file MKL46Z4.s
    Uses
       None
 Comment: PMC_IPR unused
@@ -20459,13 +20497,13 @@ Symbol: PORTA_BASE
       At line 3047 in file MKL46Z4.s
       At line 3048 in file MKL46Z4.s
       At line 3049 in file MKL46Z4.s
+      At line 3050 in file MKL46Z4.s
 
 
 
 ARM Macro Assembler    Page 280 Alphabetic symbol ordering
 Absolute symbols
 
-      At line 3050 in file MKL46Z4.s
       At line 3051 in file MKL46Z4.s
       At line 3052 in file MKL46Z4.s
       At line 3053 in file MKL46Z4.s
@@ -20483,8 +20521,8 @@ Absolute symbols
       At line 3065 in file MKL46Z4.s
       At line 3066 in file MKL46Z4.s
       At line 3067 in file MKL46Z4.s
-      At line 915 in file C_Start.s
-      At line 954 in file C_Start.s
+      At line 921 in file C_Start.s
+      At line 948 in file C_Start.s
 
 PORTA_GPCHR 40049084
 
@@ -20524,13 +20562,13 @@ Symbol: PORTA_IPR
    Definitions
       At line 2670 in file MKL46Z4.s
    Uses
+      None
 
 
 
 ARM Macro Assembler    Page 281 Alphabetic symbol ordering
 Absolute symbols
 
-      None
 Comment: PORTA_IPR unused
 PORTA_IRQ 0000001E
 
@@ -20571,7 +20609,8 @@ Symbol: PORTA_ISFR_OFFSET
       At line 3032 in file MKL46Z4.s
    Uses
       At line 3067 in file MKL46Z4.s
-Comment: PORTA_ISFR_OFFSET used once
+      At line 949 in file C_Start.s
+
 PORTA_PCR0 40049000
 
 Symbol: PORTA_PCR0
@@ -21863,7 +21902,7 @@ Absolute symbols
       At line 3211 in file MKL46Z4.s
       At line 3212 in file MKL46Z4.s
       At line 3213 in file MKL46Z4.s
-      At line 921 in file C_Start.s
+      At line 927 in file C_Start.s
 
 PORTC_GPCHR 4004B084
 
@@ -24221,8 +24260,8 @@ Symbol: RED_BUTT_SET_MASK
    Definitions
       At line 244 in file C_Start.s
    Uses
-      At line 956 in file C_Start.s
-      At line 971 in file C_Start.s
+      At line 961 in file C_Start.s
+      At line 985 in file C_Start.s
 
 RED_LED_CHAR 00000052
 
@@ -24236,8 +24275,8 @@ ARM Macro Assembler    Page 338 Alphabetic symbol ordering
 Absolute symbols
 
    Uses
-      None
-Comment: RED_LED_CHAR unused
+      At line 966 in file C_Start.s
+Comment: RED_LED_CHAR used once
 RED_LED_SET_MASK 00002000
 
 Symbol: RED_LED_SET_MASK
@@ -24821,7 +24860,8 @@ ARM Macro Assembler    Page 347 Alphabetic symbol ordering
 Absolute symbols
 
       At line 339 in file C_Start.s
-Comment: SIM_SCGC5 used once
+      At line 915 in file C_Start.s
+
 SIM_SCGC5_LPTMR_MASK 00000001
 
 Symbol: SIM_SCGC5_LPTMR_MASK
@@ -24853,7 +24893,8 @@ Symbol: SIM_SCGC5_PORTA_MASK
       At line 3498 in file MKL46Z4.s
    Uses
       At line 340 in file C_Start.s
-Comment: SIM_SCGC5_PORTA_MASK used once
+      At line 916 in file C_Start.s
+
 SIM_SCGC5_PORTA_SHIFT 00000009
 
 Symbol: SIM_SCGC5_PORTA_SHIFT
@@ -24877,21 +24918,21 @@ Symbol: SIM_SCGC5_PORTB_SHIFT
       At line 3497 in file MKL46Z4.s
    Uses
       None
-Comment: SIM_SCGC5_PORTB_SHIFT unused
-SIM_SCGC5_PORTC_MASK 00000800
 
 
 
 ARM Macro Assembler    Page 348 Alphabetic symbol ordering
 Absolute symbols
 
+Comment: SIM_SCGC5_PORTB_SHIFT unused
+SIM_SCGC5_PORTC_MASK 00000800
 
 Symbol: SIM_SCGC5_PORTC_MASK
    Definitions
       At line 3494 in file MKL46Z4.s
    Uses
-      None
-Comment: SIM_SCGC5_PORTC_MASK unused
+      At line 916 in file C_Start.s
+Comment: SIM_SCGC5_PORTC_MASK used once
 SIM_SCGC5_PORTC_SHIFT 0000000B
 
 Symbol: SIM_SCGC5_PORTC_SHIFT
@@ -24942,14 +24983,14 @@ Symbol: SIM_SCGC5_SLCD_MASK
 Comment: SIM_SCGC5_SLCD_MASK unused
 SIM_SCGC5_SLCD_SHIFT 00000013
 
-Symbol: SIM_SCGC5_SLCD_SHIFT
-   Definitions
 
 
 
 ARM Macro Assembler    Page 349 Alphabetic symbol ordering
 Absolute symbols
 
+Symbol: SIM_SCGC5_SLCD_SHIFT
+   Definitions
       At line 3489 in file MKL46Z4.s
    Uses
       None
@@ -25007,14 +25048,14 @@ SIM_SCGC6_DAC0_SHIFT 0000001F
 Symbol: SIM_SCGC6_DAC0_SHIFT
    Definitions
       At line 3521 in file MKL46Z4.s
-   Uses
-      None
 
 
 
 ARM Macro Assembler    Page 350 Alphabetic symbol ordering
 Absolute symbols
 
+   Uses
+      None
 Comment: SIM_SCGC6_DAC0_SHIFT unused
 SIM_SCGC6_DMAMUX_MASK 00000002
 
@@ -25072,13 +25113,13 @@ Symbol: SIM_SCGC6_PIT_SHIFT
    Uses
       None
 Comment: SIM_SCGC6_PIT_SHIFT unused
-SIM_SCGC6_RTC_MASK 20000000
-
 
 
 
 ARM Macro Assembler    Page 351 Alphabetic symbol ordering
 Absolute symbols
+
+SIM_SCGC6_RTC_MASK 20000000
 
 Symbol: SIM_SCGC6_RTC_MASK
    Definitions
@@ -25137,14 +25178,14 @@ Comment: SIM_SCGC6_TPM2_MASK unused
 SIM_SCGC6_TPM2_SHIFT 0000001A
 
 Symbol: SIM_SCGC6_TPM2_SHIFT
-   Definitions
-      At line 3527 in file MKL46Z4.s
 
 
 
 ARM Macro Assembler    Page 352 Alphabetic symbol ordering
 Absolute symbols
 
+   Definitions
+      At line 3527 in file MKL46Z4.s
    Uses
       None
 Comment: SIM_SCGC6_TPM2_SHIFT unused
@@ -25202,14 +25243,14 @@ Symbol: SIM_SOPT1CFG_OFFSET
    Definitions
       At line 3364 in file MKL46Z4.s
    Uses
-      At line 3392 in file MKL46Z4.s
-Comment: SIM_SOPT1CFG_OFFSET used once
 
 
 
 ARM Macro Assembler    Page 353 Alphabetic symbol ordering
 Absolute symbols
 
+      At line 3392 in file MKL46Z4.s
+Comment: SIM_SOPT1CFG_OFFSET used once
 SIM_SOPT1_OFFSET 00000000
 
 Symbol: SIM_SOPT1_OFFSET
@@ -25268,13 +25309,13 @@ Symbol: SIM_SOPT1_USBSSTBY_SHIFT
 Comment: SIM_SOPT1_USBSSTBY_SHIFT unused
 SIM_SOPT1_USBVSTBY_MASK 20000000
 
-Symbol: SIM_SOPT1_USBVSTBY_MASK
-
 
 
 ARM Macro Assembler    Page 354 Alphabetic symbol ordering
 Absolute symbols
 
+
+Symbol: SIM_SOPT1_USBVSTBY_MASK
    Definitions
       At line 3554 in file MKL46Z4.s
    Uses
@@ -25332,14 +25373,14 @@ SIM_SOPT2_PLLFLLSEL_SHIFT 00000010
 
 Symbol: SIM_SOPT2_PLLFLLSEL_SHIFT
    Definitions
-      At line 3602 in file MKL46Z4.s
-   Uses
 
 
 
 ARM Macro Assembler    Page 355 Alphabetic symbol ordering
 Absolute symbols
 
+      At line 3602 in file MKL46Z4.s
+   Uses
       None
 Comment: SIM_SOPT2_PLLFLLSEL_SHIFT unused
 SIM_SOPT2_RTCCLKOUTSEL_MASK 00000010
@@ -25397,14 +25438,14 @@ Symbol: SIM_SOPT2_UART0SRC_SHIFT
       At line 3596 in file MKL46Z4.s
    Uses
       At line 121 in file C_Start.s
-Comment: SIM_SOPT2_UART0SRC_SHIFT used once
-SIM_SOPT2_UART0_MCGPLLCLK_DIV2 04010000
 
 
 
 ARM Macro Assembler    Page 356 Alphabetic symbol ordering
 Absolute symbols
 
+Comment: SIM_SOPT2_UART0SRC_SHIFT used once
+SIM_SOPT2_UART0_MCGPLLCLK_DIV2 04010000
 
 Symbol: SIM_SOPT2_UART0_MCGPLLCLK_DIV2
    Definitions
@@ -25462,14 +25503,14 @@ Symbol: SIM_SOPT5_OFFSET
 Comment: SIM_SOPT5_OFFSET used once
 SIM_SOPT5_UART0ODE_MASK 00010000
 
-Symbol: SIM_SOPT5_UART0ODE_MASK
-   Definitions
 
 
 
 ARM Macro Assembler    Page 357 Alphabetic symbol ordering
 Absolute symbols
 
+Symbol: SIM_SOPT5_UART0ODE_MASK
+   Definitions
       At line 3636 in file MKL46Z4.s
    Uses
       At line 132 in file C_Start.s
@@ -25527,14 +25568,14 @@ SIM_SOPT5_UART1ODE_MASK 00020000
 Symbol: SIM_SOPT5_UART1ODE_MASK
    Definitions
       At line 3634 in file MKL46Z4.s
-   Uses
-      None
 
 
 
 ARM Macro Assembler    Page 358 Alphabetic symbol ordering
 Absolute symbols
 
+   Uses
+      None
 Comment: SIM_SOPT5_UART1ODE_MASK unused
 SIM_SOPT5_UART1ODE_SHIFT 00000011
 
@@ -25592,13 +25633,13 @@ Symbol: SIM_SOPT5_UART2ODE_SHIFT
    Uses
       None
 Comment: SIM_SOPT5_UART2ODE_SHIFT unused
-SIM_SOPT7 40048018
-
 
 
 
 ARM Macro Assembler    Page 359 Alphabetic symbol ordering
 Absolute symbols
+
+SIM_SOPT7 40048018
 
 Symbol: SIM_SOPT7
    Definitions
@@ -25657,14 +25698,14 @@ Comment: SIM_UIDMH unused
 SIM_UIDMH_OFFSET 00001058
 
 Symbol: SIM_UIDMH_OFFSET
-   Definitions
-      At line 3377 in file MKL46Z4.s
 
 
 
 ARM Macro Assembler    Page 360 Alphabetic symbol ordering
 Absolute symbols
 
+   Definitions
+      At line 3377 in file MKL46Z4.s
    Uses
       At line 3399 in file MKL46Z4.s
 Comment: SIM_UIDMH_OFFSET used once
@@ -25722,14 +25763,14 @@ Symbol: SPI0_PRI_POS
    Definitions
       At line 2686 in file MKL46Z4.s
    Uses
-      None
-Comment: SPI0_PRI_POS unused
 
 
 
 ARM Macro Assembler    Page 361 Alphabetic symbol ordering
 Absolute symbols
 
+      None
+Comment: SPI0_PRI_POS unused
 SPI0_Vector 0000001A
 
 Symbol: SPI0_Vector
@@ -25788,13 +25829,13 @@ Symbol: SPI1_Vector
 Comment: SPI1_Vector unused
 SVCall_IRQn FFFFFFFB
 
-Symbol: SVCall_IRQn
-
 
 
 ARM Macro Assembler    Page 362 Alphabetic symbol ordering
 Absolute symbols
 
+
+Symbol: SVCall_IRQn
    Definitions
       At line 117 in file MKL46Z4.s
    Uses
@@ -25852,14 +25893,14 @@ TMP0_PRI_POS 0000000E
 
 Symbol: TMP0_PRI_POS
    Definitions
-      At line 2693 in file MKL46Z4.s
-   Uses
 
 
 
 ARM Macro Assembler    Page 363 Alphabetic symbol ordering
 Absolute symbols
 
+      At line 2693 in file MKL46Z4.s
+   Uses
       None
 Comment: TMP0_PRI_POS unused
 TMP0_Vector 00000021
@@ -25917,14 +25958,14 @@ Symbol: TPM0_C1SC
       At line 3839 in file MKL46Z4.s
    Uses
       None
-Comment: TPM0_C1SC unused
-TPM0_C1V 40038018
 
 
 
 ARM Macro Assembler    Page 364 Alphabetic symbol ordering
 Absolute symbols
 
+Comment: TPM0_C1SC unused
+TPM0_C1V 40038018
 
 Symbol: TPM0_C1V
    Definitions
@@ -25982,14 +26023,14 @@ Symbol: TPM0_C4V
 Comment: TPM0_C4V unused
 TPM0_C5SC 40038034
 
-Symbol: TPM0_C5SC
-   Definitions
 
 
 
 ARM Macro Assembler    Page 365 Alphabetic symbol ordering
 Absolute symbols
 
+Symbol: TPM0_C5SC
+   Definitions
       At line 3847 in file MKL46Z4.s
    Uses
       None
@@ -26047,14 +26088,14 @@ TPM0_STATUS 40038050
 Symbol: TPM0_STATUS
    Definitions
       At line 3849 in file MKL46Z4.s
-   Uses
-      None
 
 
 
 ARM Macro Assembler    Page 366 Alphabetic symbol ordering
 Absolute symbols
 
+   Uses
+      None
 Comment: TPM0_STATUS unused
 TPM1_BASE 40039000
 
@@ -26112,13 +26153,13 @@ Symbol: TPM1_C1V
    Uses
       None
 Comment: TPM1_C1V unused
-TPM1_C2SC 4003901C
-
 
 
 
 ARM Macro Assembler    Page 367 Alphabetic symbol ordering
 Absolute symbols
+
+TPM1_C2SC 4003901C
 
 Symbol: TPM1_C2SC
    Definitions
@@ -26177,14 +26218,14 @@ Comment: TPM1_C5SC unused
 TPM1_C5V 40039038
 
 Symbol: TPM1_C5V
-   Definitions
-      At line 3868 in file MKL46Z4.s
 
 
 
 ARM Macro Assembler    Page 368 Alphabetic symbol ordering
 Absolute symbols
 
+   Definitions
+      At line 3868 in file MKL46Z4.s
    Uses
       None
 Comment: TPM1_C5V unused
@@ -26242,14 +26283,14 @@ Symbol: TPM1_MOD
    Definitions
       At line 3856 in file MKL46Z4.s
    Uses
-      None
-Comment: TPM1_MOD unused
 
 
 
 ARM Macro Assembler    Page 369 Alphabetic symbol ordering
 Absolute symbols
 
+      None
+Comment: TPM1_MOD unused
 TPM1_PRI_POS 00000016
 
 Symbol: TPM1_PRI_POS
@@ -26308,13 +26349,13 @@ Symbol: TPM2_BASE
 
 TPM2_C0SC 4003A00C
 
-Symbol: TPM2_C0SC
-
 
 
 ARM Macro Assembler    Page 370 Alphabetic symbol ordering
 Absolute symbols
 
+
+Symbol: TPM2_C0SC
    Definitions
       At line 3877 in file MKL46Z4.s
    Uses
@@ -26372,14 +26413,14 @@ TPM2_C3V 4003A028
 
 Symbol: TPM2_C3V
    Definitions
-      At line 3884 in file MKL46Z4.s
-   Uses
 
 
 
 ARM Macro Assembler    Page 371 Alphabetic symbol ordering
 Absolute symbols
 
+      At line 3884 in file MKL46Z4.s
+   Uses
       None
 Comment: TPM2_C3V unused
 TPM2_C4SC 4003A02C
@@ -26437,14 +26478,14 @@ Symbol: TPM2_IPR
       At line 2659 in file MKL46Z4.s
    Uses
       None
-Comment: TPM2_IPR unused
-TPM2_IRQ 00000013
 
 
 
 ARM Macro Assembler    Page 372 Alphabetic symbol ordering
 Absolute symbols
 
+Comment: TPM2_IPR unused
+TPM2_IRQ 00000013
 
 Symbol: TPM2_IRQ
    Definitions
@@ -26502,14 +26543,14 @@ Symbol: TPM2_STATUS
 Comment: TPM2_STATUS unused
 TPM2_Vector 00000023
 
-Symbol: TPM2_Vector
-   Definitions
 
 
 
 ARM Macro Assembler    Page 373 Alphabetic symbol ordering
 Absolute symbols
 
+Symbol: TPM2_Vector
+   Definitions
       At line 2813 in file MKL46Z4.s
    Uses
       None
@@ -26567,14 +26608,14 @@ Symbol: TPM_C2SC_OFFSET
 TPM_C2V_OFFSET 00000020
 
 Symbol: TPM_C2V_OFFSET
-   Definitions
-      At line 3656 in file MKL46Z4.s
 
 
 
 ARM Macro Assembler    Page 374 Alphabetic symbol ordering
 Absolute symbols
 
+   Definitions
+      At line 3656 in file MKL46Z4.s
    Uses
       At line 3842 in file MKL46Z4.s
       At line 3862 in file MKL46Z4.s
@@ -26632,14 +26673,14 @@ Symbol: TPM_C5SC_OFFSET
 
 TPM_C5V_OFFSET 00000038
 
-Symbol: TPM_C5V_OFFSET
-   Definitions
 
 
 
 ARM Macro Assembler    Page 375 Alphabetic symbol ordering
 Absolute symbols
 
+Symbol: TPM_C5V_OFFSET
+   Definitions
       At line 3662 in file MKL46Z4.s
    Uses
       At line 3848 in file MKL46Z4.s
@@ -26698,13 +26739,13 @@ Symbol: TPM_CONF_CSOT_MASK
 Comment: TPM_CONF_CSOT_MASK unused
 TPM_CONF_CSOT_SHIFT 00000010
 
-Symbol: TPM_CONF_CSOT_SHIFT
-
 
 
 ARM Macro Assembler    Page 376 Alphabetic symbol ordering
 Absolute symbols
 
+
+Symbol: TPM_CONF_CSOT_SHIFT
    Definitions
       At line 3762 in file MKL46Z4.s
    Uses
@@ -26762,14 +26803,14 @@ TPM_CONF_OFFSET 00000084
 
 Symbol: TPM_CONF_OFFSET
    Definitions
-      At line 3664 in file MKL46Z4.s
-   Uses
 
 
 
 ARM Macro Assembler    Page 377 Alphabetic symbol ordering
 Absolute symbols
 
+      At line 3664 in file MKL46Z4.s
+   Uses
       At line 3850 in file MKL46Z4.s
       At line 3870 in file MKL46Z4.s
       At line 3890 in file MKL46Z4.s
@@ -26827,14 +26868,14 @@ TPM_CnSC_CHIE_MASK 00000040
 Symbol: TPM_CnSC_CHIE_MASK
    Definitions
       At line 3695 in file MKL46Z4.s
-   Uses
-      None
 
 
 
 ARM Macro Assembler    Page 378 Alphabetic symbol ordering
 Absolute symbols
 
+   Uses
+      None
 Comment: TPM_CnSC_CHIE_MASK unused
 TPM_CnSC_CHIE_SHIFT 00000006
 
@@ -26892,13 +26933,13 @@ Symbol: TPM_CnSC_MSA_SHIFT
    Uses
       None
 Comment: TPM_CnSC_MSA_SHIFT unused
-TPM_CnSC_MSB_MASK 00000020
-
 
 
 
 ARM Macro Assembler    Page 379 Alphabetic symbol ordering
 Absolute symbols
+
+TPM_CnSC_MSB_MASK 00000020
 
 Symbol: TPM_CnSC_MSB_MASK
    Definitions
@@ -26958,13 +26999,13 @@ Symbol: TPM_MOD_OFFSET
 
 TPM_SC_CMOD_MASK 00000018
 
-Symbol: TPM_SC_CMOD_MASK
-
 
 
 ARM Macro Assembler    Page 380 Alphabetic symbol ordering
 Absolute symbols
 
+
+Symbol: TPM_SC_CMOD_MASK
    Definitions
       At line 3802 in file MKL46Z4.s
    Uses
@@ -27022,14 +27063,14 @@ Symbol: TPM_SC_OFFSET
 
 TPM_SC_PS_MASK 00000007
 
-Symbol: TPM_SC_PS_MASK
-   Definitions
 
 
 
 ARM Macro Assembler    Page 381 Alphabetic symbol ordering
 Absolute symbols
 
+Symbol: TPM_SC_PS_MASK
+   Definitions
       At line 3804 in file MKL46Z4.s
    Uses
       None
@@ -27087,14 +27128,14 @@ TPM_STATUS_CH0F_SHIFT 00000000
 Symbol: TPM_STATUS_CH0F_SHIFT
    Definitions
       At line 3830 in file MKL46Z4.s
-   Uses
-      None
 
 
 
 ARM Macro Assembler    Page 382 Alphabetic symbol ordering
 Absolute symbols
 
+   Uses
+      None
 Comment: TPM_STATUS_CH0F_SHIFT unused
 TPM_STATUS_CH1F_MASK 00000002
 
@@ -27152,13 +27193,13 @@ Symbol: TPM_STATUS_CH4F_MASK
    Uses
       None
 Comment: TPM_STATUS_CH4F_MASK unused
-TPM_STATUS_CH4F_SHIFT 00000004
-
 
 
 
 ARM Macro Assembler    Page 383 Alphabetic symbol ordering
 Absolute symbols
+
+TPM_STATUS_CH4F_SHIFT 00000004
 
 Symbol: TPM_STATUS_CH4F_SHIFT
    Definitions
@@ -27218,13 +27259,13 @@ Symbol: TSI0_IPR
 Comment: TSI0_IPR unused
 TSI0_IRQ 0000001A
 
-Symbol: TSI0_IRQ
-
 
 
 ARM Macro Assembler    Page 384 Alphabetic symbol ordering
 Absolute symbols
 
+
+Symbol: TSI0_IRQ
    Definitions
       At line 2736 in file MKL46Z4.s
    Uses
@@ -27269,8 +27310,8 @@ Symbol: TXRX_BUF_SIZE
       At line 271 in file C_Start.s
    Uses
       At line 310 in file C_Start.s
-      At line 1002 in file C_Start.s
-      At line 1004 in file C_Start.s
+      At line 1020 in file C_Start.s
+      At line 1022 in file C_Start.s
 
 UART0_BASE 4006A000
 
@@ -27282,14 +27323,14 @@ Symbol: UART0_BASE
       At line 3907 in file MKL46Z4.s
       At line 3908 in file MKL46Z4.s
       At line 3909 in file MKL46Z4.s
-      At line 3910 in file MKL46Z4.s
-      At line 3911 in file MKL46Z4.s
 
 
 
 ARM Macro Assembler    Page 385 Alphabetic symbol ordering
 Absolute symbols
 
+      At line 3910 in file MKL46Z4.s
+      At line 3911 in file MKL46Z4.s
       At line 3912 in file MKL46Z4.s
       At line 3913 in file MKL46Z4.s
       At line 3914 in file MKL46Z4.s
@@ -27347,14 +27388,14 @@ Symbol: UART0_BDH_OFFSET
 
 UART0_BDH_RXEDGIE_MASK 00000040
 
-Symbol: UART0_BDH_RXEDGIE_MASK
-   Definitions
 
 
 
 ARM Macro Assembler    Page 386 Alphabetic symbol ordering
 Absolute symbols
 
+Symbol: UART0_BDH_RXEDGIE_MASK
+   Definitions
       At line 3926 in file MKL46Z4.s
    Uses
       None
@@ -27412,14 +27453,14 @@ UART0_BDL_9600 00000038
 Symbol: UART0_BDL_9600
    Definitions
       At line 151 in file C_Start.s
-   Uses
-      At line 383 in file C_Start.s
 
 
 
 ARM Macro Assembler    Page 387 Alphabetic symbol ordering
 Absolute symbols
 
+   Uses
+      At line 383 in file C_Start.s
 Comment: UART0_BDL_9600 used once
 UART0_BDL_OFFSET 00000001
 
@@ -27477,14 +27518,14 @@ Symbol: UART0_C1_DOZEEN_SHIFT
       At line 3950 in file MKL46Z4.s
    Uses
       None
-Comment: UART0_C1_DOZEEN_SHIFT unused
-UART0_C1_ILT_MASK 00000004
 
 
 
 ARM Macro Assembler    Page 388 Alphabetic symbol ordering
 Absolute symbols
 
+Comment: UART0_C1_DOZEEN_SHIFT unused
+UART0_C1_ILT_MASK 00000004
 
 Symbol: UART0_C1_ILT_MASK
    Definitions
@@ -27543,13 +27584,13 @@ Symbol: UART0_C1_OFFSET
 
 UART0_C1_PE_MASK 00000002
 
-Symbol: UART0_C1_PE_MASK
-
 
 
 ARM Macro Assembler    Page 389 Alphabetic symbol ordering
 Absolute symbols
 
+
+Symbol: UART0_C1_PE_MASK
    Definitions
       At line 3959 in file MKL46Z4.s
    Uses
@@ -27607,14 +27648,14 @@ UART0_C1_WAKE_SHIFT 00000003
 
 Symbol: UART0_C1_WAKE_SHIFT
    Definitions
-      At line 3956 in file MKL46Z4.s
-   Uses
 
 
 
 ARM Macro Assembler    Page 390 Alphabetic symbol ordering
 Absolute symbols
 
+      At line 3956 in file MKL46Z4.s
+   Uses
       None
 Comment: UART0_C1_WAKE_SHIFT unused
 UART0_C2 4006A003
@@ -27672,14 +27713,14 @@ Symbol: UART0_C2_RE_SHIFT
 Comment: UART0_C2_RE_SHIFT unused
 UART0_C2_RIE_MASK 00000020
 
-Symbol: UART0_C2_RIE_MASK
-   Definitions
 
 
 
 ARM Macro Assembler    Page 391 Alphabetic symbol ordering
 Absolute symbols
 
+Symbol: UART0_C2_RIE_MASK
+   Definitions
       At line 3977 in file MKL46Z4.s
    Uses
       At line 175 in file C_Start.s
@@ -27737,14 +27778,14 @@ UART0_C2_TCIE_SHIFT 00000006
 Symbol: UART0_C2_TCIE_SHIFT
    Definitions
       At line 3976 in file MKL46Z4.s
-   Uses
-      None
 
 
 
 ARM Macro Assembler    Page 392 Alphabetic symbol ordering
 Absolute symbols
 
+   Uses
+      None
 Comment: UART0_C2_TCIE_SHIFT unused
 UART0_C2_TE_MASK 00000008
 
@@ -27802,14 +27843,14 @@ Symbol: UART0_C2_T_RI
    Definitions
       At line 175 in file C_Start.s
    Uses
-      At line 176 in file C_Start.s
-      At line 399 in file C_Start.s
 
 
 
 ARM Macro Assembler    Page 393 Alphabetic symbol ordering
 Absolute symbols
 
+      At line 176 in file C_Start.s
+      At line 399 in file C_Start.s
       At line 504 in file C_Start.s
 
 UART0_C3 4006A006
@@ -27867,13 +27908,13 @@ Symbol: UART0_C3_OFFSET
       At line 3900 in file MKL46Z4.s
    Uses
       At line 3912 in file MKL46Z4.s
-      At line 388 in file C_Start.s
-
 
 
 
 ARM Macro Assembler    Page 394 Alphabetic symbol ordering
 Absolute symbols
+
+      At line 388 in file C_Start.s
 
 UART0_C3_ORIE_MASK 00000008
 
@@ -27933,13 +27974,13 @@ Symbol: UART0_C3_R9T8_MASK
 Comment: UART0_C3_R9T8_MASK unused
 UART0_C3_R9T8_SHIFT 00000006
 
-Symbol: UART0_C3_R9T8_SHIFT
-
 
 
 ARM Macro Assembler    Page 395 Alphabetic symbol ordering
 Absolute symbols
 
+
+Symbol: UART0_C3_R9T8_SHIFT
    Definitions
       At line 4003 in file MKL46Z4.s
    Uses
@@ -27997,14 +28038,14 @@ UART0_C4_M10_SHIFT 00000005
 
 Symbol: UART0_C4_M10_SHIFT
    Definitions
-      At line 4029 in file MKL46Z4.s
-   Uses
 
 
 
 ARM Macro Assembler    Page 396 Alphabetic symbol ordering
 Absolute symbols
 
+      At line 4029 in file MKL46Z4.s
+   Uses
       None
 Comment: UART0_C4_M10_SHIFT unused
 UART0_C4_MAEN1_MASK 00000080
@@ -28062,14 +28103,14 @@ Symbol: UART0_C4_OSR_16
    Definitions
       At line 199 in file C_Start.s
    Uses
-      At line 200 in file C_Start.s
-Comment: UART0_C4_OSR_16 used once
 
 
 
 ARM Macro Assembler    Page 397 Alphabetic symbol ordering
 Absolute symbols
 
+      At line 200 in file C_Start.s
+Comment: UART0_C4_OSR_16 used once
 UART0_C4_OSR_MASK 0000001F
 
 Symbol: UART0_C4_OSR_MASK
@@ -28127,13 +28168,13 @@ Symbol: UART0_C5_OFFSET
       At line 3917 in file MKL46Z4.s
       At line 392 in file C_Start.s
 
-UART0_C5_RDMAE_MASK 00000020
-
 
 
 
 ARM Macro Assembler    Page 398 Alphabetic symbol ordering
 Absolute symbols
+
+UART0_C5_RDMAE_MASK 00000020
 
 Symbol: UART0_C5_RDMAE_MASK
    Definitions
@@ -28192,14 +28233,14 @@ Comment: UART0_D unused
 UART0_D_OFFSET 00000007
 
 Symbol: UART0_D_OFFSET
-   Definitions
-      At line 3901 in file MKL46Z4.s
 
 
 
 ARM Macro Assembler    Page 399 Alphabetic symbol ordering
 Absolute symbols
 
+   Definitions
+      At line 3901 in file MKL46Z4.s
    Uses
       At line 3913 in file MKL46Z4.s
       At line 509 in file C_Start.s
@@ -28257,14 +28298,14 @@ UART0_D_R3T3_MASK 00000008
 
 Symbol: UART0_D_R3T3_MASK
    Definitions
-      At line 4074 in file MKL46Z4.s
-   Uses
 
 
 
 ARM Macro Assembler    Page 400 Alphabetic symbol ordering
 Absolute symbols
 
+      At line 4074 in file MKL46Z4.s
+   Uses
       None
 Comment: UART0_D_R3T3_MASK unused
 UART0_D_R3T3_SHIFT 00000003
@@ -28322,14 +28363,14 @@ Symbol: UART0_D_R6T6_SHIFT
       At line 4069 in file MKL46Z4.s
    Uses
       None
-Comment: UART0_D_R6T6_SHIFT unused
-UART0_D_R7T7_MASK 00000080
 
 
 
 ARM Macro Assembler    Page 401 Alphabetic symbol ordering
 Absolute symbols
 
+Comment: UART0_D_R6T6_SHIFT unused
+UART0_D_R7T7_MASK 00000080
 
 Symbol: UART0_D_R7T7_MASK
    Definitions
@@ -28387,13 +28428,13 @@ Symbol: UART0_IRQn
    Uses
       None
 Comment: UART0_IRQn unused
-UART0_MA1 4006A008
-
 
 
 
 ARM Macro Assembler    Page 402 Alphabetic symbol ordering
 Absolute symbols
+
+UART0_MA1 4006A008
 
 Symbol: UART0_MA1
    Definitions
@@ -28452,14 +28493,14 @@ Comment: UART0_MA2_MA_SHIFT unused
 UART0_MA2_OFFSET 00000009
 
 Symbol: UART0_MA2_OFFSET
-   Definitions
-      At line 3903 in file MKL46Z4.s
 
 
 
 ARM Macro Assembler    Page 403 Alphabetic symbol ordering
 Absolute symbols
 
+   Definitions
+      At line 3903 in file MKL46Z4.s
    Uses
       At line 3915 in file MKL46Z4.s
 Comment: UART0_MA2_OFFSET used once
@@ -28517,14 +28558,14 @@ UART0_S1_IDLE_SHIFT 00000004
 
 Symbol: UART0_S1_IDLE_SHIFT
    Definitions
-      At line 4109 in file MKL46Z4.s
-   Uses
 
 
 
 ARM Macro Assembler    Page 404 Alphabetic symbol ordering
 Absolute symbols
 
+      At line 4109 in file MKL46Z4.s
+   Uses
       None
 Comment: UART0_S1_IDLE_SHIFT unused
 UART0_S1_NF_MASK 00000004
@@ -28582,14 +28623,14 @@ UART0_S1_PF_SHIFT 00000000
 
 Symbol: UART0_S1_PF_SHIFT
    Definitions
-      At line 4117 in file MKL46Z4.s
-   Uses
 
 
 
 ARM Macro Assembler    Page 405 Alphabetic symbol ordering
 Absolute symbols
 
+      At line 4117 in file MKL46Z4.s
+   Uses
       None
 Comment: UART0_S1_PF_SHIFT unused
 UART0_S1_RDRF_MASK 00000020
@@ -28647,14 +28688,14 @@ Symbol: UART0_S2
       At line 3911 in file MKL46Z4.s
    Uses
       None
-Comment: UART0_S2 unused
-UART0_S2_BRK13_MASK 00000004
 
 
 
 ARM Macro Assembler    Page 406 Alphabetic symbol ordering
 Absolute symbols
 
+Comment: UART0_S2 unused
+UART0_S2_BRK13_MASK 00000004
 
 Symbol: UART0_S2_BRK13_MASK
    Definitions
@@ -28712,14 +28753,14 @@ Symbol: UART0_S2_MSBF_MASK
 Comment: UART0_S2_MSBF_MASK unused
 UART0_S2_MSBF_SHIFT 00000005
 
-Symbol: UART0_S2_MSBF_SHIFT
-   Definitions
 
 
 
 ARM Macro Assembler    Page 407 Alphabetic symbol ordering
 Absolute symbols
 
+Symbol: UART0_S2_MSBF_SHIFT
+   Definitions
       At line 4133 in file MKL46Z4.s
    Uses
       None
@@ -28777,14 +28818,14 @@ UART0_S2_RWUID_SHIFT 00000003
 
 Symbol: UART0_S2_RWUID_SHIFT
    Definitions
-      At line 4137 in file MKL46Z4.s
-   Uses
 
 
 
 ARM Macro Assembler    Page 408 Alphabetic symbol ordering
 Absolute symbols
 
+      At line 4137 in file MKL46Z4.s
+   Uses
       None
 Comment: UART0_S2_RWUID_SHIFT unused
 UART0_S2_RXEDGIF_MASK 00000040
@@ -28843,13 +28884,13 @@ Symbol: UART1_BASE
       At line 4165 in file MKL46Z4.s
       At line 4166 in file MKL46Z4.s
 
-UART1_BDH 4006B000
-
 
 
 ARM Macro Assembler    Page 409 Alphabetic symbol ordering
 Absolute symbols
 
+
+UART1_BDH 4006B000
 
 Symbol: UART1_BDH
    Definitions
@@ -28907,14 +28948,14 @@ Symbol: UART1_D
 Comment: UART1_D unused
 UART1_IPR E000E40C
 
-Symbol: UART1_IPR
-   Definitions
 
 
 
 ARM Macro Assembler    Page 410 Alphabetic symbol ordering
 Absolute symbols
 
+Symbol: UART1_IPR
+   Definitions
       At line 2653 in file MKL46Z4.s
    Uses
       None
@@ -28972,14 +29013,14 @@ UART1_Vector 0000001D
 Symbol: UART1_Vector
    Definitions
       At line 2807 in file MKL46Z4.s
-   Uses
-      None
 
 
 
 ARM Macro Assembler    Page 411 Alphabetic symbol ordering
 Absolute symbols
 
+   Uses
+      None
 Comment: UART1_Vector unused
 UART2_BASE 4006C000
 
@@ -29037,13 +29078,13 @@ Symbol: UART2_C3
    Uses
       None
 Comment: UART2_C3 unused
-UART2_C4 4006C008
-
 
 
 
 ARM Macro Assembler    Page 412 Alphabetic symbol ordering
 Absolute symbols
+
+UART2_C4 4006C008
 
 Symbol: UART2_C4
    Definitions
@@ -29102,14 +29143,14 @@ Comment: UART2_PRI_POS unused
 UART2_S1 4006C004
 
 Symbol: UART2_S1
-   Definitions
-      At line 4174 in file MKL46Z4.s
 
 
 
 ARM Macro Assembler    Page 413 Alphabetic symbol ordering
 Absolute symbols
 
+   Definitions
+      At line 4174 in file MKL46Z4.s
    Uses
       None
 Comment: UART2_S1 unused
@@ -29167,14 +29208,14 @@ UART_BDH_RXEDGIE_SHIFT 00000006
 Symbol: UART_BDH_RXEDGIE_SHIFT
    Definitions
       At line 4188 in file MKL46Z4.s
-   Uses
-      None
 
 
 
 ARM Macro Assembler    Page 414 Alphabetic symbol ordering
 Absolute symbols
 
+   Uses
+      None
 Comment: UART_BDH_RXEDGIE_SHIFT unused
 UART_BDH_SBNS_MASK 00000020
 
@@ -29232,14 +29273,14 @@ Symbol: UART_BDL_SBR_SHIFT
       At line 4197 in file MKL46Z4.s
    Uses
       None
-Comment: UART_BDL_SBR_SHIFT unused
-UART_C1_ILT_MASK 00000004
 
 
 
 ARM Macro Assembler    Page 415 Alphabetic symbol ordering
 Absolute symbols
 
+Comment: UART_BDL_SBR_SHIFT unused
+UART_C1_ILT_MASK 00000004
 
 Symbol: UART_C1_ILT_MASK
    Definitions
@@ -29298,13 +29339,13 @@ Symbol: UART_C1_OFFSET
 
 UART_C1_PE_MASK 00000002
 
-Symbol: UART_C1_PE_MASK
-
 
 
 ARM Macro Assembler    Page 416 Alphabetic symbol ordering
 Absolute symbols
 
+
+Symbol: UART_C1_PE_MASK
    Definitions
       At line 4220 in file MKL46Z4.s
    Uses
@@ -29362,14 +29403,14 @@ UART_C1_UARTSWAI_SHIFT 00000006
 
 Symbol: UART_C1_UARTSWAI_SHIFT
    Definitions
-      At line 4211 in file MKL46Z4.s
-   Uses
 
 
 
 ARM Macro Assembler    Page 417 Alphabetic symbol ordering
 Absolute symbols
 
+      At line 4211 in file MKL46Z4.s
+   Uses
       None
 Comment: UART_C1_UARTSWAI_SHIFT unused
 UART_C1_WAKE_MASK 00000008
@@ -29427,14 +29468,14 @@ UART_C2_RE_SHIFT 00000002
 Symbol: UART_C2_RE_SHIFT
    Definitions
       At line 4245 in file MKL46Z4.s
-   Uses
-      None
 
 
 
 ARM Macro Assembler    Page 418 Alphabetic symbol ordering
 Absolute symbols
 
+   Uses
+      None
 Comment: UART_C2_RE_SHIFT unused
 UART_C2_RIE_MASK 00000020
 
@@ -29492,13 +29533,13 @@ Symbol: UART_C2_TCIE_MASK
    Uses
       None
 Comment: UART_C2_TCIE_MASK unused
-UART_C2_TCIE_SHIFT 00000006
-
 
 
 
 ARM Macro Assembler    Page 419 Alphabetic symbol ordering
 Absolute symbols
+
+UART_C2_TCIE_SHIFT 00000006
 
 Symbol: UART_C2_TCIE_SHIFT
    Definitions
@@ -29557,14 +29598,14 @@ Comment: UART_C3_FEIE_SHIFT unused
 UART_C3_NEIE_MASK 00000004
 
 Symbol: UART_C3_NEIE_MASK
-   Definitions
-      At line 4270 in file MKL46Z4.s
 
 
 
 ARM Macro Assembler    Page 420 Alphabetic symbol ordering
 Absolute symbols
 
+   Definitions
+      At line 4270 in file MKL46Z4.s
    Uses
       None
 Comment: UART_C3_NEIE_MASK unused
@@ -29622,14 +29663,14 @@ UART_C3_R8_MASK 00000080
 Symbol: UART_C3_R8_MASK
    Definitions
       At line 4260 in file MKL46Z4.s
-   Uses
-      None
 
 
 
 ARM Macro Assembler    Page 421 Alphabetic symbol ordering
 Absolute symbols
 
+   Uses
+      None
 Comment: UART_C3_R8_MASK unused
 UART_C3_R8_SHIFT 00000007
 
@@ -29687,13 +29728,13 @@ Symbol: UART_C3_TXINV_SHIFT
    Uses
       None
 Comment: UART_C3_TXINV_SHIFT unused
-UART_C4_OFFSET 00000008
-
 
 
 
 ARM Macro Assembler    Page 422 Alphabetic symbol ordering
 Absolute symbols
+
+UART_C4_OFFSET 00000008
 
 Symbol: UART_C4_OFFSET
    Definitions
@@ -29753,13 +29794,13 @@ Symbol: UART_S1_FE_MASK
 Comment: UART_S1_FE_MASK unused
 UART_S1_FE_SHIFT 00000001
 
-Symbol: UART_S1_FE_SHIFT
-
 
 
 ARM Macro Assembler    Page 423 Alphabetic symbol ordering
 Absolute symbols
 
+
+Symbol: UART_S1_FE_SHIFT
    Definitions
       At line 4311 in file MKL46Z4.s
    Uses
@@ -29817,14 +29858,14 @@ Comment: UART_S1_OR_MASK unused
 UART_S1_OR_SHIFT 00000003
 
 Symbol: UART_S1_OR_SHIFT
-   Definitions
-      At line 4307 in file MKL46Z4.s
 
 
 
 ARM Macro Assembler    Page 424 Alphabetic symbol ordering
 Absolute symbols
 
+   Definitions
+      At line 4307 in file MKL46Z4.s
    Uses
       None
 Comment: UART_S1_OR_SHIFT unused
@@ -29882,14 +29923,14 @@ Symbol: UART_S1_TDRE_MASK
    Definitions
       At line 4298 in file MKL46Z4.s
    Uses
-      None
-Comment: UART_S1_TDRE_MASK unused
 
 
 
 ARM Macro Assembler    Page 425 Alphabetic symbol ordering
 Absolute symbols
 
+      None
+Comment: UART_S1_TDRE_MASK unused
 UART_S1_TDRE_SHIFT 00000007
 
 Symbol: UART_S1_TDRE_SHIFT
@@ -29948,13 +29989,13 @@ Symbol: UART_S2_LBKDIF_SHIFT
 Comment: UART_S2_LBKDIF_SHIFT unused
 UART_S2_OFFSET 00000005
 
-Symbol: UART_S2_OFFSET
-
 
 
 ARM Macro Assembler    Page 426 Alphabetic symbol ordering
 Absolute symbols
 
+
+Symbol: UART_S2_OFFSET
    Definitions
       At line 4151 in file MKL46Z4.s
    Uses
@@ -30012,14 +30053,14 @@ Comment: UART_S2_RXEDGIF_SHIFT unused
 UART_S2_RXINV_MASK 00000010
 
 Symbol: UART_S2_RXINV_MASK
-   Definitions
-      At line 4328 in file MKL46Z4.s
 
 
 
 ARM Macro Assembler    Page 427 Alphabetic symbol ordering
 Absolute symbols
 
+   Definitions
+      At line 4328 in file MKL46Z4.s
    Uses
       None
 Comment: UART_S2_RXINV_MASK unused
@@ -30077,14 +30118,14 @@ Symbol: USB0_Vector
    Definitions
       At line 2818 in file MKL46Z4.s
    Uses
-      None
-Comment: USB0_Vector unused
 
 
 
 ARM Macro Assembler    Page 428 Alphabetic symbol ordering
 Absolute symbols
 
+      None
+Comment: USB0_Vector unused
 VECTOR_SIZE 00000004
 
 Symbol: VECTOR_SIZE
@@ -30107,7 +30148,7 @@ Symbol: WHITE_BUTT_SET_MASK
    Definitions
       At line 239 in file C_Start.s
    Uses
-      At line 945 in file C_Start.s
+      At line 953 in file C_Start.s
 Comment: WHITE_BUTT_SET_MASK used once
 WHITE_LED_CHAR 00000057
 
@@ -30115,7 +30156,7 @@ Symbol: WHITE_LED_CHAR
    Definitions
       At line 238 in file C_Start.s
    Uses
-      At line 950 in file C_Start.s
+      At line 958 in file C_Start.s
 Comment: WHITE_LED_CHAR used once
 WHITE_LED_SET_MASK 00010000
 
@@ -30139,22 +30180,22 @@ Symbol: YELLOW_BUTT_SET_MASK
    Definitions
       At line 249 in file C_Start.s
    Uses
-      At line 961 in file C_Start.s
+      At line 969 in file C_Start.s
 Comment: YELLOW_BUTT_SET_MASK used once
 YELLOW_LED_CHAR 00000059
-
-Symbol: YELLOW_LED_CHAR
 
 
 
 ARM Macro Assembler    Page 429 Alphabetic symbol ordering
 Absolute symbols
 
+
+Symbol: YELLOW_LED_CHAR
    Definitions
       At line 248 in file C_Start.s
    Uses
-      None
-Comment: YELLOW_LED_CHAR unused
+      At line 974 in file C_Start.s
+Comment: YELLOW_LED_CHAR used once
 YELLOW_LED_SET_MASK 00000800
 
 Symbol: YELLOW_LED_SET_MASK
