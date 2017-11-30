@@ -243,6 +243,7 @@ NUM_ENQD	EQU 	17			;number of elements enqueued
 NIB_SHFT	EQU		4			;bits to shift to get next nibble
 TXRX_BUF_SIZE	EQU		80
 BUFFER_SIZE	EQU		4
+GPIOA_LED	EQU		2_0000000000000000000000000000000000000000000000000
 ;****************************************************************
 ;MACROs
 ;****************************************************************
@@ -840,7 +841,7 @@ Init_PIT_IRQ	PROC	{R0-R14}
 			ENDP
 ;-----------------------------end subroutine-----------------------------------
 
-;------------------------------------------------------------------------------  
+;------------------------------------------------------------------------------
 ;PIT_ISR
 ;FUNCTION: handles pit triggers by incrementing a counter
 ;INPUTS: none
@@ -870,6 +871,23 @@ pit_isr_end	LDR		R0,=PIT_CH0_BASE	;get pit flag register
 			CPSIE	I
 			ENDP
 ;-----------------------------end ISR------------------------------------------
+
+;------------------------------------------------------------------------------
+;GPIO_BopIt_Init
+;FUNCTION: handles pit triggers by incrementing a counter
+;INPUTS: none
+;OUTPUTS: none
+;CHANGED: none
+;SUBROUTINES USED: none
+;------------------------------------------------------------------------------
+GPIO_BopIt_Init	PROC 	{R0-R14}
+			PUSH	{}
+			
+			LDR		R0,=PORTA_BASE
+			MOVS	R1,#GPIO_PDDR_OFFSET
+			
+			STR		R1,[R0,#PORTA_
+;-----------------------------end subroutine-----------------------------------
 
 ;>>>>>   end subroutine code <<<<<
             ALIGN
