@@ -928,6 +928,23 @@ GPIO_BopIt_Init	PROC 	{R0-R14}
 			ENDP
 ;-----------------------------end subroutine-----------------------------------
 
+;------------------------------------------------------------------------------
+;	PORTA_IRQHandler
+;		Handles an IRQ from any Port A Pins (Containing 5 LED Buttons)
+;		Checks each one to see what was clicked, updates a variable to a
+;		charcter of whcih was pressed.  Clears the Interrupt and sets the 
+;		input to 0.
+;------------------------------------------------------------------------------
+PORTA_IRQHandler  PROC	{R0-R14}
+			CPSID	I
+			PUSH	{LR}
+			
+			
+			
+			POP		{PC}
+			CPSIE	I
+			ENDP
+
 ;>>>>>   end subroutine code <<<<<
             ALIGN
 ;**********************************************************************
