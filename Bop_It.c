@@ -20,12 +20,19 @@
 
 #define MAX_STRING (79)
 
+#define WHITE_LED_MASK (0x10000)
+#define RED_LED_MASK (0x2000)
+#define YELLOW_LED_MASK (0x800)
+#define GREEN_LED_MASK (0x400)
+#define BLUE_LED_MASK (0x80)
+
 int main (void) {
 	for(;;) {
 		//init UART and PIT
 		__ASM("CPSID I");
 		Init_UART0_IRQ();
 		Init_PIT_IRQ();
+		GPIO_BopIt_Init();
 		__ASM("CPSIE I");
 	}
 	/* do forever */
