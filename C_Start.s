@@ -233,6 +233,10 @@ UART0_S1_CLEAR_FLAGS  EQU  0x1F
 UART0_S2_NO_RXINV_BRK10_NO_LBKDETECT_CLEAR_FLAGS  EQU  0xC0
 ;--------------------------------------------------------------
 
+
+;White LED
+WHITE_BUTT_SET_MASK	EQU	2_00000000000000011100000011000000
+
 MAX_STRING	EQU		79			;max size of string + null termination
 IN_PTR		EQU 	0			;pointer to where to enqueue
 OUT_PTR		EQU 	4			;pointer to where to dequeue
