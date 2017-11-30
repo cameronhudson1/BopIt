@@ -243,8 +243,8 @@ NUM_ENQD	EQU 	17			;number of elements enqueued
 NIB_SHFT	EQU		4			;bits to shift to get next nibble
 TXRX_BUF_SIZE	EQU		80
 BUFFER_SIZE	EQU		4
-GPIOA_BUTT	EQU		2_00000000000000011100000011000000	;pins 6, 7, 14, 15, 16
-GPIOC_LED	EQU		2_00000000000000010010110010000000	;pins 7, 10, 11, 13, 16
+GPIOA_BUTT	EQU		2_00000000000000011100000011000000	;pins 6, 7, 14, 15, 16  \\TODO add colors
+GPIOC_LED	EQU		2_00000000000000010010110010000000	;pins 7, 10, 11, 13, 16  \\TODO add colors
 ;****************************************************************
 ;MACROs
 ;****************************************************************
@@ -876,7 +876,7 @@ pit_isr_end	LDR		R0,=PIT_CH0_BASE	;get pit flag register
 
 ;------------------------------------------------------------------------------
 ;GPIO_BopIt_Init
-;FUNCTION: handles pit triggers by incrementing a counter
+;FUNCTION: initializes gpio pins for led output and buttons input
 ;INPUTS: none
 ;OUTPUTS: none
 ;CHANGED: none
@@ -885,13 +885,13 @@ pit_isr_end	LDR		R0,=PIT_CH0_BASE	;get pit flag register
 GPIO_BopIt_Init	PROC 	{R0-R14}
 			PUSH	{R0-R2}
 			
-			LDR		R0,=PORTA_BASE
+			LDR		R0,=PORTA_BASE		;initialize GPIOA pins for buttons
 			LDR		R1,[R0,#0]
 			MOVS	R2,#GPIOA_BUTT
 			BICS	R1,R1,R2
 			STR		R1,[R0,#GPIO_PDDR_OFFSET]
 			
-			LDR		R0,=PORTC_BASE
+			LDR		R0,=PORTC_BASE		;initialize GPIOC pins for LEDs
 			LDR		R1,[R0,#0]
 			MOVS	R2,#GPIOA_LED
 			ORRS	R1,R1,R2
