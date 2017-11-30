@@ -1,0 +1,126 @@
+;------------------------------------------------------------------------------
+;GPIO_BopIt_Init
+;FUNCTION: initializes gpio pins for led output and buttons input
+;INPUTS: none
+;OUTPUTS: none
+;CHANGED: none
+;SUBROUTINES USED: none
+;------------------------------------------------------------------------------
+GPIO_BopIt_Init	PROC 	{R0-R14}
+			PUSH	{R0-R2,LR}
+			
+			LDR		R0,=SIM_SCGC5
+			LDR		R1,=SIM_SCGC5_PORTA_MASK :OR: SIM_SCGC5_PORTC_MASK
+			LDR		R2,[R0,#0]
+			ORRS	R1,R1,R2
+			STR		R1,[R0,#0]
+			
+			LDR		R0,=PORTA_BASE		;initialize GPIOA pins for buttons
+			LDR		R1,[R0,#0]
+			LDR		R2,=GPIOA_BUTT
+			BICS	R1,R1,R2
+			STR		R1,[R0,#GPIO_PDDR_OFFSET]
+			
+			LDR		R0,=PORTC_BASE		;initialize GPIOC pins for LEDs
+			LDR		R1,[R0,#0]
+			LDR		R2,=GPIOC_LED
+			ORRS	R1,R1,R2
+			STR		R1,[R0,#GPIO_PDDR_OFFSET]
+			
+			POP		{R0-R2,PC}
+			ENDP
+;-----------------------------end subroutine-----------------------------------
+
+;------------------------------------------------------------------------------
+;GPIO_Write_LED
+;FUNCTION: initializes gpio pins for led output and buttons input
+;INPUTS: R0 - mask to set an led in PORTC; R1 - boolean for set/clear 
+;(true = set, false = clear)
+;OUTPUTS: none
+;CHANGED: none
+;SUBROUTINES USED: none
+;------------------------------------------------------------------------------
+GPIO_Write_LED	PROC	{R0-R14}
+			PUSH	{R2,LR}
+			
+			LDR		R2,=PORTC_BASE
+			CMP		R1,#0
+			BEQ		LEDSet
+			STR		R0,[R2,#GPIO_PCOR_OFFSET]	;clear led (off)
+			B		WriteLEDEnd
+LEDSet		STR		R0,[R2,#GPIO_PSOR_OFFSET]	;set led (on)
+
+WriteLEDEnd	POP		{R2,PC}
+			ENDP
+;-----------------------------end subroutine-----------------------------------
+
+;------------------------------------------------------------------------------
+;	PORTA_IRQHandler
+;		Handles an IRQ from any Port A Pins (Containing 5 LED Buttons)
+;		Checks each one to see what was clicked, updates a variable to a
+;		charcter of whcih was pressed.  Clears the Interrupt and sets the 
+;		input to 0.
+;------------------------------------------------------------------------------
+PORTA_IRQHandler  PROC	{R0-R14}
+			CPSID	I
+			PUSH	{LR}
+			
+			LDR		R0,=PORTA_BASE				;
+			MOVS	R1,#PORTA_ISFR_OFFSET
+			ADDS	R0,R0,R1
+			LDR		R1,[R0,#0]					;R1 <- PortA Interrupt Status
+												;Flag Register
+			
+CheckWhite	LDR		R2,=WHITE_BUTT_SET_MASK		;R2 <- White Button Set Mask
+			CMP		R1,R2						;
+			BNE		CheckRed					;Branch if White Button is not
+												;set
+			
+			LDR		R2,=ButtTouch				;
+			MOVS	R3,#WHITE_LED_CHAR			;
+			STR		R3,[R2,#0]					;White Led Character->ButtTouch
+
+CheckRed	LDR		R2,=RED_BUTT_SET_MASK		;R2 <- White Button Set Mask
+			CMP		R1,R2						;
+			BNE		CheckYellow					;Branch if Red Button is not 
+												;set
+			
+			LDR		R2,=ButtTouch				;
+			MOVS	R3,#RED_LED_CHAR			;
+			STR		R3,[R2,#0]					;Red Led Character ->ButtTouch
+
+CheckYellow	LDR		R2,=YELLOW_BUTT_SET_MASK	;R2 <- White Button Set Mask
+			CMP		R1,R2						;
+			BNE		CheckGreen					;Branch if Yellow Button is not
+												;set
+			
+			LDR		R2,=ButtTouch				;
+			MOVS	R3,#YELLOW_LED_CHAR			;
+			STR		R3,[R2,#0]					;Yellow Led Char->ButtTouch
+
+CheckGreen	LDR		R2,=GREEN_BUTT_SET_MASK		;R2 <- White Button Set Mask
+			CMP		R1,R2						;
+			BNE		CheckBlue					;Branch if Green Button is not 
+												;set
+			
+			LDR		R2,=ButtTouch				;
+			MOVS	R3,#GREEN_LED_CHAR			;
+			STR		R3,[R2,#0]					;Green Led Character->ButtTouch
+
+CheckBlue	LDR		R2,=RED_BUTT_SET_MASK		;R2 <- White Button Set Mask
+			CMP		R1,R2						;
+			BNE		NoMore						;Branch if Blue Button is not 
+												;set
+			
+			LDR		R2,=ButtTouch				;
+			MOVS	R3,#BLUE_LED_CHAR			;
+			STR		R3,[R2,#0]					;Blue Led Character ->ButtTouch
+
+NoMore		;Clear OUTterrupts
+			STR		R1,[R0,#0]					;Storing 1's to pin bit values 
+												;clears them
+
+			POP		{PC}
+			CPSIE	I
+			ENDP
+
