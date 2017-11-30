@@ -914,13 +914,13 @@ GPIO_BopIt_Init	PROC 	{R0-R14}
 			
 			LDR		R0,=PORTA_BASE		;initialize GPIOA pins for buttons
 			LDR		R1,[R0,#0]
-			MOVS	R2,#GPIOA_BUTT
+			LDR		R2,=GPIOA_BUTT
 			BICS	R1,R1,R2
 			STR		R1,[R0,#GPIO_PDDR_OFFSET]
 			
 			LDR		R0,=PORTC_BASE		;initialize GPIOC pins for LEDs
 			LDR		R1,[R0,#0]
-			MOVS	R2,#GPIOA_LED
+			LDR		R2,=GPIOC_LED
 			ORRS	R1,R1,R2
 			STR		R1,[R0,#GPIO_PDDR_OFFSET]
 			
@@ -939,8 +939,52 @@ PORTA_IRQHandler  PROC	{R0-R14}
 			CPSID	I
 			PUSH	{LR}
 			
+			LDR		R0,=PORTA_BASE				;
+			LDR		R1,[R0,#PORTA_ISFR_OFFSET]	;R1 <- PortA Interrupt Status Flag Register
 			
+CheckWhite	LDR		R2,=WHITE_BUTT_SET_MASK		;R2 <- White Button Set Mask
+			CMP		R1,R2						;
+			BNE		CheckRed					;Branch if White Button is not set
 			
+			LDR		R2,=ButtTouch				;
+			MOVS	R3,#WHITE_LED_CHAR			;
+			STR		R3,[R2,#0]					;White Led Character ->ButtTouch
+
+CheckRed	LDR		R2,=RED_BUTT_SET_MASK		;R2 <- White Button Set Mask
+			CMP		R1,R2						;
+			BNE		CheckYellow					;Branch if Red Button is not set
+			
+			LDR		R2,=ButtTouch				;
+			MOVS	R3,#RED_LED_CHAR			;
+			STR		R3,[R2,#0]					;Red Led Character ->ButtTouch
+
+CheckYellow	LDR		R2,=YELLOW_BUTT_SET_MASK	;R2 <- White Button Set Mask
+			CMP		R1,R2						;
+			BNE		CheckGreen					;Branch if Yellow Button is not set
+			
+			LDR		R2,=ButtTouch				;
+			MOVS	R3,#YELLOW_LED_CHAR			;
+			STR		R3,[R2,#0]					;Yellow Led Character ->ButtTouch
+
+CheckGreen	LDR		R2,=GREEN_BUTT_SET_MASK		;R2 <- White Button Set Mask
+			CMP		R1,R2						;
+			BNE		CheckBlue					;Branch if Green Button is not set
+			
+			LDR		R2,=ButtTouch				;
+			MOVS	R3,#GREEN_LED_CHAR			;
+			STR		R3,[R2,#0]					;Green Led Character ->ButtTouch
+
+CheckBlue	LDR		R2,=RED_BUTT_SET_MASK		;R2 <- White Button Set Mask
+			CMP		R1,R2						;
+			BNE		NoMore						;Branch if Blue Button is not set
+			
+			LDR		R2,=ButtTouch				;
+			MOVS	R3,#BLUE_LED_CHAR			;
+			STR		R3,[R2,#0]					;Blue Led Character ->ButtTouch
+
+NoMore		;Clear OUTterrupts
+			STR		R1,[R0,#0]					;Storing 1's to pin bit values clears them
+
 			POP		{PC}
 			CPSIE	I
 			ENDP
@@ -968,5 +1012,7 @@ TxQRef		SPACE	18
 RxQBuffer	SPACE	TXRX_BUF_SIZE
 			ALIGN
 TxQBuffer	SPACE	TXRX_BUF_SIZE
+			ALIGN
+ButtTouch	SPACE	1					;Stores Char of the last button pressed
 ;>>>>>   end variables here <<<<<
             END

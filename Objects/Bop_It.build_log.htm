@@ -27,17 +27,17 @@ Project File Date:  11/30/2017
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 5 (build 528)', folder: 'D:\Keil\ARM\ARMCC\Bin'
 Rebuild target 'Target 1'
-assembling C_Start.s...
-C_Start.s(247): error: A1914E: Expected expression
-C_Start.s(904): error: A1492E: Immediate 0x0001C0C0 out of range for this operation.  Permitted values are 0x00000000 to 0x000000FF
-assembling startup_MKL46Z4.s...
 assembling MKL46Z4.s...
+assembling C_Start.s...
+assembling startup_MKL46Z4.s...
 compiling Bop_It.c...
 Bop_It.c(32): warning:  #111-D: statement is unreachable
     return (0);
 Bop_It.c: 1 warning, 0 errors
 compiling system_MKL46Z4.c...
-".\Objects\Bop_It.axf" - 2 Error(s), 1 Warning(s).
+linking...
+Program Size: Code=1544 RO-data=476 RW-data=212 ZI-data=356  
+".\Objects\Bop_It.axf" - 0 Error(s), 1 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -65,7 +65,6 @@ Package Vendor: Keil
       Source file:   Device\Source\system_MKL46Z4.c
 
    * Component: ARM::CMSIS:CORE:5.0.1
-Target not created.
 Build Time Elapsed:  00:00:01
 </pre>
 </body>
