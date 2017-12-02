@@ -26,14 +26,38 @@
 #define GREEN_LED_MASK (0x400)
 #define BLUE_LED_MASK (0x80)
 
+/*
+*	getRandNum
+*	Get a random number between 0 and 4
+*	inputs: none
+*	outputs: ranDUMB number between 0 and 4
+*
+*/
+int getRandNum (void) {
+	int rand = (Count & 0x03);
+	int addend = (Count & 0x04);
+	rand += addend;
+	return rand;
+}
+
 int main (void) {
 	for(;;) {
+		char dubmStr[MAX_STRING];
+		int rand;
+		
 		//init UART and PIT
 		__ASM("CPSID I");
 		Init_UART0_IRQ();
 		Init_PIT_IRQ();
 		GPIO_BopIt_Init();
 		__ASM("CPSIE I");
+		
+		//get a fellas name but you actually getting a seed for the RNG LOL xDDD
+		Count = 0;
+		RunStopWatch = 1;
+		PutStringSB("Welcome to Bop-It! nigga whatcho name say it back   >", MAX_STRING);
+		GetStringSB(dubmStr, MAX_STRING);
+		
 	}
 	/* do forever */
   return (0);
