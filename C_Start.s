@@ -235,23 +235,23 @@ UART0_S2_NO_RXINV_BRK10_NO_LBKDETECT_CLEAR_FLAGS  EQU  0xC0
 
 
 ;White LED
-WHITE_LED_CHAR			EQU	'W'
+WHITE_LED_NUM			EQU	0
 WHITE_BUTT_SET_MASK		EQU	2_00000000000000010000000000000000;
 
 ;Red LED
-RED_LED_CHAR			EQU	'R'
+RED_LED_NUM				EQU	1
 RED_BUTT_SET_MASK		EQU	2_00000000000000001000000000000000;
 	
 ;Yellow LED
-YELLOW_LED_CHAR			EQU	'Y'
+YELLOW_LED_NUM			EQU	2
 YELLOW_BUTT_SET_MASK	EQU	2_00000000000000000100000000000000;
 	
 ;Green LED
-GREEN_LED_CHAR			EQU	'G'
+GREEN_LED_NUM			EQU	3
 GREEN_BUTT_SET_MASK		EQU	2_00000000000000000000000010000000;
 	
 ;Blue LED
-BLUE_LED_CHAR			EQU	'B'
+BLUE_LED_NUM			EQU	4
 BLUE_BUTT_SET_MASK		EQU	2_00000000000000000000000001000000;
 
 
@@ -991,7 +991,7 @@ CheckWhite	LDR		R2,=WHITE_BUTT_SET_MASK		;R2 <- White Button Set Mask
 			BNE		CheckRed					;Branch if White Button is not set
 			
 			LDR		R2,=ButtTouch				;
-			MOVS	R3,#WHITE_LED_CHAR			;
+			MOVS	R3,#WHITE_LED_NUM			;
 			STR		R3,[R2,#0]					;White Led Character ->ButtTouch
 
 CheckRed	LDR		R2,=RED_BUTT_SET_MASK		;R2 <- White Button Set Mask
@@ -999,7 +999,7 @@ CheckRed	LDR		R2,=RED_BUTT_SET_MASK		;R2 <- White Button Set Mask
 			BNE		CheckYellow					;Branch if Red Button is not set
 			
 			LDR		R2,=ButtTouch				;
-			MOVS	R3,#RED_LED_CHAR			;
+			MOVS	R3,#RED_LED_NUM			;
 			STR		R3,[R2,#0]					;Red Led Character ->ButtTouch
 
 CheckYellow	LDR		R2,=YELLOW_BUTT_SET_MASK	;R2 <- White Button Set Mask
@@ -1007,7 +1007,7 @@ CheckYellow	LDR		R2,=YELLOW_BUTT_SET_MASK	;R2 <- White Button Set Mask
 			BNE		CheckGreen					;Branch if Yellow Button is not set
 			
 			LDR		R2,=ButtTouch				;
-			MOVS	R3,#YELLOW_LED_CHAR			;
+			MOVS	R3,#YELLOW_LED_NUM			;
 			STR		R3,[R2,#0]					;Yellow Led Character ->ButtTouch
 
 CheckGreen	LDR		R2,=GREEN_BUTT_SET_MASK		;R2 <- White Button Set Mask
@@ -1015,7 +1015,7 @@ CheckGreen	LDR		R2,=GREEN_BUTT_SET_MASK		;R2 <- White Button Set Mask
 			BNE		CheckBlue					;Branch if Green Button is not set
 			
 			LDR		R2,=ButtTouch				;
-			MOVS	R3,#GREEN_LED_CHAR			;
+			MOVS	R3,#GREEN_LED_NUM			;
 			STR		R3,[R2,#0]					;Green Led Character ->ButtTouch
 
 CheckBlue	LDR		R2,=RED_BUTT_SET_MASK		;R2 <- White Button Set Mask
@@ -1023,7 +1023,7 @@ CheckBlue	LDR		R2,=RED_BUTT_SET_MASK		;R2 <- White Button Set Mask
 			BNE		NoMore						;Branch if Blue Button is not set
 			
 			LDR		R2,=ButtTouch				;
-			MOVS	R3,#BLUE_LED_CHAR			;
+			MOVS	R3,#BLUE_LED_NUM			;
 			STR		R3,[R2,#0]					;Blue Led Character ->ButtTouch
 
 NoMore		;Clear OUTterrupts
