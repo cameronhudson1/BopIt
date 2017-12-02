@@ -265,8 +265,15 @@ NUM_ENQD	EQU 	17			;number of elements enqueued
 NIB_SHFT	EQU		4			;bits to shift to get next nibble
 TXRX_BUF_SIZE	EQU		80
 BUFFER_SIZE	EQU		4
-GPIOA_BUTT	EQU		2_00000000000000011100000011000000	;pins 6 (White), 7 (Red), 14 (Yellow), 15 (Green), 16 (Blue)  
-GPIOC_LED	EQU		2_00000000000000010010110010000000	;pins 7 (White), 10 (Red), 11 (Yellow), 13 (Green), 16 (Blue) 
+
+;pins 6 (White), 7 (Red), 14 (Yellow), 15 (Green), 16 (Blue) 
+GPIOA_BUTT	EQU		2_00000000000000011100000011000000	 
+	
+;pins 7 (White), 10 (Red), 11 (Yellow), 13 (Green), 16 (Blue) 
+GPIOC_LED	EQU		2_00000000000000010010110010000000	
+
+;1001 in bits 19-16 means interrupts enabled
+PORTA_PIN_INT_EN		EQU	2_00000000000010010000000000000000;	Stored to Control Register for Pin
 ;****************************************************************
 ;MACROs
 ;****************************************************************
@@ -926,6 +933,15 @@ GPIO_BopIt_Init	PROC 	{R0-R14}
 			LDR		R2,=GPIOC_LED
 			ORRS	R1,R1,R2
 			STR		R1,[R0,#GPIO_PDDR_OFFSET]
+			
+			;Initialize PORTA for interrupts
+			;pins 6 (White), 7 (Red), 14 (Yellow), 15 (Green), 16 (Blue) 
+			LDR		R0,=PORTA_BASE
+			LDR		R2,=PORTA_PIN_INT_EN	;Mask to enable interrupts for the specified pin
+			
+			;Enable Interrupts for White Button
+			LDR		R1,[R0,#PORTA_PCR6_OFFSET]
+			
 			
 			POP		{R0-R2,PC}
 			ENDP

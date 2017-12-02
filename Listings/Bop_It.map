@@ -271,7 +271,7 @@ Image Symbol Table
     i.SystemInit                             0x00000204   Section        0  system_mkl46z4.o(i.SystemInit)
     i.main                                   0x000002d4   Section        0  bop_it.o(i.main)
     .ARM.__at_0x400                          0x00000400   Section       16  startup_mkl46z4.o(.ARM.__at_0x400)
-    MyCode                                   0x00000410   Section     1052  c_start.o(MyCode)
+    MyCode                                   0x00000410   Section     1060  c_start.o(MyCode)
     InitQueue                                0x00000531   Thumb Code    22  c_start.o(MyCode)
     Dequeue                                  0x00000547   Thumb Code    64  c_start.o(MyCode)
     Enqueue                                  0x00000587   Thumb Code    64  c_start.o(MyCode)
@@ -424,9 +424,9 @@ Image Symbol Table
     __use_no_semihosting_swi                 0x00000201   Thumb Code     2  use_no_semi.o(.text)
     __semihosting_library_function           0x00000203   Thumb Code     0  indicate_semi.o(.text)
     SystemInit                               0x00000205   Thumb Code   180  system_mkl46z4.o(i.SystemInit)
-    main                                     0x000002d5   Thumb Code    16  bop_it.o(i.main)
-    Region$$Table$$Base                      0x000002e4   Number         0  anon$$obj.o(Region$$Table)
-    Region$$Table$$Limit                     0x00000304   Number         0  anon$$obj.o(Region$$Table)
+    main                                     0x000002d5   Thumb Code    20  bop_it.o(i.main)
+    Region$$Table$$Base                      0x000002e8   Number         0  anon$$obj.o(Region$$Table)
+    Region$$Table$$Limit                     0x00000308   Number         0  anon$$obj.o(Region$$Table)
     Init_UART0_IRQ                           0x00000411   Thumb Code   150  c_start.o(MyCode)
     GetChar                                  0x000004a7   Thumb Code    18  c_start.o(MyCode)
     GetStringSB                              0x000004b9   Thumb Code    56  c_start.o(MyCode)
@@ -437,9 +437,9 @@ Image Symbol Table
     PutStringSB                              0x00000663   Thumb Code    26  c_start.o(MyCode)
     Init_PIT_IRQ                             0x0000067d   Thumb Code    64  c_start.o(MyCode)
     PIT_IRQHandler                           0x000006bd   Thumb Code     0  c_start.o(MyCode)
-    GPIO_BopIt_Init                          0x000006db   Thumb Code    34  c_start.o(MyCode)
-    GPIO_Write_LED                           0x000006fd   Thumb Code    16  c_start.o(MyCode)
-    PORTA_IRQHandler                         0x0000070d   Thumb Code    78  c_start.o(MyCode)
+    GPIO_BopIt_Init                          0x000006db   Thumb Code    40  c_start.o(MyCode)
+    GPIO_Write_LED                           0x00000703   Thumb Code    16  c_start.o(MyCode)
+    PORTA_IRQHandler                         0x00000713   Thumb Code    78  c_start.o(MyCode)
     Count                                    0x1fffe000   Data           4  c_start.o(MyData)
     RunStopWatch                             0x1fffe004   Data           1  c_start.o(MyData)
     ButtTouch                                0x1fffe0d0   Data           1  c_start.o(MyData)
@@ -454,9 +454,9 @@ Memory Map of the image
 
   Image Entry point : 0x00000165
 
-  Load Region LR_1 (Base: 0x00000000, Size: 0x00000900, Max: 0xffffffff, ABSOLUTE)
+  Load Region LR_1 (Base: 0x00000000, Size: 0x00000908, Max: 0xffffffff, ABSOLUTE)
 
-    Execution Region ER_RO (Exec base: 0x00000000, Load base: 0x00000000, Size: 0x0000082c, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_RO (Exec base: 0x00000000, Load base: 0x00000000, Size: 0x00000834, Max: 0xffffffff, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
@@ -518,26 +518,26 @@ Memory Map of the image
     0x00000202   0x00000202   0x00000000   Code   RO          221    .text               c_p.l(indicate_semi.o)
     0x00000202   0x00000202   0x00000002   PAD
     0x00000204   0x00000204   0x000000d0   Code   RO           65    i.SystemInit        system_mkl46z4.o
-    0x000002d4   0x000002d4   0x00000010   Code   RO            3    i.main              bop_it.o
-    0x000002e4   0x000002e4   0x00000020   Data   RO          271    Region$$Table       anon$$obj.o
-    0x00000304   0x00000304   0x000000fc   PAD
+    0x000002d4   0x000002d4   0x00000014   Code   RO            3    i.main              bop_it.o
+    0x000002e8   0x000002e8   0x00000020   Data   RO          271    Region$$Table       anon$$obj.o
+    0x00000308   0x00000308   0x000000f8   PAD
     0x00000400   0x00000400   0x00000010   Code   RO           55    .ARM.__at_0x400     startup_mkl46z4.o
-    0x00000410   0x00000410   0x0000041c   Code   RO           46    MyCode              c_start.o
+    0x00000410   0x00000410   0x00000424   Code   RO           46    MyCode              c_start.o
 
 
-    Execution Region ER_RW (Exec base: 0x1fffe000, Load base: 0x0000082c, Size: 0x000000d4, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_RW (Exec base: 0x1fffe000, Load base: 0x00000834, Size: 0x000000d4, Max: 0xffffffff, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
-    0x1fffe000   0x0000082c   0x000000d1   Data   RW           48    MyData              c_start.o
+    0x1fffe000   0x00000834   0x000000d1   Data   RW           48    MyData              c_start.o
 
 
-    Execution Region ER_ZI (Exec base: 0x1fffe0d4, Load base: 0x00000900, Size: 0x00000164, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_ZI (Exec base: 0x1fffe0d4, Load base: 0x00000908, Size: 0x00000164, Max: 0xffffffff, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
     0x1fffe0d4        -       0x00000060   Zero   RW          144    .bss                c_p.l(libspace.o)
-    0x1fffe134   0x00000900   0x00000004   PAD
+    0x1fffe134   0x00000908   0x00000004   PAD
     0x1fffe138        -       0x00000000   Zero   RW           53    HEAP                startup_mkl46z4.o
     0x1fffe138        -       0x00000100   Zero   RW           52    STACK               startup_mkl46z4.o
 
@@ -549,15 +549,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Object Name
 
-        16          0          0          0          0       1879   bop_it.o
-      1052        210          0        209          0       1392   c_start.o
-        68         38        192          0        256        864   startup_mkl46z4.o
-       208         28          0          0          0        533   system_mkl46z4.o
+        20          0          0          0          0       1867   bop_it.o
+      1060        212          0        209          0       1384   c_start.o
+        68         38        192          0        256        836   startup_mkl46z4.o
+       208         28          0          0          0        521   system_mkl46z4.o
 
     ----------------------------------------------------------------------
-      1344        276        476        212        256       4668   Object Totals
+      1356        278        472        212        256       4608   Object Totals
          0          0         32          0          0          0   (incl. Generated)
-         0          0        252          3          0          0   (incl. Padding)
+         0          0        248          3          0          0   (incl. Padding)
 
     ----------------------------------------------------------------------
 
@@ -604,15 +604,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-      1616        292        476        212        356       5080   Grand Totals
-      1616        292        476        212        356       5080   ELF Image Totals
-      1616        292        476        212          0          0   ROM Totals
+      1628        294        472        212        356       5020   Grand Totals
+      1628        294        472        212        356       5020   ELF Image Totals
+      1628        294        472        212          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                 2092 (   2.04kB)
+    Total RO  Size (Code + RO Data)                 2100 (   2.05kB)
     Total RW  Size (RW Data + ZI Data)               568 (   0.55kB)
-    Total ROM Size (Code + RO Data + RW Data)       2304 (   2.25kB)
+    Total ROM Size (Code + RO Data + RW Data)       2312 (   2.26kB)
 
 ==============================================================================
 
