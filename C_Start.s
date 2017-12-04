@@ -68,6 +68,7 @@ NVIC_ISER_UART0_MASK  EQU  UART0_IRQ_MASK
 ;0.01 s * 24,000,000 Hz = 240,000
 ;TSV = 240,000 - 1
 PIT_LDVAL_10ms  EQU  239999
+PIT_LDVAL_1ms	EQU		23999
 ;---------------------------------------------------------------
 ;PIT_MCR:  PIT module control register
 ;1-->    0:FRZ=freeze (continue'/stop in debug mode)
@@ -863,7 +864,7 @@ Init_PIT_IRQ	PROC	{R0-R14}
 			STRB	R1,[R0,#PIT_MCR_OFFSET]
 			
 			LDR		R0,=PIT_CH0_BASE	;set interrupt period
-			LDR		R1,=PIT_LDVAL_10ms
+			LDR		R1,=PIT_LDVAL_1ms
 			STR		R1,[R0,#PIT_LDVAL_OFFSET]
 			
 			LDR		R0,=PIT_CH0_BASE	;enable timer channel 0 for interrupts
@@ -974,8 +975,9 @@ WriteLEDEnd	POP		{R2,PC}
 ;	PORTA_IRQHandler
 ;		Handles an IRQ from any Port A Pins (Containing 5 LED Buttons)
 ;		Checks each one to see what was clicked, updates a variable to a
-;		charcter of whcih was pressed.  Clears the Interrupt and sets the 
-;		input to 0.
+;		charcter of whcih was pressed with the button's corresponding number
+;		(white = 0, red = 1, yellow = 2, green = 3, blue = 4).  Clears the 
+;		Interrupt and sets the input to 0.
 ;------------------------------------------------------------------------------
 PORTA_IRQHandler  PROC	{R0-R14}
 			CPSID	I
