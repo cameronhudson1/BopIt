@@ -105,9 +105,7 @@ void resetStopwatch (void) {
 
 int main (void) {
 	//init some stuff
-	SUCCcount = 0;
 	highScore = 0;
-	currentPeriod = START_PERIOD;
 	
 	//init UART and PIT
 	__ASM("CPSID I");
@@ -119,6 +117,9 @@ int main (void) {
 	//restart your clox
 	resetStopwatch();
 	for(;;) {
+		//init some other stuff
+		currentPeriod = START_PERIOD;
+		SUCCcount = 0;
 		//Turn all LEDs on for AESTHETIC
 		GPIO_Write_LED(ALL_LED_MASK, TRUE);
 		PutStringSB("Welcome to Bop-It! The current high score is ",MAX_STRING);
