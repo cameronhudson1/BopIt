@@ -28,12 +28,16 @@
 #define ALL_LED_MASK (0x12C80)
 
 #define PERIOD_SCALE (.75)
-#define START_PERIOD (3000) 
+#define START_PERIOD (3000)
+#define BUTTS_PER_STAGE (10)
 
 char dubmStr[MAX_STRING];
 char SUCCess;
 int rand;
 int expectButt;
+int SUCCcount;
+int highScore;
+int currentPeriod;
 
 /*
  *	getRandNum
@@ -82,6 +86,12 @@ char waitForButt (int expected) {
 	}
 }
 
+/*
+ *	resetStopwatch
+ *	restart the stopwatch duh
+ * 	inputs: no
+ *	outputs: no
+ */
 void resetStopwatch (void) {
 	RunStopWatch = 0;
 	Count = 0;
@@ -96,12 +106,11 @@ int main (void) {
 	GPIO_BopIt_Init();
 	__ASM("CPSIE I");
 	
-	//get a fellas name but you actually getting a seed for the RNG LOL xDDD
-	Count = 0;
-	RunStopWatch = 1;
-	PutStringSB("Welcome to Bop-It! nigga whatcho name say it back   >", MAX_STRING);
-	GetStringSB(dubmStr, MAX_STRING);
+	//restart your clox
+	resetStopwatch();
 	for(;;) {
+		//Turn all LEDs on for AESTHETIC
+		GPIO_Write_LED(ALL_LED_MASK, TRUE);
 		PutStringSB("Welcome to Bop-It! Press any button to start the game", MAX_STRING);
 		nextButton(0);
 		//COUNTDOWN TIIIIIIIIIIIIIIME
@@ -113,14 +122,20 @@ int main (void) {
 		while(Count < 3000);
 		PutStringSB("1", MAX_STRING);
 		for(;;) {
+			if (SUCCcount % BUTTS_PER_STAGE == 0) {
+				currentPeriod *= PERIOD_SCALE;
+			}
+			//grab a butt
 			rand = getRandNum();
 			nextButton(rand);
+			resetStopwatch();
 			SUCCess = waitForButt(rand);
+			//is the butt right?
 			if(!SUCCess) {
 				PutStringSB("You failed! Press any button to play again", MAX_STRING);
 				break;
 			}
-			resetStopwatch();
+			SUCCcount ++;
 		}
 	}
 	/* do forever */
