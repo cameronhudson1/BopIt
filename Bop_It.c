@@ -31,6 +31,7 @@
 #define START_PERIOD (3000) 
 
 char dubmStr[MAX_STRING];
+char SUCCess;
 int rand;
 int expectButt;
 
@@ -71,7 +72,7 @@ void nextButton (int button) {
  *	inputs: int between 0 and 4
  *	outputs: true if button matches expected, otherwise false
  */
-char waitForButt (char expected) {
+char waitForButt (int expected) {
 	while (ButtTouch == ' ');
 	if (ButtTouch == expected) {
 		return TRUE;
@@ -79,6 +80,12 @@ char waitForButt (char expected) {
 	else {
 		return FALSE;
 	}
+}
+
+void resetStopwatch (void) {
+	RunStopWatch = 0;
+	Count = 0;
+	RunStopWatch = 1;
 }
 
 int main (void) {
@@ -95,7 +102,26 @@ int main (void) {
 	PutStringSB("Welcome to Bop-It! nigga whatcho name say it back   >", MAX_STRING);
 	GetStringSB(dubmStr, MAX_STRING);
 	for(;;) {
-		
+		PutStringSB("Welcome to Bop-It! Press any button to start the game", MAX_STRING);
+		nextButton(0);
+		//COUNTDOWN TIIIIIIIIIIIIIIME
+		resetStopwatch();
+		while(Count < 1000);
+		PutStringSB("3", MAX_STRING);
+		while(Count < 2000);
+		PutStringSB("2", MAX_STRING);
+		while(Count < 3000);
+		PutStringSB("1", MAX_STRING);
+		for(;;) {
+			rand = getRandNum();
+			nextButton(rand);
+			SUCCess = waitForButt(rand);
+			if(!SUCCess) {
+				PutStringSB("You failed! Press any button to play again", MAX_STRING);
+				break;
+			}
+			resetStopwatch();
+		}
 	}
 	/* do forever */
   return (0);
