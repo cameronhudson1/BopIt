@@ -68,6 +68,7 @@ NVIC_ISER_UART0_MASK  EQU  UART0_IRQ_MASK
 ;0.01 s * 24,000,000 Hz = 240,000
 ;TSV = 240,000 - 1
 PIT_LDVAL_10ms  EQU  239999
+PIT_LDVAL_1ms	EQU		23999
 ;---------------------------------------------------------------
 ;PIT_MCR:  PIT module control register
 ;1-->    0:FRZ=freeze (continue'/stop in debug mode)
@@ -235,23 +236,23 @@ UART0_S2_NO_RXINV_BRK10_NO_LBKDETECT_CLEAR_FLAGS  EQU  0xC0
 
 
 ;White LED
-WHITE_LED_CHAR			EQU	'W'
+WHITE_LED_NUM			EQU	0
 WHITE_BUTT_SET_MASK		EQU	2_00000000000000010000000000000000;
 
 ;Red LED
-RED_LED_CHAR			EQU	'R'
+RED_LED_NUM				EQU	1
 RED_BUTT_SET_MASK		EQU	2_00000000000000001000000000000000;
 	
 ;Yellow LED
-YELLOW_LED_CHAR			EQU	'Y'
+YELLOW_LED_NUM			EQU	2
 YELLOW_BUTT_SET_MASK	EQU	2_00000000000000000100000000000000;
 	
 ;Green LED
-GREEN_LED_CHAR			EQU	'G'
+GREEN_LED_NUM			EQU	3
 GREEN_BUTT_SET_MASK		EQU	2_00000000000000000000000010000000;
 	
 ;Blue LED
-BLUE_LED_CHAR			EQU	'B'
+BLUE_LED_NUM			EQU	4
 BLUE_BUTT_SET_MASK		EQU	2_00000000000000000000000001000000;
 
 
@@ -863,7 +864,7 @@ Init_PIT_IRQ	PROC	{R0-R14}
 			STRB	R1,[R0,#PIT_MCR_OFFSET]
 			
 			LDR		R0,=PIT_CH0_BASE	;set interrupt period
-			LDR		R1,=PIT_LDVAL_10ms
+			LDR		R1,=PIT_LDVAL_1ms
 			STR		R1,[R0,#PIT_LDVAL_OFFSET]
 			
 			LDR		R0,=PIT_CH0_BASE	;enable timer channel 0 for interrupts
@@ -986,8 +987,9 @@ WriteLEDEnd	POP		{R2,PC}
 ;	PORTA_IRQHandler
 ;		Handles an IRQ from any Port A Pins (Containing 5 LED Buttons)
 ;		Checks each one to see what was clicked, updates a variable to a
-;		charcter of whcih was pressed.  Clears the Interrupt and sets the 
-;		input to 0.
+;		charcter of whcih was pressed with the button's corresponding number
+;		(white = 0, red = 1, yellow = 2, green = 3, blue = 4).  Clears the 
+;		Interrupt and sets the input to 0.
 ;------------------------------------------------------------------------------
 PORTA_IRQHandler  PROC	{R0-R14}
 			CPSID	I
@@ -1003,7 +1005,7 @@ CheckWhite	LDR		R2,=WHITE_BUTT_SET_MASK		;R2 <- White Button Set Mask
 			BNE		CheckRed					;Branch if White Button is not set
 			
 			LDR		R2,=ButtTouch				;
-			MOVS	R3,#WHITE_LED_CHAR			;
+			MOVS	R3,#WHITE_LED_NUM			;
 			STR		R3,[R2,#0]					;White Led Character ->ButtTouch
 
 CheckRed	LDR		R2,=RED_BUTT_SET_MASK		;R2 <- White Button Set Mask
@@ -1011,7 +1013,7 @@ CheckRed	LDR		R2,=RED_BUTT_SET_MASK		;R2 <- White Button Set Mask
 			BNE		CheckYellow					;Branch if Red Button is not set
 			
 			LDR		R2,=ButtTouch				;
-			MOVS	R3,#RED_LED_CHAR			;
+			MOVS	R3,#RED_LED_NUM			;
 			STR		R3,[R2,#0]					;Red Led Character ->ButtTouch
 
 CheckYellow	LDR		R2,=YELLOW_BUTT_SET_MASK	;R2 <- White Button Set Mask
@@ -1019,7 +1021,7 @@ CheckYellow	LDR		R2,=YELLOW_BUTT_SET_MASK	;R2 <- White Button Set Mask
 			BNE		CheckGreen					;Branch if Yellow Button is not set
 			
 			LDR		R2,=ButtTouch				;
-			MOVS	R3,#YELLOW_LED_CHAR			;
+			MOVS	R3,#YELLOW_LED_NUM			;
 			STR		R3,[R2,#0]					;Yellow Led Character ->ButtTouch
 
 CheckGreen	LDR		R2,=GREEN_BUTT_SET_MASK		;R2 <- White Button Set Mask
@@ -1027,7 +1029,7 @@ CheckGreen	LDR		R2,=GREEN_BUTT_SET_MASK		;R2 <- White Button Set Mask
 			BNE		CheckBlue					;Branch if Green Button is not set
 			
 			LDR		R2,=ButtTouch				;
-			MOVS	R3,#GREEN_LED_CHAR			;
+			MOVS	R3,#GREEN_LED_NUM			;
 			STR		R3,[R2,#0]					;Green Led Character ->ButtTouch
 
 CheckBlue	LDR		R2,=RED_BUTT_SET_MASK		;R2 <- White Button Set Mask
@@ -1035,7 +1037,7 @@ CheckBlue	LDR		R2,=RED_BUTT_SET_MASK		;R2 <- White Button Set Mask
 			BNE		NoMore						;Branch if Blue Button is not set
 			
 			LDR		R2,=ButtTouch				;
-			MOVS	R3,#BLUE_LED_CHAR			;
+			MOVS	R3,#BLUE_LED_NUM			;
 			STR		R3,[R2,#0]					;Blue Led Character ->ButtTouch
 
 NoMore		;Clear OUTterrupts
