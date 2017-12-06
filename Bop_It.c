@@ -17,6 +17,7 @@
 
 #define FALSE      (0)
 #define TRUE       (1)
+#define OUT_OF_TIME (2)
 
 #define MAX_STRING (79)
 
@@ -77,7 +78,11 @@ void nextButton (int button) {
  *	outputs: true if button matches expected, otherwise false
  */
 char waitForButt (int expected) {
-	while (ButtTouch == ' ');
+	while (ButtTouch == ' ') {
+		if (Count > currentPeriod) {
+			return OUT_OF_TIME;
+		}
+	}
 	if (ButtTouch == expected) {
 		return TRUE;
 	}
@@ -99,6 +104,11 @@ void resetStopwatch (void) {
 }
 
 int main (void) {
+	//init some stuff
+	SUCCcount = 0;
+	highScore = 0;
+	currentPeriod = START_PERIOD;
+	
 	//init UART and PIT
 	__ASM("CPSID I");
 	Init_UART0_IRQ();
@@ -122,17 +132,22 @@ int main (void) {
 		while(Count < 3000);
 		PutStringSB("1", MAX_STRING);
 		for(;;) {
+			//check if you should shift into MAXIMUM OVERDRIVE
 			if (SUCCcount % BUTTS_PER_STAGE == 0) {
 				currentPeriod *= PERIOD_SCALE;
 			}
 			//grab a butt
 			rand = getRandNum();
 			nextButton(rand);
-			resetStopwatch();
 			SUCCess = waitForButt(rand);
 			//is the butt right?
-			if(!SUCCess) {
-				PutStringSB("You failed! Press any button to play again", MAX_STRING);
+			if (!SUCCess) {
+				GPIO_Write_LED(ALL_LED_MASK, TRUE);
+				PutStringSB("Wrong Button! Press any button to play again", MAX_STRING);
+				break;
+			}
+			else if (SUCCess == 2) {
+				PutStringSB("Out of time! Press any button to play again", MAX_STRING);
 				break;
 			}
 			SUCCcount ++;
