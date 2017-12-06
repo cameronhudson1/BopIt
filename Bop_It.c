@@ -25,14 +25,21 @@
 #define YELLOW_LED_MASK (0x800)
 #define GREEN_LED_MASK (0x400)
 #define BLUE_LED_MASK (0x80)
+#define ALL_LED_MASK (0x12C80)
+
+#define PERIOD_SCALE (.75)
+#define START_PERIOD (3000) 
+
+char dubmStr[MAX_STRING];
+int rand;
+int expectButt;
 
 /*
-*	getRandNum
-*	Get a random number between 0 and 4
-*	inputs: none
-*	outputs: ranDUMB number between 0 and 4
-*
-*/
+ *	getRandNum
+ *	Get a random number between 0 and 4
+ *	inputs: none
+ *	outputs: ranDUMB number between 0 and 4
+ */
 int getRandNum (void) {
 	int rand = (Count & 0x03);
 	int addend = (Count & 0x04);
@@ -40,23 +47,54 @@ int getRandNum (void) {
 	return rand;
 }
 
+/* 
+ * 	nextButton
+ * 	reset the buttTouch and light up the next light
+ *	inputs: int between 0 and 4
+ *	outputs: none
+ */
+void nextButton (int button) {
+	ButtTouch = ' ';
+	GPIO_Write_LED(ALL_LED_MASK, FALSE);
+	switch (button) {
+		case 0: {GPIO_Write_LED(WHITE_LED_MASK, TRUE); expectButt = 0;}; break;
+		case 1: GPIO_Write_LED(RED_LED_MASK, TRUE); break;
+		case 2: GPIO_Write_LED(YELLOW_LED_MASK, TRUE); break;
+		case 3: GPIO_Write_LED(GREEN_LED_MASK, TRUE); break;
+		case 4: GPIO_Write_LED(BLUE_LED_MASK, TRUE); break;
+	}
+}
+
+/*
+ *	waitForButt
+ *	get the next button pressed and compare it against the expected button
+ *	inputs: int between 0 and 4
+ *	outputs: true if button matches expected, otherwise false
+ */
+char waitForButt (char expected) {
+	while (ButtTouch == ' ');
+	if (ButtTouch == expected) {
+		return TRUE;
+	}
+	else {
+		return FALSE;
+	}
+}
+
 int main (void) {
+	//init UART and PIT
+	__ASM("CPSID I");
+	Init_UART0_IRQ();
+	Init_PIT_IRQ();
+	GPIO_BopIt_Init();
+	__ASM("CPSIE I");
+	
+	//get a fellas name but you actually getting a seed for the RNG LOL xDDD
+	Count = 0;
+	RunStopWatch = 1;
+	PutStringSB("Welcome to Bop-It! nigga whatcho name say it back   >", MAX_STRING);
+	GetStringSB(dubmStr, MAX_STRING);
 	for(;;) {
-		char dubmStr[MAX_STRING];
-		int rand;
-		
-		//init UART and PIT
-		__ASM("CPSID I");
-		Init_UART0_IRQ();
-		Init_PIT_IRQ();
-		GPIO_BopIt_Init();
-		__ASM("CPSIE I");
-		
-		//get a fellas name but you actually getting a seed for the RNG LOL xDDD
-		Count = 0;
-		RunStopWatch = 1;
-		PutStringSB("Welcome to Bop-It! nigga whatcho name say it back   >", MAX_STRING);
-		GetStringSB(dubmStr, MAX_STRING);
 		
 	}
 	/* do forever */
