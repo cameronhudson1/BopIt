@@ -940,7 +940,19 @@ GPIO_BopIt_Init	PROC 	{R0-R14}
 			LDR		R2,=PORTA_PIN_INT_EN	;Mask to enable interrupts for the specified pin
 			
 			;Enable Interrupts for White Button
-			LDR		R1,[R0,#PORTA_PCR6_OFFSET]
+			STR		R2,[R0,#PORTA_PCR6_OFFSET]		;PortA Pin 6 Control Register (White)
+			
+			;Enable Interrupts for Red Button
+			STR		R2,[R0,#PORTA_PCR7_OFFSET]		;PortA Pin 7 Control Register (Red)
+			
+			;Enable Interrupts for Yellow Button
+			STR		R2,[R0,#PORTA_PCR14_OFFSET]		;PortA Pin 14 Control Register (Yellow)
+			
+			;Enable Interrupts for Green Button
+			STR		R2,[R0,#PORTA_PCR15_OFFSET]		;PortA Pin 15 Control Register (Green)
+			
+			;Enable Interrupts for Blue Button
+			STR		R2,[R0,#PORTA_PCR16_OFFSET]		;PortA Pin 16 Control Register (Blue)
 			
 			
 			POP		{R0-R2,PC}
