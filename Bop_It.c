@@ -147,6 +147,7 @@ int main (void) {
 			//grab a butt
 			rand = getRandNum();
 			nextButton(rand);
+			resetStopwatch();
 			SUCCess = waitForButt(rand);
 			//is the butt right?
 			if (!SUCCess) {
