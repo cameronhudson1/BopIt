@@ -134,6 +134,7 @@ int main (void) {
 		for(;;) {
 			//check if you should shift into MAXIMUM OVERDRIVE
 			if (SUCCcount % BUTTS_PER_STAGE == 0) {
+				PutStringSB("Speeding up!",MAX_STRING);
 				currentPeriod *= PERIOD_SCALE;
 			}
 			//grab a butt
