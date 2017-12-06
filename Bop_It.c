@@ -121,7 +121,9 @@ int main (void) {
 	for(;;) {
 		//Turn all LEDs on for AESTHETIC
 		GPIO_Write_LED(ALL_LED_MASK, TRUE);
-		PutStringSB("Welcome to Bop-It! Press any button to start the game", MAX_STRING);
+		PutStringSB("Welcome to Bop-It! The current high score is ",MAX_STRING);
+		PutNumUB(highScore);
+		PutStringSB("Press any button to start the game", MAX_STRING);
 		nextButton(0);
 		//COUNTDOWN TIIIIIIIIIIIIIIME
 		resetStopwatch();
