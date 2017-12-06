@@ -117,6 +117,10 @@ int main (void) {
 	//restart your clox
 	resetStopwatch();
 	for(;;) {
+		//YO NEW HIGH SCORE IN TOWN
+		if(SUCCcount > highScore) {
+			highScore = SUCCcount;
+		}
 		//init some other stuff
 		currentPeriod = START_PERIOD;
 		SUCCcount = 0;
