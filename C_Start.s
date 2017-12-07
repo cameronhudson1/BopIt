@@ -298,6 +298,7 @@ PORTA_PIN_INT_EN		EQU	2_00000000000010010000000000000000;	Stored to Control Regi
 			EXPORT	PIT_IRQHandler
 			EXPORT  PIT_ISR
 			EXPORT 	PORTA_IRQHandler
+			EXPORT	ButtChange
 ;>>>>> begin subroutine code <<<<<
 
 ;------------------------------------------------------------------------------  
@@ -1091,6 +1092,23 @@ NoMore		;Clear OUTterrupts
 
 			POP		{PC}
 			CPSIE	I
+			ENDP
+				
+
+;ButtChange waits for a button to be pressed and returns which one was pressed
+ButtChange	PROC	{R0-R14}
+			PUSH	{R1-R2,LR}
+			
+			LDR		R0,=ButtTouch
+			LDR		R1,[R0,#0]
+			LDR		R2,[R0,#0]
+buttPoll	CMP		R1,R2
+			BNE		bPollDone
+			LDR		R1,[R0,#0]
+			B		buttPoll
+bPollDone	MOVS	R0,R1
+
+			POP		{R1-R2,PC}
 			ENDP
 
 ;>>>>>   end subroutine code <<<<<

@@ -91,71 +91,83 @@ char waitForButt (int expected) {
 	}
 }
 
+
+
+//int main (void) {
+//	//init some stuff
+//	highScore = 0;
+//	ButtTouch = 5;
+//	
+//	//init UART and PIT
+//	__ASM("CPSID I");
+//	Init_UART0_IRQ();
+//	Init_PIT_IRQ();
+//	GPIO_BopIt_Init();
+//	ResetStopwatch();
+//	__ASM("CPSIE I");
+//	
+//	//restart your clox
+//	//ResetStopwatch();
+//	
+//	for(;;) {
+//		PutStringSB("Welcome to Bop-It! The current high score is ",MAX_STRING);
+//		PutNumUB(highScore);
+//		PutStringSB("Press any button to start the game", MAX_STRING);
+//		//YO NEW HIGH SCORE IN TOWN
+//		if(SUCCcount > highScore) {
+//			highScore = SUCCcount;
+//		}
+//		//init some other stuff
+//		currentPeriod = START_PERIOD;
+//		SUCCcount = 0;
+//		//Turn all LEDs on for AESTHETIC
+//		GPIO_Write_LED(ALL_LED_MASK, TRUE);
+//		PutStringSB("Welcome to Bop-It! The current high score is ",MAX_STRING);
+//		PutNumUB(highScore);
+//		PutStringSB("Press any button to start the game", MAX_STRING);
+//		waitForButt(0);
+//		//COUNTDOWN TIIIIIIIIIIIIIIME
+//		ResetStopwatch();
+//		while(GetCount() < 1000);
+//		PutStringSB("3", MAX_STRING);
+//		while(GetCount() < 2000);
+//		PutStringSB("2", MAX_STRING);
+//		while(GetCount() < 3000);
+//		PutStringSB("1", MAX_STRING);
+//		for(;;) {
+//			//check if you should shift into MAXIMUM OVERDRIVE
+//			if (SUCCcount % BUTTS_PER_STAGE == 0) {
+//				PutStringSB("Speeding up!",MAX_STRING);
+//				currentPeriod *= PERIOD_SCALE;
+//			}
+//			//grab a butt
+//			rand = getRandNum();
+//			nextButton(rand);
+//			ResetStopwatch();
+//			SUCCess = waitForButt(rand);
+//			//is the butt right?
+//			if (!SUCCess) {
+//				GPIO_Write_LED(ALL_LED_MASK, TRUE);
+//				PutStringSB("Wrong Button! Press any button to play again", MAX_STRING);
+//				break;
+//			}
+//			else if (SUCCess == 2) {
+//				PutStringSB("Out of time! Press any button to play again", MAX_STRING);
+//				break;
+//			}
+//			SUCCcount ++;
+//		}
+//	}
+//	/* do forever */
+//  return (0);
+//} /* main */
+
+
 int main (void) {
-	//init some stuff
-	highScore = 0;
-	ButtTouch = 5;
-	
-	//init UART and PIT
 	__ASM("CPSID I");
 	Init_UART0_IRQ();
-	//Init_PIT_IRQ();
-	//GPIO_BopIt_Init();
-	//ResetStopwatch();
 	__ASM("CPSIE I");
-	
-	//restart your clox
-	//ResetStopwatch();
-	
-	for(;;) {
-		PutStringSB("Welcome to Bop-It! The current high score is ",MAX_STRING);
-	PutNumUB(highScore);
-		PutStringSB("Press any button to start the game", MAX_STRING);
-		//YO NEW HIGH SCORE IN TOWN
-		//if(SUCCcount > highScore) {
-		//	highScore = SUCCcount;
-		//}
-		//init some other stuff
-		//currentPeriod = START_PERIOD;
-		//SUCCcount = 0;
-		//Turn all LEDs on for AESTHETIC
-		//GPIO_Write_LED(ALL_LED_MASK, TRUE);
-		PutStringSB("Welcome to Bop-It! The current high score is ",MAX_STRING);
-		PutNumUB(highScore);
-		PutStringSB("Press any button to start the game", MAX_STRING);
-		waitForButt(0);
-		//COUNTDOWN TIIIIIIIIIIIIIIME
-		ResetStopwatch();
-		while(GetCount() < 1000);
-		PutStringSB("3", MAX_STRING);
-		while(GetCount() < 2000);
-		PutStringSB("2", MAX_STRING);
-		while(GetCount() < 3000);
-		PutStringSB("1", MAX_STRING);
-		for(;;) {
-			//check if you should shift into MAXIMUM OVERDRIVE
-			if (SUCCcount % BUTTS_PER_STAGE == 0) {
-				PutStringSB("Speeding up!",MAX_STRING);
-				currentPeriod *= PERIOD_SCALE;
-			}
-			//grab a butt
-			rand = getRandNum();
-			nextButton(rand);
-			ResetStopwatch();
-			SUCCess = waitForButt(rand);
-			//is the butt right?
-			if (!SUCCess) {
-				GPIO_Write_LED(ALL_LED_MASK, TRUE);
-				PutStringSB("Wrong Button! Press any button to play again", MAX_STRING);
-				break;
-			}
-			else if (SUCCess == 2) {
-				PutStringSB("Out of time! Press any button to play again", MAX_STRING);
-				break;
-			}
-			SUCCcount ++;
-		}
-	}
-	/* do forever */
-  return (0);
-} /* main */
+	PutStringSB("Welcome to guessing game (not bop it) press a button to start", MAX_STRING);
+	GetChar();
+	ButtChange();
+}

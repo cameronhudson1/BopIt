@@ -35,3 +35,4 @@ void GPIO_BopIt_Init (void);
 void GPIO_Write_LED (int LEDMask, int on);
 int GetCount (void);
 void ResetStopwatch (void);
+int ButtChange (void);
