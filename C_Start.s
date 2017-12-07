@@ -303,9 +303,9 @@ PORTA_PIN_INT_EN		EQU	0x01090112	;Stored to Control Register for Pin
 			EXPORT	ResetStopwatch
 			EXPORT 	UART0_IRQHandler
 			EXPORT	PIT_IRQHandler
-			EXPORT  PIT_ISR
 			EXPORT 	PORTA_IRQHandler
 			EXPORT	ButtChange
+			EXPORT	WaitForCount
 ;>>>>> begin subroutine code <<<<<
 
 ;------------------------------------------------------------------------------  
@@ -841,8 +841,6 @@ PSEnd		POP 	{R0-R3,PC}
 ;OUTPUTS: none
 ;CHANGED: none
 ;------------------------------------------------------------------------------
-			EXPORT PIT_IRQHandler
-PIT_IRQHandler
 Init_PIT_IRQ	PROC	{R0-R14}
 			PUSH	{R0-R3,LR}
 			
@@ -888,8 +886,8 @@ Init_PIT_IRQ	PROC	{R0-R14}
 			;LDR		R1,=PIT_LDVAL_10ms
 			;STR		R1,[R0,#PIT_LDVAL_OFFSET]
 			LDR		R2,=PIT_CH0_BASE	;set interrupt period
-			LDR		R3,=PIT_LDVAL_10ms
-			STR		R3,[R0,#PIT_LDVAL_OFFSET]
+			LDR		R3,=PIT_LDVAL_1ms
+			STR		R3,[R2,#PIT_LDVAL_OFFSET]
 			
 			
 			;LDR		R0,=PIT_CH0_BASE	;enable timer channel 0 for interrupts
@@ -1141,10 +1139,26 @@ ButtChange	PROC	{R0-R14}
 			LDR		R2,[R0,#0]
 buttPoll	CMP		R1,R2
 			BNE		bPollDone
+			CPSID 	I
 			LDR		R1,[R0,#0]
+			CPSIE	I
 			B		buttPoll
 bPollDone	MOVS	R0,R1
 
+			
+			POP		{R1-R2,PC}
+			ENDP
+
+WaitForCount	PROC 	{R0-R14}
+			PUSH	{R1-R2,LR}
+			
+			LDR		R1,=Count
+waitLoop	CPSID	I
+			LDR		R2,[R1,#0]
+			CPSIE	I
+			CMP		R2,R0
+			BLO		waitLoop
+			
 			POP		{R1-R2,PC}
 			ENDP
 

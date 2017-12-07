@@ -36,3 +36,4 @@ void GPIO_Write_LED (int LEDMask, int on);
 int GetCount (void);
 void ResetStopwatch (void);
 int ButtChange (void);
+void WaitForCount (int);
