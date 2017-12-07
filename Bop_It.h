@@ -20,8 +20,6 @@ typedef unsigned short int UInt16;
 typedef unsigned char UInt8;
 
 /* assembly language variables */
-extern int Count;
-extern char RunStopWatch;
 extern char ButtTouch;
 
 /* assembly language subroutines */
@@ -34,5 +32,6 @@ void PutNumHex (UInt32);
 void PutNumUB (UInt8);
 void PutStringSB (char String[], int StringBufferCapacity);
 void GPIO_BopIt_Init (void);
-void PORTA_IRQHandler (void);
 void GPIO_Write_LED (int LEDMask, int on);
+int GetCount (void);
+void ResetStopwatch (void);

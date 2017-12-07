@@ -296,12 +296,15 @@ PORTA_PIN_INT_EN		EQU	0x01090112	;Stored to Control Register for Pin
 			EXPORT	PutNumHex
 			EXPORT	PutNumUB
 			EXPORT	PutStringSB
-			EXPORT 	UART0_IRQHandler
 			EXPORT 	Init_PIT_IRQ
-			EXPORT	PIT_IRQHandler
 			EXPORT	GPIO_BopIt_Init
-			EXPORT 	PORTA_IRQHandler
 			EXPORT	GPIO_Write_LED
+			EXPORT	GetCount
+			EXPORT	ResetStopwatch
+			EXPORT 	UART0_IRQHandler
+			EXPORT	PIT_IRQHandler
+			EXPORT  PIT_ISR
+			EXPORT 	PORTA_IRQHandler
 ;>>>>> begin subroutine code <<<<<
 
 ;------------------------------------------------------------------------------  
@@ -840,7 +843,7 @@ PSEnd		POP 	{R0-R3,PC}
 			EXPORT PIT_IRQHandler
 PIT_IRQHandler
 Init_PIT_IRQ	PROC	{R0-R14}
-			PUSH	{R0-R2,LR}
+			PUSH	{R0-R3,LR}
 			
 			LDR		R0,=SIM_SCGC6	;set SIM_SCGC6 for PIT clock enabled
 			LDR		R1,=SIM_SCGC6_PIT_MASK
@@ -851,14 +854,22 @@ Init_PIT_IRQ	PROC	{R0-R14}
 			LDR		R0,=PIT_CH0_BASE	;disable PIT0 timer
 			LDR		R1,=PIT_TCTRL_TEN_MASK
 			LDRB	R2,[R0,#PIT_TCTRL_OFFSET]
-			BICS	R1,R1,R2
-			STR		R1,[R0,#PIT_TCTRL_OFFSET]
+			;BICS	R1,R1,R2
+			;STR	R1,[R0,#PIT_TCTRL_OFFSET]
+			BICS	R2,R2,R1
+			STR		R2,[R0,#PIT_TCTRL_OFFSET]
 			
+			
+			;LDR		R0,=PIT_IPR		;set PIT interrupt priority
+			;LDR		R1,=NVIC_IPR_PIT_MASK
+			;LDR		R2,[R0,#0]
+			;BICS	R2,R2,R1
+			;STR		R2,[R0,#0]
 			LDR		R0,=PIT_IPR		;set PIT interrupt priority
 			LDR		R1,=NVIC_IPR_PIT_MASK
-			LDR		R2,[R0,#0]
-			BICS	R2,R2,R1
-			STR		R2,[R0,#0]
+			LDR		R3,[R0,#0]
+			BICS	R3,R3,R1
+			STR		R3,[R0,#0]
 			
 			LDR		R0,=NVIC_ICPR	;clear any pending PIT interrupts
 			LDR		R1,=NVIC_ICPR_PIT_MASK
@@ -872,15 +883,21 @@ Init_PIT_IRQ	PROC	{R0-R14}
 			LDR		R1,=PIT_MCR_EN_FRZ
 			STRB	R1,[R0,#PIT_MCR_OFFSET]
 			
-			LDR		R0,=PIT_CH0_BASE	;set interrupt period
-			LDR		R1,=PIT_LDVAL_1ms
-			STR		R1,[R0,#PIT_LDVAL_OFFSET]
+			;LDR		R0,=PIT_CH0_BASE	;set interrupt period
+			;LDR		R1,=PIT_LDVAL_10ms
+			;STR		R1,[R0,#PIT_LDVAL_OFFSET]
+			LDR		R2,=PIT_CH0_BASE	;set interrupt period
+			LDR		R3,=PIT_LDVAL_10ms
+			STR		R3,[R0,#PIT_LDVAL_OFFSET]
 			
-			LDR		R0,=PIT_CH0_BASE	;enable timer channel 0 for interrupts
-			MOVS	R1,#PIT_TCTRL_CH_IE
-			STRB	R1,[R0,#PIT_TCTRL_OFFSET]
 			
-			POP		{R0-R2,PC}
+			;LDR		R0,=PIT_CH0_BASE	;enable timer channel 0 for interrupts
+			;MOVS	R1,#PIT_TCTRL_CH_IE
+			;STRB	R1,[R0,#PIT_TCTRL_OFFSET]
+			LDR		R0,=PIT_TCTRL_CH_IE
+			STR	R0,[R2,#PIT_TCTRL_OFFSET]
+			
+			POP		{R0-R3,PC}
 			ENDP
 ;-----------------------------end subroutine-----------------------------------
 
@@ -895,26 +912,67 @@ Init_PIT_IRQ	PROC	{R0-R14}
 PIT_IRQHandler
 PIT_ISR		PROC 	{R0-R14}
 			CPSID	I
-			PUSH	{LR}
+			PUSH	{R0-R3,LR}
 			
 			LDR		R0,=RunStopWatch	;get RunStopWatch variable
-			LDRB	R0,[R0,#0]
-			CMP		R0,#0			;exit if equals 0
+			LDRB	R1,[R0,#0]
+			CMP		R1,#0			;exit if equals 0
 			BEQ		pit_isr_end
-			LDR		R0,=Count		;get count variable
-			LDR		R1,[R0,#0]
-			ADDS	R1,R1,#1		;increment count
-			STR		R1,[R0,#0]		;store new count
+			LDR		R2,=Count		;get count variable
+			LDR		R3,[R2,#0]
+			ADDS	R3,R3,#1		;increment count
+			STR		R3,[R2,#0]		;store new count
 			
-pit_isr_end	LDR		R0,=PIT_CH0_BASE	;get pit flag register
+pit_isr_end	LDR		R0,=PIT_TFLG0	;get pit flag register
 			MOVS	R1,#PIT_TFLG_TIF_MASK	;get pit flag mask
-			STRB	R1,[R0,#PIT_TFLG_OFFSET]	;store new tflg register
+			STRB	R1,[R0,#0]	;store new tflg register
 			
-			POP		{PC}
+			POP		{R0-R3,PC}
 			CPSIE	I
 			ENDP
 ;-----------------------------end ISR------------------------------------------
 
+;------------------------------------------------------------------------------
+;GetCount
+;FUNCTION: get the current counter value
+;INPUTS: none
+;OUTPUTS: R0 - counter value
+;CHANGED: R0
+;SUBROUTINES USED: none
+;------------------------------------------------------------------------------
+GetCount	PROC 	{R0-R14}
+			PUSH	{LR}
+			
+			LDR		R0,=Count
+			LDR		R0,[R0,#0]
+			
+			POP		{PC}
+			ENDP
+				
+;------------------------------------------------------------------------------
+;ResetStopwatch
+;FUNCTION: reset the timer
+;INPUTS: none
+;OUTPUTS: none
+;CHANGED: none
+;SUBROUTINES USED: none
+;------------------------------------------------------------------------------
+ResetStopwatch	PROC	{R0-R14}
+			PUSH	{R0-R1,LR}
+			
+			LDR		R0,=RunStopWatch
+			MOVS	R1,#0
+			STR		R1,[R0,#0]
+			
+			LDR		R0,=Count
+			STR		R1,[R0,#0]
+			
+			LDR		R0,=RunStopWatch
+			MOVS	R1,#1
+			STR		R1,[R0,#0]
+			
+			POP		{R0-R1,PC}
+			ENDP
 ;------------------------------------------------------------------------------
 ;GPIO_BopIt_Init
 ;FUNCTION: initializes gpio pins for led output and buttons input
@@ -1082,12 +1140,8 @@ NoMore		;Clear OUTterrupts
 ;**********************************************************************
 ;Variables
             AREA    MyData,DATA,READWRITE
-			EXPORT	Count
-			EXPORT 	RunStopWatch
 			EXPORT	ButtTouch
 ;>>>>> begin variables here <<<<<
-Count		SPACE	4
-RunStopWatch	SPACE	1
 			ALIGN
 RxQRef		SPACE 	18
 			ALIGN
@@ -1096,6 +1150,9 @@ TxQRef		SPACE	18
 RxQBuffer	SPACE	TXRX_BUF_SIZE
 			ALIGN
 TxQBuffer	SPACE	TXRX_BUF_SIZE
+			ALIGN
+Count		SPACE	4
+RunStopWatch	SPACE	1
 			ALIGN
 ButtTouch	SPACE	1					;Stores Char of the last button pressed
 ;>>>>>   end variables here <<<<<
