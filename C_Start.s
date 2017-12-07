@@ -235,25 +235,25 @@ UART0_S2_NO_RXINV_BRK10_NO_LBKDETECT_CLEAR_FLAGS  EQU  0xC0
 ;--------------------------------------------------------------
 
 
-;White LED
-WHITE_LED_NUM			EQU	0
-WHITE_BUTT_SET_MASK		EQU	2_00000000000000010000000000000000;
+;Blue LED
+BLUE_LED_CHAR			EQU	'B'
+BLUE_BUTT_SET_MASK		EQU	2_00000000000000010000000000000000;
 
-;Red LED
-RED_LED_NUM				EQU	1
-RED_BUTT_SET_MASK		EQU	2_00000000000000001000000000000000;
+;GREEN LED
+GREEN_LED_CHAR			EQU	'G'
+GREEN_BUTT_SET_MASK		EQU	2_00000000000000001000000000000000;
 	
 ;Yellow LED
-YELLOW_LED_NUM			EQU	2
+YELLOW_LED_CHAR			EQU	'Y'
 YELLOW_BUTT_SET_MASK	EQU	2_00000000000000000100000000000000;
 	
-;Green LED
-GREEN_LED_NUM			EQU	3
-GREEN_BUTT_SET_MASK		EQU	2_00000000000000000000000010000000;
+;Red LED
+RED_LED_CHAR			EQU	'R'
+RED_BUTT_SET_MASK		EQU	2_00000000000000000000000010000000;
 	
-;Blue LED
-BLUE_LED_NUM			EQU	4
-BLUE_BUTT_SET_MASK		EQU	2_00000000000000000000000001000000;
+;WHITE LED
+WHITE_LED_CHAR			EQU	'W'
+WHITE_BUTT_SET_MASK		EQU	2_00000000000000000000000001000000;
 
 
 MAX_STRING	EQU		79			;max size of string + null termination
@@ -266,15 +266,22 @@ NUM_ENQD	EQU 	17			;number of elements enqueued
 NIB_SHFT	EQU		4			;bits to shift to get next nibble
 TXRX_BUF_SIZE	EQU		80
 BUFFER_SIZE	EQU		4
+carRet      EQU     0x0D
+newLine     EQU     0x0A
+PTA_IRQ_PRI	EQU 0x00000000	;Mask to give priority of 1 (just below PIT)
+
+PTA_PRI_POS	EQU 0x1E		;Port A Priority position
+PTA_MASK	EQU (1 << PTA_PRI_POS)	;Port A IRQ Enable mask
+
 
 ;pins 6 (White), 7 (Red), 14 (Yellow), 15 (Green), 16 (Blue) 
-GPIOA_BUTT	EQU		2_00000000000000011100000011000000	 
+GPIOA_BUTT	EQU		2_00000000000000011100000011000000
 	
 ;pins 7 (White), 10 (Red), 11 (Yellow), 13 (Green), 16 (Blue) 
 GPIOC_LED	EQU		2_00000000000000010010110010000000	
 
 ;1001 in bits 19-16 means interrupts enabled
-PORTA_PIN_INT_EN		EQU	2_00000000000010010000000000000000;	Stored to Control Register for Pin
+PORTA_PIN_INT_EN		EQU	0x01090112	;Stored to Control Register for Pin
 ;****************************************************************
 ;MACROs
 ;****************************************************************
@@ -834,6 +841,8 @@ PSEnd		POP 	{R0-R3,PC}
 ;OUTPUTS: none
 ;CHANGED: none
 ;------------------------------------------------------------------------------
+			EXPORT PIT_IRQHandler
+PIT_IRQHandler
 Init_PIT_IRQ	PROC	{R0-R14}
 			PUSH	{R0-R3,LR}
 			
@@ -982,17 +991,33 @@ GPIO_BopIt_Init	PROC 	{R0-R14}
 			ORRS	R1,R1,R2
 			STR		R1,[R0,#0]
 			
-			LDR		R0,=PORTA_BASE		;initialize GPIOA pins for buttons
-			LDR		R1,[R0,#0]
+			;initialize GPIOA pins for buttons
+			LDR		R0,=GPIOA_PDDR
+			LDR 	R1,[R0,#0]
 			LDR		R2,=GPIOA_BUTT
 			BICS	R1,R1,R2
-			STR		R1,[R0,#GPIO_PDDR_OFFSET]
+			STR		R1,[R0,#0]
 			
-			LDR		R0,=PORTC_BASE		;initialize GPIOC pins for LEDs
+			;initialize GPIOC pins for LEDs
+			LDR		R0,=GPIOC_PDDR		
 			LDR		R1,[R0,#0]
 			LDR		R2,=GPIOC_LED
 			ORRS	R1,R1,R2
-			STR		R1,[R0,#GPIO_PDDR_OFFSET]
+			STR		R1,[R0,#0]
+			
+			;Set PORTA priority
+			
+			;Enable interrupts within the NVIC
+			LDR		R0,=NVIC_BASE
+			LDR		R1,=PTA_MASK
+			LDR		R2,[R0,#0]
+			ORRS	R2,R2,R1
+			STR		R2,[R0,#0]
+
+			;Set priority to 1
+			LDR		R2,=NVIC_IPR7_OFFSET
+			LDR		R1,=PTA_IRQ_PRI
+			STR		R1,[R0,R2]
 			
 			;Initialize PORTA for interrupts
 			;pins 6 (White), 7 (Red), 14 (Yellow), 15 (Green), 16 (Blue) 
@@ -1000,7 +1025,19 @@ GPIO_BopIt_Init	PROC 	{R0-R14}
 			LDR		R2,=PORTA_PIN_INT_EN	;Mask to enable interrupts for the specified pin
 			
 			;Enable Interrupts for White Button
-			LDR		R1,[R0,#PORTA_PCR6_OFFSET]
+			STR		R2,[R0,#PORTA_PCR6_OFFSET]		;PortA Pin 6 Control Register (White)
+			
+			;Enable Interrupts for Red Button
+			STR		R2,[R0,#PORTA_PCR7_OFFSET]		;PortA Pin 7 Control Register (Red)
+			
+			;Enable Interrupts for Yellow Button
+			STR		R2,[R0,#PORTA_PCR14_OFFSET]		;PortA Pin 14 Control Register (Yellow)
+			
+			;Enable Interrupts for Green Button
+			STR		R2,[R0,#PORTA_PCR15_OFFSET]		;PortA Pin 15 Control Register (Green)
+			
+			;Enable Interrupts for Blue Button
+			STR		R2,[R0,#PORTA_PCR16_OFFSET]		;PortA Pin 16 Control Register (Blue)
 			
 			
 			POP		{R0-R2,PC}
@@ -1052,7 +1089,7 @@ CheckWhite	LDR		R2,=WHITE_BUTT_SET_MASK		;R2 <- White Button Set Mask
 			BNE		CheckRed					;Branch if White Button is not set
 			
 			LDR		R2,=ButtTouch				;
-			MOVS	R3,#WHITE_LED_NUM			;
+			MOVS	R3,#WHITE_LED_CHAR			;
 			STR		R3,[R2,#0]					;White Led Character ->ButtTouch
 
 CheckRed	LDR		R2,=RED_BUTT_SET_MASK		;R2 <- White Button Set Mask
@@ -1060,7 +1097,7 @@ CheckRed	LDR		R2,=RED_BUTT_SET_MASK		;R2 <- White Button Set Mask
 			BNE		CheckYellow					;Branch if Red Button is not set
 			
 			LDR		R2,=ButtTouch				;
-			MOVS	R3,#RED_LED_NUM			;
+			MOVS	R3,#RED_LED_CHAR			;
 			STR		R3,[R2,#0]					;Red Led Character ->ButtTouch
 
 CheckYellow	LDR		R2,=YELLOW_BUTT_SET_MASK	;R2 <- White Button Set Mask
@@ -1068,7 +1105,7 @@ CheckYellow	LDR		R2,=YELLOW_BUTT_SET_MASK	;R2 <- White Button Set Mask
 			BNE		CheckGreen					;Branch if Yellow Button is not set
 			
 			LDR		R2,=ButtTouch				;
-			MOVS	R3,#YELLOW_LED_NUM			;
+			MOVS	R3,#YELLOW_LED_CHAR			;
 			STR		R3,[R2,#0]					;Yellow Led Character ->ButtTouch
 
 CheckGreen	LDR		R2,=GREEN_BUTT_SET_MASK		;R2 <- White Button Set Mask
@@ -1076,7 +1113,7 @@ CheckGreen	LDR		R2,=GREEN_BUTT_SET_MASK		;R2 <- White Button Set Mask
 			BNE		CheckBlue					;Branch if Green Button is not set
 			
 			LDR		R2,=ButtTouch				;
-			MOVS	R3,#GREEN_LED_NUM			;
+			MOVS	R3,#GREEN_LED_CHAR			;
 			STR		R3,[R2,#0]					;Green Led Character ->ButtTouch
 
 CheckBlue	LDR		R2,=RED_BUTT_SET_MASK		;R2 <- White Button Set Mask
@@ -1084,7 +1121,7 @@ CheckBlue	LDR		R2,=RED_BUTT_SET_MASK		;R2 <- White Button Set Mask
 			BNE		NoMore						;Branch if Blue Button is not set
 			
 			LDR		R2,=ButtTouch				;
-			MOVS	R3,#BLUE_LED_NUM			;
+			MOVS	R3,#BLUE_LED_CHAR			;
 			STR		R3,[R2,#0]					;Blue Led Character ->ButtTouch
 
 NoMore		;Clear OUTterrupts

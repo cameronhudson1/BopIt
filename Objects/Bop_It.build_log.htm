@@ -5,7 +5,7 @@
 <h2>Tool Versions:</h2>
 IDE-Version: µVision V5.24.2.0
 Copyright (C) 2017 ARM Ltd and ARM Germany GmbH. All rights reserved.
-License Information: David Pastuch, Rochester Institute of Technology, LIC=----
+License Information: Cam cmrnh, RIT, LIC=----
  
 Tool Versions:
 Toolchain:       MDK-Lite  Version: 5.24.1
@@ -21,21 +21,22 @@ Target DLL:      UL2CM3.DLL V1.160.3.0
 Dialog DLL:      TARMCM1.DLL V1.13.0.0
  
 <h2>Project:</h2>
-C:\Users\d1pas\Google Drive\CMPE 250\Bop_It\BopIt\Bop_It.uvprojx
-Project File Date:  11/30/2017
+C:\Users\cmrnh\Desktop\Lab 12\Bop_It\Bop_It.uvprojx
+Project File Date:  12/06/2017
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 5 (build 528)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
-Build target 'Target 1'
+Rebuild target 'Target 1'
+assembling C_Start.s...
+C_Start.s(888): error: A1108E: Multiply defined symbol 'PIT_IRQHandler'
+assembling MKL46Z4.s...
+assembling startup_MKL46Z4.s...
+compiling system_MKL46Z4.c...
 compiling Bop_It.c...
-Bop_It.c(84): warning:  #111-D: statement is unreachable
+Bop_It.c(166): warning:  #111-D: statement is unreachable
     return (0);
-Bop_It.c(66): warning:  #177-D: variable "rand"  was declared but never referenced
-  	int rand;
-Bop_It.c: 2 warnings, 0 errors
-linking...
-Program Size: Code=1724 RO-data=376 RW-data=212 ZI-data=356  
-".\Objects\Bop_It.axf" - 0 Error(s), 2 Warning(s).
+Bop_It.c: 1 warning, 0 errors
+".\Objects\Bop_It.axf" - 1 Error(s), 1 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -46,15 +47,15 @@ Package Vendor: ARM
    * Component: CORE Version: 5.0.1
 
 Package Vendor: Keil
-                http://www.keil.com/pack/Keil.Kinetis_KLxx_DFP.1.13.0.pack
-                Keil.Kinetis_KLxx_DFP.1.13.0
+                http://www.keil.com/pack/Keil.Kinetis_KLxx_DFP.1.14.0.pack
+                Keil.Kinetis_KLxx_DFP.1.14.0
                 NXP Kinetis KLxx Series Device Support and Examples
    * Component: Startup Version: 1.0.0
 
 <h2>Collection of Component include folders:</h2>
   .\RTE\_Target_1
   C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include
-  C:\Keil_v5\ARM\PACK\Keil\Kinetis_KLxx_DFP\1.13.0\Device\Include
+  C:\Keil_v5\ARM\PACK\Keil\Kinetis_KLxx_DFP\1.14.0\Device\Include
 
 <h2>Collection of Component Files used:</h2>
 
@@ -63,7 +64,8 @@ Package Vendor: Keil
       Source file:   Device\Source\system_MKL46Z4.c
 
    * Component: ARM::CMSIS:CORE:5.0.1
-Build Time Elapsed:  00:00:01
+Target not created.
+Build Time Elapsed:  00:00:04
 </pre>
 </body>
 </html>
