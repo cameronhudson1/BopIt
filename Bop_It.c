@@ -124,9 +124,9 @@ int main (void) {
 		//Turn all LEDs on for AESTHETIC
 		GPIO_Write_LED(ALL_LED_MASK, TRUE);
 		__asm("CPSIE I");
-		PutStringSB("Welcome to Bop-It! The current high score is ",MAX_STRING);
+		PutStringSB("Welcome to Bop-It! The current high score is \r\n",MAX_STRING);
 		PutNumUB(highScore);
-		PutStringSB("\r\nPress any button to start the game", MAX_STRING);
+		PutStringSB("Press any button to start the game\r\n", MAX_STRING);
 		__asm("CPSIE	I");
 		ButtChange();
 		//COUNTDOWN TIIIIIIIIIIIIIIME
@@ -141,24 +141,20 @@ int main (void) {
 			//check if you should shift into MAXIMUM OVERDRIVE
 			if (SUCCcount % BUTTS_PER_STAGE == 0) {
 				__asm("CPSIE	I");
-				PutStringSB("Speeding up!",MAX_STRING);
+				PutStringSB("Speeding up!\r\n",MAX_STRING);
 				currentPeriod *= PERIOD_SCALE;
 			}
 			//grab a butt
 			rand = getRandNum();
 			nextButton(rand);
-			ResetStopwatch();
 			SUCCess = ButtChange();
 			//is the butt right?
-			if (!SUCCess) {
+			if (SUCCess != rand) {
 				GPIO_Write_LED(ALL_LED_MASK, TRUE);
-				PutStringSB("Wrong Button! Press any button to play again", MAX_STRING);
+				PutStringSB("Wrong Button! Press any button to play again\r\n", MAX_STRING);
 				break;
 			}
-			else if (SUCCess == 2) {
-				PutStringSB("Out of time! Press any button to play again", MAX_STRING);
-				break;
-			}
+			PutStringSB("yay\r\n",MAX_STRING);
 			SUCCcount ++;
 		}
 	}
