@@ -20,7 +20,7 @@ typedef unsigned short int UInt16;
 typedef unsigned char UInt8;
 
 /* assembly language variables */
-extern char ButtTouch;
+extern int ButtTouch;
 
 /* assembly language subroutines */
 char GetChar (void);
@@ -28,12 +28,15 @@ void GetStringSB (char String[], int StringBufferCapacity);
 void Init_UART0_IRQ (void);
 void Init_PIT_IRQ (void);
 void PutChar (char Character);
-void PutNumHex (UInt32);
-void PutNumUB (UInt8);
+void PutNumHex (UInt32 ok);
+void PutNumUB (UInt8 ok);
 void PutStringSB (char String[], int StringBufferCapacity);
 void GPIO_BopIt_Init (void);
 void GPIO_Write_LED (int LEDMask, int on);
 int GetCount (void);
 void ResetStopwatch (void);
 int ButtChange (void);
-void WaitForCount (int);
+void WaitForCount (int ok);
+void ResetButt (void);
+int GetRandCount (void);
+int ButtTime (int time);

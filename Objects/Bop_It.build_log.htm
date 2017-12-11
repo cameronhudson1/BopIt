@@ -17,26 +17,27 @@ Library Manager: ArmAr.exe V5.06 update 5 (build 528)
 Hex Converter:   FromElf.exe V5.06 update 5 (build 528)
 CPU DLL:         SARMCM3.DLL V5.24.1
 Dialog DLL:      DARMCM1.DLL V1.18.0.0
-Target DLL:      UL2CM3.DLL V1.160.3.0
+Target DLL:      CMSIS_AGDI.dll V1.28.3.0
 Dialog DLL:      TARMCM1.DLL V1.13.0.0
  
 <h2>Project:</h2>
 C:\Users\cmrnh\Desktop\Lab 12\Bop_It\Bop_It.uvprojx
-Project File Date:  12/06/2017
+Project File Date:  12/07/2017
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 5 (build 528)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Rebuild target 'Target 1'
-assembling C_Start.s...
-C_Start.s(888): error: A1108E: Multiply defined symbol 'PIT_IRQHandler'
 assembling MKL46Z4.s...
+assembling C_Start.s...
 assembling startup_MKL46Z4.s...
-compiling system_MKL46Z4.c...
 compiling Bop_It.c...
-Bop_It.c(166): warning:  #111-D: statement is unreachable
+Bop_It.c(178): warning:  #111-D: statement is unreachable
     return (0);
 Bop_It.c: 1 warning, 0 errors
-".\Objects\Bop_It.axf" - 1 Error(s), 1 Warning(s).
+compiling system_MKL46Z4.c...
+linking...
+Program Size: Code=3876 RO-data=224 RW-data=240 ZI-data=352  
+".\Objects\Bop_It.axf" - 0 Error(s), 1 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -60,12 +61,11 @@ Package Vendor: Keil
 <h2>Collection of Component Files used:</h2>
 
    * Component: Keil::Device:Startup:1.0.0
-      Source file:   Device\Source\ARM\startup_MKL46Z4.s
       Source file:   Device\Source\system_MKL46Z4.c
+      Source file:   Device\Source\ARM\startup_MKL46Z4.s
 
    * Component: ARM::CMSIS:CORE:5.0.1
-Target not created.
-Build Time Elapsed:  00:00:04
+Build Time Elapsed:  00:00:02
 </pre>
 </body>
 </html>

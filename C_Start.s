@@ -306,6 +306,7 @@ PORTA_PIN_INT_EN		EQU	0x01090112	;Stored to Control Register for Pin
 			EXPORT 	PORTA_IRQHandler
 			EXPORT	ButtChange
 			EXPORT	WaitForCount
+			EXPORT ButtTime
 ;>>>>> begin subroutine code <<<<<
 
 ;------------------------------------------------------------------------------  
@@ -913,6 +914,11 @@ PIT_ISR		PROC 	{R0-R14}
 			CPSID	I
 			PUSH	{R0-R3,LR}
 			
+			LDR		R0,=RandCount
+			LDR		R1,[R0,#0]
+			ADDS	R1,R1,#1
+			STR		R1,[R0,#0]
+			
 			LDR		R0,=RunStopWatch	;get RunStopWatch variable
 			LDRB	R1,[R0,#0]
 			CMP		R1,#0			;exit if equals 0
@@ -947,6 +953,24 @@ GetCount	PROC 	{R0-R14}
 			
 			POP		{PC}
 			ENDP
+
+;------------------------------------------------------------------------------
+;GetRandCount
+;FUNCTION: get the current counter value
+;INPUTS: none
+;OUTPUTS: R0 - counter value
+;CHANGED: R0
+;SUBROUTINES USED: none
+;------------------------------------------------------------------------------
+			EXPORT	GetRandCount
+GetRandCount	PROC 	{R0-R14}
+			PUSH	{LR}
+			
+			LDR		R0,=RandCount
+			LDR		R0,[R0,#0]
+			
+			POP		{PC}
+			ENDP
 				
 ;------------------------------------------------------------------------------
 ;ResetStopwatch
@@ -961,14 +985,16 @@ ResetStopwatch	PROC	{R0-R14}
 			
 			LDR		R0,=RunStopWatch
 			MOVS	R1,#0
-			STR		R1,[R0,#0]
+			STRB	R1,[R0,#0]
 			
 			LDR		R0,=Count
+			CPSID	I
 			STR		R1,[R0,#0]
+			CPSIE	I
 			
 			LDR		R0,=RunStopWatch
 			MOVS	R1,#1
-			STR		R1,[R0,#0]
+			STRB	R1,[R0,#0]
 			
 			POP		{R0-R1,PC}
 			ENDP
@@ -1087,40 +1113,42 @@ CheckWhite	LDR		R2,=WHITE_BUTT_SET_MASK		;R2 <- White Button Set Mask
 			BNE		CheckRed					;Branch if White Button is not set
 			
 			LDR		R2,=ButtTouch				;
-			MOVS	R3,#WHITE_LED_CHAR			;
-			STR		R3,[R2,#0]					;White Led Character ->ButtTouch
+			MOVS	R3,#0						;
+			STR		R3,[R2,#0]					;White Led (0) ->ButtTouch
 
+			;NOT WORKING
 CheckRed	LDR		R2,=RED_BUTT_SET_MASK		;R2 <- White Button Set Mask
 			CMP		R1,R2						;
 			BNE		CheckYellow					;Branch if Red Button is not set
 			
 			LDR		R2,=ButtTouch				;
 			MOVS	R3,#RED_LED_CHAR			;
-			STR		R3,[R2,#0]					;Red Led Character ->ButtTouch
+			STR		R3,[R2,#0]					;Red Led (NONE) ->ButtTouch
 
-CheckYellow	LDR		R2,=YELLOW_BUTT_SET_MASK	;R2 <- White Button Set Mask
+CheckYellow	LDR		R2,=YELLOW_BUTT_SET_MASK	;R2 <- Yellow Button Set Mask
 			CMP		R1,R2						;
 			BNE		CheckGreen					;Branch if Yellow Button is not set
 			
 			LDR		R2,=ButtTouch				;
-			MOVS	R3,#YELLOW_LED_CHAR			;
-			STR		R3,[R2,#0]					;Yellow Led Character ->ButtTouch
+			MOVS	R3,#2						;
+			STR		R3,[R2,#0]					;Yellow Led (2) ->ButtTouch
 
-CheckGreen	LDR		R2,=GREEN_BUTT_SET_MASK		;R2 <- White Button Set Mask
+CheckGreen	LDR		R2,=GREEN_BUTT_SET_MASK		;R2 <- GREEN Button Set Mask
 			CMP		R1,R2						;
 			BNE		CheckBlue					;Branch if Green Button is not set
 			
 			LDR		R2,=ButtTouch				;
-			MOVS	R3,#GREEN_LED_CHAR			;
-			STR		R3,[R2,#0]					;Green Led Character ->ButtTouch
+			MOVS	R3,#3						;
+			STR		R3,[R2,#0]					;Green Led (3) ->ButtTouch
 
-CheckBlue	LDR		R2,=RED_BUTT_SET_MASK		;R2 <- White Button Set Mask
+			;ACTUALLY RED BUTTON IDK WHY
+CheckBlue	LDR		R2,=RED_BUTT_SET_MASK		;R2 <- Red Button Set Mask
 			CMP		R1,R2						;
 			BNE		NoMore						;Branch if Blue Button is not set
 			
 			LDR		R2,=ButtTouch				;
-			MOVS	R3,#BLUE_LED_CHAR			;
-			STR		R3,[R2,#0]					;Blue Led Character ->ButtTouch
+			MOVS	R3,#1						;
+			STR		R3,[R2,#0]					;Red Led (1) ->ButtTouch
 
 NoMore		;Clear OUTterrupts
 			STR		R1,[R0,#0]					;Storing 1's to pin bit values clears them
@@ -1130,6 +1158,7 @@ NoMore		;Clear OUTterrupts
 			ENDP
 				
 
+;--------------------BUTT CHANGE-------------------------------------------
 ;ButtChange waits for a button to be pressed and returns which one was pressed
 ButtChange	PROC	{R0-R14}
 			PUSH	{R1-R2,LR}
@@ -1149,6 +1178,51 @@ bPollDone	MOVS	R0,R1
 			POP		{R1-R2,PC}
 			ENDP
 
+
+			
+;--------------------BUTT CHANGE-------------------------------------------
+;ButtChange waits for a button to be pressed and returns which one was pressed
+ButtTime	PROC	{R0-R14}
+			PUSH	{R1-R3,LR}
+			
+			MOVS	R3,R0			;MAXTIME = R3
+			LDR		R0,=ButtTouch
+			LDR		R1,[R0,#0]
+			LDR		R2,[R0,#0]
+			
+dbuttPoll	CMP		R1,R2
+			BNE		dPollDone		;Button Has Changed
+			LDR		R1,=Count
+			LDR		R1,[R1,#0]
+			CMP		R1,R3
+			BHS		dTimeOut		;Count Exceeds Max Time
+			CPSID 	I
+			LDR		R1,[R0,#0]
+			CPSIE	I
+			B		dbuttPoll
+			
+dPollDone	MOVS	R0,R1
+			B	 	dDone
+
+dTimeOut	MOVS	R0,#6			;Passes Gas if Button not pressed in time
+			
+dDone		POP		{R1-R3,PC}
+			ENDP
+
+			EXPORT	ResetButt
+;-----------------------RESET BUTT--------------------------------------
+ResetButt	PROC	{R0-R14}
+			PUSH	{R0-R1}
+			
+			MOVS	R0,#5
+			LDR		R1,=ButtTouch
+			STR		R0,[R1,#0]
+			
+			POP		{R0-R1}
+			BX		LR
+			ENDP
+
+;-----------------------WAIT FOR COUNT-----------------------------------
 WaitForCount	PROC 	{R0-R14}
 			PUSH	{R1-R2,LR}
 			
@@ -1184,8 +1258,12 @@ RxQBuffer	SPACE	TXRX_BUF_SIZE
 TxQBuffer	SPACE	TXRX_BUF_SIZE
 			ALIGN
 Count		SPACE	4
+			ALIGN
+RandCount	SPACE	4
+			ALIGN
 RunStopWatch	SPACE	1
 			ALIGN
-ButtTouch	SPACE	1					;Stores Char of the last button pressed
+ButtTouch	SPACE	4					;Stores int of the last button pressed (WHITE = 0, RED = 1, YELLOW = 2, GREEN = 3)
+			ALIGN
 ;>>>>>   end variables here <<<<<
             END

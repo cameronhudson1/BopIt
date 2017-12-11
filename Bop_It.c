@@ -47,9 +47,9 @@ int currentPeriod;
  *	outputs: ranDUMB number between 0 and 4
  */
 int getRandNum (void) {
-	int rand = (GetCount() & 0x03);
-	int addend = (GetCount() & 0x04);
-	rand += addend;
+	int rand = (GetRandCount() & 0x03);
+	//int addend = (GetCount() & 0x04);
+	//rand += addend;
 	return rand;
 }
 
@@ -71,27 +71,6 @@ void nextButton (int button) {
 	}
 }
 
-/*
- *	waitForButt
- *	get the next button pressed and compare it against the expected button
- *	inputs: int between 0 and 4
- *	outputs: true if button matches expected, otherwise false
- */
-char waitForButt (int expected) {
-	while (ButtTouch == 5) {
-		if (GetCount() > currentPeriod) {
-			return OUT_OF_TIME;
-		}
-	}
-	if (ButtTouch == expected) {
-		return TRUE;
-	}
-	else {
-		return FALSE;
-	}
-}
-
-
 
 int main (void) {
 	//init some stuff
@@ -110,51 +89,88 @@ int main (void) {
 	//ResetStopwatch();
 	
 	for(;;) {
-		__asm("CPSIE I");
-		//PutStringSB("Welcome to Bop-It! The current high score is ",MAX_STRING);
-		//PutNumUB(highScore);
-		//PutStringSB("Press any button to start the game", MAX_STRING);
-		//YO NEW HIGH SCORE IN TOWN
+		__ASM("CPSID	I");
+		ResetStopwatch();
+		__asm("CPSIE	I");
+		
 		if(SUCCcount > highScore) {
 			highScore = SUCCcount;
 		}
 		//init some other stuff
 		currentPeriod = START_PERIOD;
 		SUCCcount = 0;
+		
 		//Turn all LEDs on for AESTHETIC
 		GPIO_Write_LED(ALL_LED_MASK, TRUE);
 		__asm("CPSIE I");
-		PutStringSB("Welcome to Bop-It! The current high score is \r\n",MAX_STRING);
+		
+		PutStringSB("Welcome to Bop-It! The current high score is: ",MAX_STRING);
 		PutNumUB(highScore);
+		PutStringSB("\r\n\t", MAX_STRING);
 		PutStringSB("Press any button to start the game\r\n", MAX_STRING);
+		ResetButt();
+		
+		__ASM("CPSID	I");
+		ResetStopwatch();
 		__asm("CPSIE	I");
 		ButtChange();
+		WaitForCount(500);
+		ResetStopwatch();
 		//COUNTDOWN TIIIIIIIIIIIIIIME
 		__asm("CPSIE	I");
 		WaitForCount(1000);
-		PutStringSB("3", MAX_STRING);
+		PutStringSB("\r\n3, ", MAX_STRING);
 		WaitForCount(2000);
-		PutStringSB("2", MAX_STRING);
+		PutStringSB("2, ", MAX_STRING);
 		WaitForCount(3000);
-		PutStringSB("1", MAX_STRING);
+		PutStringSB("1!\r\n", MAX_STRING);
+		ResetButt();
 		for(;;) {
 			//check if you should shift into MAXIMUM OVERDRIVE
-			if (SUCCcount % BUTTS_PER_STAGE == 0) {
+			if ((SUCCcount % BUTTS_PER_STAGE == 0) && (SUCCcount != 0)) {
 				__asm("CPSIE	I");
 				PutStringSB("Speeding up!\r\n",MAX_STRING);
 				currentPeriod *= PERIOD_SCALE;
 			}
-			//grab a butt
-			rand = getRandNum();
-			nextButton(rand);
-			SUCCess = ButtChange();
-			//is the butt right?
-			if (SUCCess != rand) {
-				GPIO_Write_LED(ALL_LED_MASK, TRUE);
-				PutStringSB("Wrong Button! Press any button to play again\r\n", MAX_STRING);
+			
+			ResetStopwatch();
+			WaitForCount(500);
+			rand = getRandNum();  			//Generate new random butt
+			
+			switch (rand) {
+				case 0: PutStringSB("Quick!  Press the white button!\r\n", MAX_STRING); break; 
+				case 1: PutStringSB("Quick!  Press the red button!\r\n", MAX_STRING); break;
+				case 2: PutStringSB("Quick!  Press the yellow button!\r\n", MAX_STRING); break;
+				case 3: PutStringSB("Quick!  Press the green button!\r\n", MAX_STRING); break;
+				default:	PutStringSB("INVALID", MAX_STRING); break;
+			}
+			
+			ResetStopwatch();
+			SUCCess = ButtTime(currentPeriod);			//Takes input when the Butt Changes
+			
+			if (SUCCess == 6){
+				PutStringSB("\tToo Slow!\r\n\r\n\r\n", MAX_STRING);
+				ResetStopwatch();
+				WaitForCount(500);
+				ResetButt();
 				break;
 			}
-			PutStringSB("yay\r\n",MAX_STRING);
+			
+			ResetStopwatch();
+			WaitForCount(500);
+			
+			if (SUCCess != rand) {			//Grab the butt - is the butt right?
+				GPIO_Write_LED(ALL_LED_MASK, TRUE);
+				PutStringSB("\tWrong Button!\r\n\r\n\r\n", MAX_STRING);
+				ResetStopwatch();
+				WaitForCount(500);
+				ResetButt();
+				break;
+			}
+			PutStringSB("\tYay, that was the right button!\r\n",MAX_STRING);
+			ResetStopwatch();
+			WaitForCount(500);
+			ResetButt();
 			SUCCcount ++;
 		}
 	}
